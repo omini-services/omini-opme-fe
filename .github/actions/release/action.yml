@@ -1,0 +1,30 @@
+name: cd
+description: deploy application
+
+inputs:
+  artifact-name:
+    description: artifact name
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set up AWS CLI
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws-region: 'us-east-1'
+
+    - name: Download Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.artifact-name }}
+
+    - name: Deploy to S3
+      shell: bash
+      run: |
+        aws s3 sync --delete ${{ inputs.artifact-name }} s3://${{ env.AWS_S3_BUCKET_NAME }}
+        aws cloudfront create-invalidation --distribution-id ${{ env.AWS_INVALIDATION_DISTRIBUTION_ID }} --paths /index.html
+        echo "Artifact deployed"

@@ -1,0 +1,93 @@
+name: CD
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  tag:
+    name: Tag 🪧
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.pull_request.title, 'Release:') && github.event.pull_request.merged == true
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          cache: 'yarn'
+
+      - id: build
+        uses: ./.github/actions/build
+        with:
+          upload-artifact: true
+
+      - name: Set up git
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Get tag
+        id: get_tag
+        run: |
+          git branch --show-current
+          git pull
+          echo "version=$(yarn version --no-git-tag-version | grep "Current version:" | awk '{ print "v"$4 }')" >> $GITHUB_OUTPUT
+
+      - name: Tag the commit
+        run: |
+          current_version=${{ steps.get_tag.outputs.version }}
+          git tag -a "$current_version" -m "Version $current_version"
+          git push --follow-tags
+
+      - name: Create changelog diff
+        id: changelog_diff
+        run: |
+          previous_tag=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))
+          current_tag="${{ steps.get_tag.outputs.version }}"
+
+          if [ -n "$previous_tag" ]; then
+            sed -n "/^## \[$current_tag\]/,/^## \[$previous_tag\]/{/^## \[$previous_tag\]/!p;}" CHANGELOG.md > release_notes.md
+          else
+            sed -n "/^## \[$current_tag\]/,\$p" CHANGELOG.md > release_notes.md
+          fi
+
+      - name: Create release
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ steps.get_tag.outputs.version }} \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="Release ${{ steps.get_tag.outputs.version }}" \
+              -F release_notes.md
+          rm release_notes.md
+          echo "😌 Release created"
+
+    outputs:
+      artifact-name: ${{ steps.build.outputs.artifact-name }}
+
+  cd:
+    name: Deploy 💣
+    needs: tag
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+      url: ${{ vars.OMINI_URL }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy 💣
+        uses: ./.github/actions/release
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET_NAME: ${{ vars.AWS_S3_BUCKET_NAME }}
+          AWS_INVALIDATION_DISTRIBUTION_ID: ${{ vars.AWS_INVALIDATION_DISTRIBUTION_ID }}
+        with:
+          artifact-name: ${{ needs.tag.outputs.artifact-name }}
+

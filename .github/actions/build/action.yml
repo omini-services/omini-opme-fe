@@ -1,0 +1,68 @@
+name: ci
+description: build application
+
+inputs:
+  upload-artifact:
+    description: upload artifact
+    required: false
+    defaut: 'false'
+
+outputs:
+  artifact-name:
+    description: artifact name
+    value: ${{ steps.build.outputs.artifact-name }}
+
+runs:
+  using: composite
+  steps:
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.x'
+        cache: 'yarn'
+
+    - name: Get last commit SHA
+      shell: bash
+      run: echo "Last commit 🫖 SHA=${GITHUB_SHA}" >> $GITHUB_STEP_SUMMARY
+
+    - name: Prepare
+      shell: bash
+      run: npm pkg delete scripts.prepare
+
+    - name: Install dependencies
+      shell: bash
+      run: yarn install --frozen-lockfile
+
+    - name: Linting
+      shell: bash
+      run: yarn ci:lint
+
+    - name: Typechecking
+      shell: bash
+      run: yarn typecheck
+
+    - name: Tests
+      shell: bash
+      run: yarn test:ci
+
+    - name: Get version
+      id: get_version
+      shell: bash
+      run: echo "version=$(yarn version --no-git-tag-version | grep "Current version:" | awk '{ print "v"$4 }')" >> $GITHUB_OUTPUT
+
+    - id: build
+      name: Build
+      shell: bash
+      env:
+        VITE_APP_VERSION: ${{ steps.get_version.outputs.version }}
+      run: |
+        yarn build --mode production
+        echo "artifact-name=dist" >> $GITHUB_OUTPUT
+        echo "✅ Build passed"
+
+    - name: Upload Artifact
+      if: ${{ inputs.upload-artifact == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.build.outputs.artifact-name }}
+        path: ${{ steps.build.outputs.artifact-name }}
