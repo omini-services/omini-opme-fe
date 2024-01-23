@@ -1,3 +1,4 @@
+import { AuthContext, SignInData } from '@contexts/AuthContext';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import Box from '@mui/joy/Box';
@@ -17,7 +18,6 @@ import Typography from '@mui/joy/Typography';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { AuthContext } from '@/contexts/AuthContext';
 import FraterLogo from '@components/FraterLogo/FraterLogo';
 
 // interface IFormElements extends HTMLFormControlsCollection {
@@ -66,7 +66,7 @@ export default function Login() {
   const { register, handleSubmit } = useForm();
   const { signIn } = useContext(AuthContext);
 
-  async function handleSignIn(data) {
+  async function handleSignIn(data: SignInData) {
     await signIn(data);
   }
 
@@ -175,16 +175,7 @@ export default function Login() {
             <Stack gap={4} sx={{ mt: 2 }}>
               <form
                 onSubmit={
-                  //   (event: FormEvent<ISignInFormElement>) => {
-                  //   event.preventDefault();
-                  //   const formElements = event.currentTarget.elements;
-                  //   const data = {
-                  //     email: formElements.email.value,
-                  //     password: formElements.password.value,
-                  //     persistent: formElements.persistent.checked,
-                  //   };
-                  //   alert(JSON.stringify(data, null, 2));
-                  // }
+                  // @ts-ignore
                   handleSubmit(handleSignIn)
                 }
               >

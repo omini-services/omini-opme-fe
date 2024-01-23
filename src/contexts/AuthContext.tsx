@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useEffect, useMemo, useState, ReactNode } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +11,7 @@ type User = {
   avatar_url: string;
 };
 
-type SignInData = {
+export type SignInData = {
   email: string;
   password: string;
 };
@@ -22,11 +22,20 @@ type AuthContextType = {
   signIn: (data: SignInData) => Promise<void>;
 };
 
+type TAuthProvider = {
+  children: ReactNode;
+};
+
 export const AuthContext = createContext({} as AuthContextType);
 
-export function AuthProvider({ children }) {
+export const AuthProvider = (props: TAuthProvider) => {
+  const { children } = props;
   const [cookies, setCookie] = useCookies(['token']);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User>({
+    name: '',
+    email: '',
+    avatar_url: '',
+  });
   const navigate = useNavigate();
   const isAuthenticated = !!user;
 
@@ -40,7 +49,8 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  async function signIn({ email, password }: SignInData) {
+  const signIn = async (signInProps: SignInData) => {
+    const { email, password } = signInProps;
     const { token, user: signedUser } = await signInRequest({
       email,
       password,
@@ -56,7 +66,7 @@ export function AuthProvider({ children }) {
 
     console.log(signedUser);
     navigate('/');
-  }
+  };
 
   return useMemo(
     () => (
@@ -66,4 +76,6 @@ export function AuthProvider({ children }) {
     ),
     [children, isAuthenticated, user],
   );
-}
+};
+
+export default AuthProvider;

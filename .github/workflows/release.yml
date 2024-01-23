@@ -29,7 +29,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Set up git
         run: |
@@ -39,7 +39,7 @@ jobs:
       - name: Update the version
         id: update_version
         run: |
-          echo "version=$(npm version --${{ github.event.inputs.version }} --no-git-tag-version | grep "New version:" | awk '{ print "v"$4 }')" >> $GITHUB_OUTPUT
+          echo "version=$(yarn version --${{ github.event.inputs.version }} --no-git-tag-version | grep "New version:" | awk '{ print "v"$4 }')" >> $GITHUB_OUTPUT
 
       - name: Update changelog
         id: update_changelog
