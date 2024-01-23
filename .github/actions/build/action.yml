@@ -27,7 +27,7 @@ runs:
 
     - name: Prepare
       shell: bash
-      run: yarn pkg delete scripts.prepare
+      run: npm pkg delete scripts.prepare
 
     - name: Install dependencies
       shell: bash
