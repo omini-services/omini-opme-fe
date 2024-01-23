@@ -26,7 +26,8 @@ export async function recoverUserInformation() {
     user: {
       name: 'Guilherme Or',
       email: 'demon@zenko.tec.br',
-      avatar_url: 'https://avatars.githubusercontent.com/u/6473061?s=400&u=f9324cbc4d00a5fbce48393e3ec8ce5b5738cf66&v=4',
+      avatar_url:
+        'https://avatars.githubusercontent.com/u/6473061?s=400&u=f9324cbc4d00a5fbce48393e3ec8ce5b5738cf66&v=4',
     },
   };
 }
