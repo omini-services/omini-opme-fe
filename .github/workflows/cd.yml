@@ -90,4 +90,3 @@ jobs:
           AWS_INVALIDATION_DISTRIBUTION_ID: ${{ vars.AWS_INVALIDATION_DISTRIBUTION_ID }}
         with:
           artifact-name: ${{ needs.tag.outputs.artifact-name }}
-

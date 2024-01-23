@@ -23,6 +23,7 @@
     }
   },
   "rules": {
+    "react/function-component-definition": "off",
     "react/prop-types": "off", // Since we do not use prop-types
     "react/require-default-props": "off", // Since we do not use prop-types
     "no-restricted-imports": ["error", { "patterns": ["@/features/*/*"] }],

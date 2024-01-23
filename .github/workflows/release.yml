@@ -52,6 +52,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: release/${{ steps.update_version.outputs.version }}
-          title: "Release: ${{ steps.update_version.outputs.version }} Pull Request"
-          body: "This pull request contains the updated package.json with the new release version"
+          title: 'Release: ${{ steps.update_version.outputs.version }} Pull Request'
+          body: 'This pull request contains the updated package.json with the new release version'
           base: main
