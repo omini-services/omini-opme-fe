@@ -1,4 +1,3 @@
-import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import Box from '@mui/joy/Box';
@@ -15,24 +14,27 @@ import Link from '@mui/joy/Link';
 import Stack from '@mui/joy/Stack';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import Typography from '@mui/joy/Typography';
-import * as React from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
-import GoogleIcon from '@components/GoogleIcon';
+import { AuthContext } from '@/contexts/AuthContext';
+import FraterLogo from '@components/FraterLogo/FraterLogo';
 
-interface IFormElements extends HTMLFormControlsCollection {
-  email: HTMLInputElement;
-  password: HTMLInputElement;
-  persistent: HTMLInputElement;
-}
-interface ISignInFormElement extends HTMLFormElement {
-  readonly elements: IFormElements;
-}
+// interface IFormElements extends HTMLFormControlsCollection {
+//   email: HTMLInputElement;
+//   password: HTMLInputElement;
+//   persistent: HTMLInputElement;
+// }
+
+// interface ISignInFormElement extends HTMLFormElement {
+//   readonly elements: IFormElements;
+// }
 
 function ColorSchemeToggle(props: IconButtonProps) {
   const { onClick, ...other } = props;
   const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
     setMounted(true);
   }, []);
   if (!mounted) {
@@ -61,6 +63,13 @@ function ColorSchemeToggle(props: IconButtonProps) {
 }
 
 export default function Login() {
+  const { register, handleSubmit } = useForm();
+  const { signIn } = useContext(AuthContext);
+
+  async function handleSignIn(data) {
+    await signIn(data);
+  }
+
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
@@ -112,10 +121,7 @@ export default function Login() {
             }}
           >
             <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
-              <IconButton variant="soft" color="primary" size="sm">
-                <BadgeRoundedIcon />
-              </IconButton>
-              <Typography level="title-lg">Company logo</Typography>
+              <FraterLogo />
             </Box>
             <ColorSchemeToggle />
           </Box>
@@ -152,14 +158,6 @@ export default function Login() {
                   </Link>
                 </Typography>
               </Stack>
-              <Button
-                variant="soft"
-                color="neutral"
-                fullWidth
-                startDecorator={<GoogleIcon />}
-              >
-                Continue with Google
-              </Button>
             </Stack>
             <Divider
               sx={(theme) => ({
@@ -176,24 +174,31 @@ export default function Login() {
             </Divider>
             <Stack gap={4} sx={{ mt: 2 }}>
               <form
-                onSubmit={(event: React.FormEvent<ISignInFormElement>) => {
-                  event.preventDefault();
-                  const formElements = event.currentTarget.elements;
-                  const data = {
-                    email: formElements.email.value,
-                    password: formElements.password.value,
-                    persistent: formElements.persistent.checked,
-                  };
-                  alert(JSON.stringify(data, null, 2));
-                }}
+                onSubmit={
+                  //   (event: FormEvent<ISignInFormElement>) => {
+                  //   event.preventDefault();
+                  //   const formElements = event.currentTarget.elements;
+                  //   const data = {
+                  //     email: formElements.email.value,
+                  //     password: formElements.password.value,
+                  //     persistent: formElements.persistent.checked,
+                  //   };
+                  //   alert(JSON.stringify(data, null, 2));
+                  // }
+                  handleSubmit(handleSignIn)
+                }
               >
                 <FormControl required>
                   <FormLabel>Email</FormLabel>
-                  <Input type="email" name="email" />
+                  <Input {...register('email')} type="email" name="email" />
                 </FormControl>
                 <FormControl required>
                   <FormLabel>Password</FormLabel>
-                  <Input type="password" name="password" />
+                  <Input
+                    {...register('password')}
+                    type="password"
+                    name="password"
+                  />
                 </FormControl>
                 <Stack gap={4} sx={{ mt: 2 }}>
                   <Box
@@ -217,7 +222,7 @@ export default function Login() {
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body-xs" textAlign="center">
-              © Your company {new Date().getFullYear()}
+              © Zenko company {new Date().getFullYear()}
             </Typography>
           </Box>
         </Box>
