@@ -31,7 +31,7 @@ import * as React from 'react';
 import { ReactNode } from 'react';
 
 import FraterLogo from '@components/FraterLogo/FraterLogo';
-import { ThemeModeToggle } from '@components/ThemeModeToggle';
+import ThemeModeToggle from '@components/ThemeModeToggle';
 import { closeSidebar } from '@utils/sidebar';
 
 interface IToggler {

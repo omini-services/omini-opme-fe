@@ -1,13 +1,16 @@
 import { CssBaseline, CssVarsProvider } from '@mui/joy';
+import { RecoilRoot } from 'recoil';
 
-import { Router } from './routes';
+import { Router } from '@/Routes';
 
 export function App() {
   return (
-    <CssVarsProvider disableTransitionOnChange>
-      <CssBaseline />
-      <Router />
-    </CssVarsProvider>
+    <RecoilRoot>
+      <CssVarsProvider disableTransitionOnChange>
+        <CssBaseline />
+        <Router />
+      </CssVarsProvider>
+    </RecoilRoot>
   );
 }
 

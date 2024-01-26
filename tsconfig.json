@@ -20,14 +20,20 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
+      // folders
       "@/*": ["./src/*"],
       "@public/*": ["./public/*"],
       "@features/*": ["./src/features/*"],
       "@components/*": ["./src/components/*"],
-      "@utils/*": ["./src/utils/*"],
       "@contexts/*": ["./src/contexts/*"],
+      "@utils/*": ["./src/utils/*"],
       "@services/*": ["./src/services/*"],
       "@pages/*": ["./src/pages/*"],
+      "@types/*": ["./src/types/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@atoms/*": ["./src/atoms/*"],
+      // files
+      "@constants": ["./src/constants.ts"],
     }
   },
   "include": ["src"],

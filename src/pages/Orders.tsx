@@ -1,8 +1,8 @@
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import { Box, Typography, Button } from '@mui/joy';
 
-import OrderList from '@features/order-list';
-import OrderTable from '@features/order-table';
+import OrderList from '@components/OrderList';
+import OrderTable from '@components/OrderTable';
 
 const Orders = () => (
   <Box

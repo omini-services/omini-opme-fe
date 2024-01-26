@@ -1,17 +1,19 @@
 import Box from '@mui/joy/Box';
 import { Outlet } from 'react-router-dom';
 
-import AutoBreadcrumbs from '@components/AutoBreadcrumbs/AutoBreadcrumbs';
+import AutoBreadcrumbs from '@/components/AutoBreadcrumbs';
 import Header from '@components/Header';
+import NotificationCenter from '@components/NotificationCenter';
 import Sidebar from '@components/Sidebar';
 
 const DashboardLayout = () => (
   <Box sx={{ display: 'flex', minHeight: '100dvh' }}>
+    <NotificationCenter />
     <Header />
     <Sidebar />
 
     <Box
-      component="main"
+      component="div"
       className="MainContent"
       sx={{
         px: { xs: 2, md: 6 },
@@ -27,12 +29,24 @@ const DashboardLayout = () => (
         minWidth: 0,
         height: '100dvh',
         gap: 1,
+        overflow: 'hidden',
+        overflowY: 'auto',
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <AutoBreadcrumbs />
       </Box>
+      {/* <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          height: '100%',
+        }}
+      > */}
       <Outlet />
+      {/* </Box> */}
     </Box>
   </Box>
 );
