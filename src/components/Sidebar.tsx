@@ -1,5 +1,9 @@
+// eslint-disable-next-line import/no-unresolved
+import { AuthContext } from '@contexts/AuthContext';
+import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
@@ -11,15 +15,34 @@ import IconButton from '@mui/joy/IconButton';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListItemButton, { listItemButtonClasses } from '@mui/joy/ListItemButton';
+import ListItemContent from '@mui/joy/ListItemContent';
 import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
+import { useContext } from 'react';
 
 import FraterLogo from '@components/FraterLogo/FraterLogo';
 import ListItemLink from '@components/ListItemLink';
-import { ThemeModeToggle } from '@components/ThemeModeToggle';
+import ThemeModeToggle from '@components/ThemeModeToggle';
+import Toggler from '@components/Toggler';
 import { closeSidebar } from '@utils/sidebar';
 
+const renderListItems = () =>
+  [
+    { title: 'Home', to: '/', icon: HomeRoundedIcon },
+    { title: 'Dashboard', to: '/dashboard', icon: DashboardRoundedIcon },
+    { title: 'Orders', to: '/orders', icon: ShoppingCartRoundedIcon },
+  ].map((item) => (
+    <ListItemLink key={item.title} title={item.title} to={item.to}>
+      {/* @ts-ignore */}
+      {item.icon?.type?.render()}
+    </ListItemLink>
+  ));
+
 export default function Sidebar() {
+  const { signOut } = useContext(AuthContext);
+
+  const handlSignOut = () => signOut();
+
   return (
     <Sheet
       className="Sidebar"
@@ -103,17 +126,43 @@ export default function Sidebar() {
             '--ListItem-radius': (theme) => theme.vars.radius.sm,
           }}
         >
-          <ListItemLink title="Home" to="/">
-            <HomeRoundedIcon />
-          </ListItemLink>
-
-          <ListItemLink title="Dashboard" to="/dashboard">
-            <DashboardRoundedIcon />
-          </ListItemLink>
-
-          <ListItemLink title="Orders" to="/orders">
-            <ShoppingCartRoundedIcon />
-          </ListItemLink>
+          {renderListItems()}
+          <ListItem nested>
+            <Toggler
+              renderToggle={({ open, setOpen }) => (
+                <ListItemButton onClick={() => setOpen(!open)}>
+                  <AssignmentRoundedIcon />
+                  <ListItemContent>
+                    <Typography level="title-sm">Cadastros</Typography>
+                  </ListItemContent>
+                  <KeyboardArrowDownIcon
+                    sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
+                  />
+                </ListItemButton>
+              )}
+            >
+              <List sx={{ gap: 0.5 }}>
+                <ListItem sx={{ mt: 0.5 }}>
+                  <ListItemButton>Ocamento</ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton>Empresa</ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton>Especialidade</ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton>Procedimento</ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton>Iitems</ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton>Lote</ListItemButton>
+                </ListItem>
+              </List>
+            </Toggler>
+          </ListItem>
         </List>
 
         <List
@@ -145,7 +194,12 @@ export default function Sidebar() {
           <Typography level="title-sm">Siriwat K.</Typography>
           <Typography level="body-xs">siriwatk@test.com</Typography>
         </Box>
-        <IconButton size="sm" variant="plain" color="neutral">
+        <IconButton
+          size="sm"
+          variant="plain"
+          color="neutral"
+          onClick={handlSignOut}
+        >
           <LogoutRoundedIcon />
         </IconButton>
       </Box>

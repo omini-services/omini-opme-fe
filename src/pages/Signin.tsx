@@ -1,75 +1,20 @@
-import { AuthContext, SignInData } from '@contexts/AuthContext';
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+// eslint-disable-next-line import/no-unresolved
+import { ROUTES } from '@constants';
 import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import Checkbox from '@mui/joy/Checkbox';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Divider from '@mui/joy/Divider';
-import FormControl from '@mui/joy/FormControl';
-import FormLabel, { formLabelClasses } from '@mui/joy/FormLabel';
+import { formLabelClasses } from '@mui/joy/FormLabel';
 import GlobalStyles from '@mui/joy/GlobalStyles';
-import IconButton, { IconButtonProps } from '@mui/joy/IconButton';
-import Input from '@mui/joy/Input';
 import Link from '@mui/joy/Link';
 import Stack from '@mui/joy/Stack';
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
+import { CssVarsProvider } from '@mui/joy/styles';
 import Typography from '@mui/joy/Typography';
-import { useContext, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 
+import ColorSchemeToggle from '@components/ColorSchemeToggle';
 import FraterLogo from '@components/FraterLogo/FraterLogo';
+import SigninForm from '@components/SigninForm';
 
-// interface IFormElements extends HTMLFormControlsCollection {
-//   email: HTMLInputElement;
-//   password: HTMLInputElement;
-//   persistent: HTMLInputElement;
-// }
-
-// interface ISignInFormElement extends HTMLFormElement {
-//   readonly elements: IFormElements;
-// }
-
-function ColorSchemeToggle(props: IconButtonProps) {
-  const { onClick, ...other } = props;
-  const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) {
-    return <IconButton size="sm" variant="outlined" color="neutral" disabled />;
-  }
-  return (
-    <IconButton
-      id="toggle-mode"
-      size="sm"
-      variant="outlined"
-      color="neutral"
-      aria-label="toggle light/dark mode"
-      {...other}
-      onClick={(event) => {
-        if (mode === 'light') {
-          setMode('dark');
-        } else {
-          setMode('light');
-        }
-        onClick?.(event);
-      }}
-    >
-      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
-    </IconButton>
-  );
-}
-
-export default function Login() {
-  const { register, handleSubmit } = useForm();
-  const { signIn } = useContext(AuthContext);
-
-  async function handleSignIn(data: SignInData) {
-    await signIn(data);
-  }
-
+export default function Signin() {
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
@@ -148,17 +93,10 @@ export default function Login() {
               },
             }}
           >
-            <Stack gap={4} sx={{ mb: 2 }}>
-              <Stack gap={1}>
-                <Typography level="h3">Sign in</Typography>
-                <Typography level="body-sm">
-                  New to company?{' '}
-                  <Link href="#replace-with-a-link" level="title-sm">
-                    Sign up!
-                  </Link>
-                </Typography>
-              </Stack>
+            <Stack gap={4} sx={{ mt: 2 }}>
+              <SigninForm />
             </Stack>
+
             <Divider
               sx={(theme) => ({
                 [theme.getColorSchemeSelector('light')]: {
@@ -172,43 +110,15 @@ export default function Login() {
             >
               or
             </Divider>
-            <Stack gap={4} sx={{ mt: 2 }}>
-              <form
-                onSubmit={
-                  // @ts-ignore
-                  handleSubmit(handleSignIn)
-                }
-              >
-                <FormControl required>
-                  <FormLabel>Email</FormLabel>
-                  <Input {...register('email')} type="email" name="email" />
-                </FormControl>
-                <FormControl required>
-                  <FormLabel>Password</FormLabel>
-                  <Input
-                    {...register('password')}
-                    type="password"
-                    name="password"
-                  />
-                </FormControl>
-                <Stack gap={4} sx={{ mt: 2 }}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Checkbox size="sm" label="Remember me" name="persistent" />
-                    <Link level="title-sm" href="#replace-with-a-link">
-                      Forgot your password?
-                    </Link>
-                  </Box>
-                  <Button type="submit" fullWidth>
-                    Sign in
-                  </Button>
-                </Stack>
-              </form>
+            <Stack gap={4} sx={{ mb: 2 }}>
+              <Stack gap={1}>
+                <Typography level="body-sm">
+                  New company?{' '}
+                  <Link href={ROUTES.signup.to} level="title-sm">
+                    Sign up!
+                  </Link>
+                </Typography>
+              </Stack>
             </Stack>
           </Box>
           <Box component="footer" sx={{ py: 3 }}>

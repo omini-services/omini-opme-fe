@@ -5,7 +5,7 @@ import { useColorScheme } from '@mui/joy/styles';
 import * as React from 'react';
 import { useEffect } from 'react';
 
-export function ThemeModeToggle(props: IconButtonProps) {
+const ThemeModeToggle = (props: IconButtonProps) => {
   const { onClick, sx, ...other } = props;
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -55,4 +55,6 @@ export function ThemeModeToggle(props: IconButtonProps) {
       <LightModeIcon />
     </IconButton>
   );
-}
+};
+
+export default ThemeModeToggle;
