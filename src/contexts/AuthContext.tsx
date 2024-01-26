@@ -1,28 +1,22 @@
 // eslint-disable-next-line import/no-unresolved
-import { ROUTES } from '@constants';
+import { tokenState } from '@atoms/auth';
+import { notificationState } from '@atoms/notification';
 import {
-  createContext,
-  useEffect,
-  useState,
-  useCallback,
-  ReactNode,
-} from 'react';
-import { useCookies } from 'react-cookie';
+  CognitoIdentityProviderClient,
+  InitiateAuthCommand,
+} from '@aws-sdk/client-cognito-identity-provider';
+import { SignInData, User } from '@types/SignIn';
+import { createContext, useState, useCallback, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { v4 as uuid } from 'uuid';
+import { useSetRecoilState } from 'recoil';
 
-// import { api } from '@services/api';
-
-type User = {
-  name: string;
-  email: string;
-  avatar_url: string;
-};
-
-export type SignInData = {
-  email: string;
-  password: string;
-};
+import {
+  AWS_CLIENT_ID,
+  AWS_REGION,
+  INITIAL_TOKEN_STATE,
+  INITIAL_USER_STATE,
+  ROUTES,
+} from '@/constants';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -37,84 +31,54 @@ type TAuthProvider = {
 
 export const AuthContext = createContext({} as AuthContextType);
 
-export const delay = (amount = 750) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, amount);
-  });
-
-const initialUserValue = {
-  name: '',
-  email: '',
-  avatar_url: '',
-};
-
 export const AuthProvider = (props: TAuthProvider) => {
   const { children } = props;
-  const [cookies, setCookie, removeCookie] = useCookies(['token']);
-  const [user, setUser] = useState<User>(initialUserValue);
+  const [user, setUser] = useState<User>(INITIAL_USER_STATE);
+
+  const setToken = useSetRecoilState(tokenState);
+  const setNotification = useSetRecoilState(notificationState);
+
   const navigate = useNavigate();
   const isAuthenticated = !!user;
 
-  const recoverUserInformation = useCallback(async () => {
-    await delay();
-
-    return {
-      user: {
-        name: 'Guilherme Or',
-        email: 'demon@zenko.tec.br',
-        avatar_url:
-          'https://avatars.githubusercontent.com/u/6473061?s=400&u=f9324cbc4d00a5fbce48393e3ec8ce5b5738cf66&v=4',
-      },
-    };
-  }, []);
-
-  const signInRequest = useCallback(async (data: SignInData) => {
-    await delay();
-
-    return {
-      token: uuid(),
-      user: {
-        name: 'Guilherme Or',
-        email: data.email,
-        avatar_url:
-          'https://avatars.githubusercontent.com/u/6473061?s=400&u=f9324cbc4d00a5fbce48393e3ec8ce5b5738cf66&v=4',
-      },
-    };
-  }, []);
-
-  useEffect(() => {
-    const { token } = cookies;
-
-    if (token) {
-      recoverUserInformation().then((response) => {
-        setUser(response.user);
-      });
-    }
-  }, [recoverUserInformation]);
-
   const signIn = useCallback(
-    async (signInProps: SignInData) => {
-      const { email, password } = signInProps;
-      const { token, user: signedUser } = await signInRequest({
-        email,
-        password,
+    async (signInData: SignInData) => {
+      const client = new CognitoIdentityProviderClient({
+        region: AWS_REGION,
       });
-      setCookie('token', token, {
-        maxAge: 60 * 60 * 1, // 1 hour
+      const command = new InitiateAuthCommand({
+        AuthFlow: 'USER_PASSWORD_AUTH',
+        ClientId: AWS_CLIENT_ID,
+        AuthParameters: {
+          USERNAME: signInData.email,
+          PASSWORD: signInData.password,
+        },
       });
-      // api.defaults.headers.Authorization = `Bearer ${token}`;
-      setUser(signedUser);
-      navigate(ROUTES.root.to);
+
+      try {
+        const response = await client.send(command);
+        console.log('response => ', response);
+
+        // Processar resposta e definir estado do usuário
+        const foundUser = {
+          // Defina as propriedades do usuário
+        };
+
+        setToken(response.AuthenticationResult);
+        setUser(foundUser);
+        navigate(ROUTES.root.to);
+      } catch (error) {
+        setNotification('Erro na tentativa de login.');
+      }
     },
-    [navigate, setCookie, signInRequest],
+    [navigate, setNotification, setToken],
   );
 
   const signOut = useCallback(() => {
-    removeCookie('token', { path: '/' });
-    // api.defaults.headers.Authorization = '';
-    setUser(initialUserValue);
+    setUser(INITIAL_USER_STATE);
+    setToken(INITIAL_TOKEN_STATE);
     navigate(ROUTES.signin.to);
-  }, [navigate, removeCookie]);
+  }, [navigate]);
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values

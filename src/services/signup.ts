@@ -3,7 +3,7 @@ import {
   CognitoIdentityProviderClient,
 } from '@aws-sdk/client-cognito-identity-provider';
 // eslint-disable-next-line import/no-unresolved
-import { AWS_CLIENT_ID } from '@constants';
+import { AWS_CLIENT_ID, AWS_REGION } from '@constants';
 import { SignUpData } from '@types/SignUpData';
 
 // import { generateSecretHash } from '@utils/crypto';
@@ -28,7 +28,7 @@ export const createUser = async (userData: SignUpData) => {
   try {
     const signUp = ({ clientId, username, password, email }: ISignUp) => {
       const client = new CognitoIdentityProviderClient({
-        region: 'us-east-1',
+        region: AWS_REGION,
       });
 
       const command = new SignUpCommand({
@@ -38,7 +38,7 @@ export const createUser = async (userData: SignUpData) => {
         UserAttributes: [
           { Name: 'email', Value: email },
           { Name: 'given_name', Value: userData.name },
-          { Name: 'family_name', Value: 'Or' },
+          { Name: 'family_name', Value: 'Or' }, // TODO: ADD HERE FORM DATA
           { Name: 'middle_name', Value: 'Stefan' },
         ],
       });

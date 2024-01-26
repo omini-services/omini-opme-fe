@@ -1,23 +1,32 @@
 import axios from 'axios';
+import { useRecoilValue } from 'recoil';
 
-export function getAPIClient() {
+import { tokenState } from '@/atoms/auth';
+
+export const getAPIClient = () => {
   // const { 'nextauth.token': token } = parseCookies(ctx)
+  // const token = useRecoilValue(tokenState);
 
-  const token = '123321';
+  const token = `123`;
 
   const api = axios.create({
     baseURL: 'http://localhost:3333',
   });
 
-  api.interceptors.request.use((config) => {
-    console.log(config);
-
-    return config;
-  });
+  axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response.status === 401) {
+        // Ou outro código específico de token inválido
+        logout();
+      }
+      return Promise.reject(error);
+    },
+  );
 
   if (token) {
     api.defaults.headers.Authorization = `Bearer ${token}`;
   }
 
   return api;
-}
+};

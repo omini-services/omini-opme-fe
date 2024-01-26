@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved
 import { notificationState } from '@atoms/notification';
 // eslint-disable-next-line import/no-unresolved
-import { AuthContext, SignInData } from '@contexts/AuthContext';
+import { AuthContext } from '@contexts/AuthContext';
 import {
   FormControl,
   FormLabel,
@@ -15,6 +15,8 @@ import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+
+import { SignInData } from '@/types/SignIn';
 
 const SigninForm = () => {
   const setNotification = useSetRecoilState(notificationState);
