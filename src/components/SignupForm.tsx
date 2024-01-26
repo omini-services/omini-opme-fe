@@ -1,13 +1,13 @@
 // eslint-disable-next-line import/no-unresolved
 import { useSignUp } from '@hooks/useSignUp';
 import { FormControl, FormLabel, Input, Stack, Button } from '@mui/joy';
-// eslint-disable-next-line import/no-unresolved
-import { SignUpData } from '@types/SignUpData';
 import { useForm } from 'react-hook-form';
+// eslint-disable-next-line import/no-unresolved, import/order
+import { SignUpData } from '@types/SignUpData';
 
 const SignupForm = () => {
   const { register, handleSubmit } = useForm();
-  const { signUp, loading, error } = useSignUp();
+  const { signUp, loading } = useSignUp();
 
   const handleSignUp = async (formData: SignUpData) => {
     await signUp(formData);

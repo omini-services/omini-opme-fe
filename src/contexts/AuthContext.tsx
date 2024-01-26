@@ -28,7 +28,7 @@ type AuthContextType = {
   isAuthenticated: boolean;
   user: User;
   signIn: (data: SignInData) => Promise<void>;
-  signOut: (data: SignInData) => void;
+  signOut: () => void;
 };
 
 type TAuthProvider = {
@@ -117,6 +117,7 @@ export const AuthProvider = (props: TAuthProvider) => {
   }, [navigate, removeCookie]);
 
   return (
+    // eslint-disable-next-line react/jsx-no-constructed-context-values
     <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
       {children}
     </AuthContext.Provider>

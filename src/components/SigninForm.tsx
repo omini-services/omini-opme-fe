@@ -50,6 +50,7 @@ const SigninForm = () => {
           }}
         >
           <Checkbox size="sm" label="Remember me" name="persistent" />
+          {/* @ts-ignore */}
           <Link level="title-sm" href="#replace-with-a-link">
             Forgot your password?
           </Link>

@@ -40,3 +40,5 @@ export const ROUTES = {
     to: '/registry/item',
   },
 };
+
+export const AWS_CLIENT_ID = '1ufuhqlfu1h6fneitjkglbavm3';

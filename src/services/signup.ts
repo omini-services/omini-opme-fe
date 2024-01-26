@@ -3,7 +3,10 @@ import {
   CognitoIdentityProviderClient,
 } from '@aws-sdk/client-cognito-identity-provider';
 // eslint-disable-next-line import/no-unresolved
+import { AWS_CLIENT_ID } from '@constants';
 import { SignUpData } from '@types/SignUpData';
+
+// import { generateSecretHash } from '@utils/crypto';
 
 interface ISignUp {
   username: string;
@@ -13,8 +16,10 @@ interface ISignUp {
 }
 
 export const createUser = async (userData: SignUpData) => {
+  // const secretHash = generateSecretHash(userData.username, AWS_CLIENT_ID, clientSecret);
+
   const requestData = {
-    clientId: '1eroc789rnnkb1a756l7gijd5h',
+    clientId: AWS_CLIENT_ID,
     username: userData.email,
     email: userData.email,
     password: userData.password,
@@ -30,7 +35,12 @@ export const createUser = async (userData: SignUpData) => {
         ClientId: clientId,
         Username: username,
         Password: password,
-        UserAttributes: [{ Name: 'email', Value: email }],
+        UserAttributes: [
+          { Name: 'email', Value: email },
+          { Name: 'given_name', Value: userData.name },
+          { Name: 'family_name', Value: 'Or' },
+          { Name: 'middle_name', Value: 'Stefan' },
+        ],
       });
 
       return client.send(command);

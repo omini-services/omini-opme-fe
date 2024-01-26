@@ -33,6 +33,7 @@ const renderListItems = () =>
     { title: 'Orders', to: '/orders', icon: ShoppingCartRoundedIcon },
   ].map((item) => (
     <ListItemLink key={item.title} title={item.title} to={item.to}>
+      {/* @ts-ignore */}
       {item.icon?.type?.render()}
     </ListItemLink>
   ));
@@ -40,9 +41,7 @@ const renderListItems = () =>
 export default function Sidebar() {
   const { signOut } = useContext(AuthContext);
 
-  async function handlSignOut() {
-    await signOut();
-  }
+  const handlSignOut = () => signOut();
 
   return (
     <Sheet
