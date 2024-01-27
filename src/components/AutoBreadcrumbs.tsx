@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import { breadcrumbNameMap } from '@constants';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
@@ -15,6 +14,8 @@ const LinkRouter = (props: ILinkRouter) => (
   <Link {...props} component={RouterLink as any} />
 );
 
+const isInOthers = (to: string) => ['/registry'].includes(to);
+
 const AutoBreadcrumbs = () => {
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter((x) => x);
@@ -29,17 +30,22 @@ const AutoBreadcrumbs = () => {
       <LinkRouter underline="none" color="neutral" to="/" aria-label="Home">
         <HomeRoundedIcon />
       </LinkRouter>
-      {pathnames.map((_, index) => {
+      {pathnames.map((value, index) => {
         const last = index === pathnames.length - 1;
         const to = `/${pathnames.slice(0, index + 1).join('/')}`;
 
-        return last ? (
-          <Typography color="text.primary" key={to}>
-            {breadcrumbNameMap[to]}
-          </Typography>
-        ) : (
+        const breadcrumbName = breadcrumbNameMap[to] || value;
+
+        if (last || isInOthers(to))
+          return (
+            <Typography color="text.primary" key={to}>
+              {breadcrumbName}
+            </Typography>
+          );
+
+        return (
           <LinkRouter underline="none" color="neutral" to={to} key={to}>
-            {breadcrumbNameMap[to]}
+            {breadcrumbName}
           </LinkRouter>
         );
       })}

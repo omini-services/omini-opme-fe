@@ -25,6 +25,7 @@ import ListItemLink from '@components/ListItemLink';
 import ThemeModeToggle from '@components/ThemeModeToggle';
 import Toggler from '@components/Toggler';
 import { closeSidebar } from '@utils/sidebar';
+import { ROUTES } from '@/constants';
 
 const renderListItems = () =>
   [
@@ -142,24 +143,40 @@ export default function Sidebar() {
               )}
             >
               <List sx={{ gap: 0.5 }}>
-                <ListItem sx={{ mt: 0.5 }}>
-                  <ListItemButton>Ocamento</ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>Empresa</ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>Especialidade</ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>Procedimento</ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>Iitems</ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>Lote</ListItemButton>
-                </ListItem>
+                <ListItemLink
+                  title={ROUTES.registry.company.name}
+                  to={ROUTES.registry.company.to}
+                >
+                  <ShoppingCartRoundedIcon />
+                </ListItemLink>
+
+                <ListItemLink
+                  title={ROUTES.registry.order.name}
+                  to={ROUTES.registry.order.to}
+                >
+                  <ShoppingCartRoundedIcon />
+                </ListItemLink>
+
+                <ListItemLink
+                  title={ROUTES.registry.specialty.name}
+                  to={ROUTES.registry.specialty.to}
+                >
+                  <ShoppingCartRoundedIcon />
+                </ListItemLink>
+
+                <ListItemLink
+                  title={ROUTES.registry.procedure.name}
+                  to={ROUTES.registry.procedure.to}
+                >
+                  <ShoppingCartRoundedIcon />
+                </ListItemLink>
+
+                <ListItemLink
+                  title={ROUTES.registry.item.name}
+                  to={ROUTES.registry.item.to}
+                >
+                  <ShoppingCartRoundedIcon />
+                </ListItemLink>
               </List>
             </Toggler>
           </ListItem>

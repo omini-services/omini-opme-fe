@@ -6,7 +6,7 @@ import Header from '@components/Header';
 import NotificationCenter from '@components/NotificationCenter';
 import Sidebar from '@components/Sidebar';
 
-const DashboardLayout = () => (
+const Layout = () => (
   <Box sx={{ display: 'flex', minHeight: '100dvh' }}>
     <NotificationCenter />
     <Header />
@@ -51,4 +51,4 @@ const DashboardLayout = () => (
   </Box>
 );
 
-export default DashboardLayout;
+export default Layout;

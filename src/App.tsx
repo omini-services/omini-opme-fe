@@ -1,7 +1,7 @@
 import { CssBaseline, CssVarsProvider } from '@mui/joy';
 import { RecoilRoot } from 'recoil';
 
-import { Router } from '@/Routes';
+import { Router } from '@/routes';
 
 export function App() {
   return (

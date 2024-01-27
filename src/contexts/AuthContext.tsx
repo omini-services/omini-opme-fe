@@ -1,93 +1,3 @@
-// // eslint-disable-next-line import/no-unresolved
-// import { tokenState } from '@atoms/auth';
-// import { notificationState } from '@atoms/notification';
-// import {
-//   CognitoIdentityProviderClient,
-//   InitiateAuthCommand,
-// } from '@aws-sdk/client-cognito-identity-provider';
-// import { SignInData, User } from '@types/SignIn';
-// import { createContext, useState, useCallback, ReactNode } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { useSetRecoilState } from 'recoil';
-
-// import {
-//   AWS_CLIENT_ID,
-//   AWS_REGION,
-//   INITIAL_TOKEN_STATE,
-//   INITIAL_USER_STATE,
-//   ROUTES,
-// } from '@/constants';
-
-// type AuthContextType = {
-//   isAuthenticated: boolean;
-//   user: User;
-//   signIn: (data: SignInData) => Promise<void>;
-//   signOut: () => void;
-// };
-
-// type TAuthProvider = {
-//   children: ReactNode;
-// };
-
-// export const AuthContext = createContext({} as AuthContextType);
-
-// export const AuthProvider = (props: TAuthProvider) => {
-//   const { children } = props;
-//   const [user, setUser] = useState<User>(INITIAL_USER_STATE);
-
-//   const setToken = useSetRecoilState(tokenState);
-//   const setNotification = useSetRecoilState(notificationState);
-
-//   const navigate = useNavigate();
-//   const isAuthenticated = !!user;
-
-//   const signIn = useCallback(
-//     async (signInData: SignInData) => {
-//       const client = new CognitoIdentityProviderClient({
-//         region: AWS_REGION,
-//       });
-//       const command = new InitiateAuthCommand({
-//         AuthFlow: 'USER_PASSWORD_AUTH',
-//         ClientId: AWS_CLIENT_ID,
-//         AuthParameters: {
-//           USERNAME: signInData.email,
-//           PASSWORD: signInData.password,
-//         },
-//       });
-
-//       try {
-//         const response = await client.send(command);
-//         console.log('response => ', response);
-
-//         // Processar resposta e definir estado do usuário
-//         const foundUser = {
-//           // Defina as propriedades do usuário
-//         };
-
-//         setToken(response.AuthenticationResult);
-//         setUser(foundUser);
-//         navigate(ROUTES.root.to);
-//       } catch (error) {
-//         setNotification('Erro na tentativa de login.');
-//       }
-//     },
-//     [navigate, setNotification, setToken],
-//   );
-
-//   const signOut = useCallback(() => {
-//     setUser(INITIAL_USER_STATE);
-//     setToken(INITIAL_TOKEN_STATE);
-//     navigate(ROUTES.signin.to);
-//   }, [navigate]);
-
-//   return (
-//     // eslint-disable-next-line react/jsx-no-constructed-context-values
-//     <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
-
 import {
   CognitoIdentityProviderClient,
   InitiateAuthCommand,
@@ -105,11 +15,15 @@ import { useSetRecoilState } from 'recoil';
 
 import { notificationState } from '@/atoms/notification';
 import {
-  AUTH_TOKEN,
+  COOKIE_ACCESS_TOKEN,
   AWS_CLIENT_ID,
   AWS_REGION,
   INITIAL_USER_STATE,
   ROUTES,
+  COOKIE_EXPIRES_IN,
+  COOKIE_ID_TOKEN,
+  COOKIE_REFRESH_TOKEN,
+  COOKIE_TOKEN_TYPE,
 } from '@/constants';
 import { SignInData, User } from '@/types/SignIn';
 
@@ -128,10 +42,18 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthProvider = ({ children }: TAuthProvider) => {
   const [user, setUser] = useState<User>(INITIAL_USER_STATE);
-  const [cookies, setCookie, removeCookie] = useCookies([AUTH_TOKEN]);
+  const [cookies, setCookie, removeCookie] = useCookies();
   const setNotification = useSetRecoilState(notificationState);
+  const [cookiesKeys] = useState([
+    COOKIE_ACCESS_TOKEN,
+    COOKIE_EXPIRES_IN,
+    COOKIE_ID_TOKEN,
+    COOKIE_REFRESH_TOKEN,
+    COOKIE_TOKEN_TYPE,
+  ]);
+
   const navigate = useNavigate();
-  const isAuthenticated = !!cookies.auth;
+  const isAuthenticated = !!cookies[COOKIE_ACCESS_TOKEN];
 
   const signIn = useCallback(
     async (signInData: SignInData) => {
@@ -148,20 +70,24 @@ export const AuthProvider = ({ children }: TAuthProvider) => {
       try {
         const response = await client.send(command);
 
-        const keys = Object.keys(response.AuthenticationResult);
-        keys.forEach((key) => {
-          setCookie(key, response.AuthenticationResult[key], {
-            maxAge: response.AuthenticationResult.ExpiresIn,
+        if (response.AuthenticationResult) {
+          cookiesKeys.forEach((key) => {
+            setCookie(key, response.AuthenticationResult[key], {
+              maxAge: response.AuthenticationResult[COOKIE_EXPIRES_IN],
+            });
           });
-        });
 
-        // Processar resposta e definir estado do usuário
-        const foundUser = {
-          // Defina as propriedades do usuário
-        };
+          // Processar resposta e definir estado do usuário
+          const foundUser = {
+            // Defina as propriedades do usuário
+          };
 
-        setUser(foundUser);
-        navigate(ROUTES.root.to);
+          setUser(foundUser);
+          navigate(ROUTES.root.to);
+        } else {
+          setNotification('Erro na tentativa de login.');
+          throw new Error('Erro na tentativa de login.');
+        }
       } catch (error) {
         setNotification('Erro na tentativa de login.');
       }
@@ -170,14 +96,12 @@ export const AuthProvider = ({ children }: TAuthProvider) => {
   );
 
   const signOut = useCallback(() => {
-    removeCookie(AUTH_TOKEN, { path: ROUTES.root.to });
+    cookiesKeys.forEach((key) => {
+      removeCookie(key, { path: ROUTES.root.to });
+    });
     setUser(INITIAL_USER_STATE);
     navigate(ROUTES.signin.to);
   }, [navigate, removeCookie]);
-
-  useEffect(() => {
-    console.log('cookies => ', { cookies });
-  }, [cookies]);
 
   return (
     <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>

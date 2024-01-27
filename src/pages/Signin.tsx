@@ -113,9 +113,9 @@ export default function Signin() {
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
                 <Typography level="body-sm">
-                  New company?{' '}
+                  Novo cadastro?{' '}
                   <Link href={ROUTES.signup.to} level="title-sm">
-                    Sign up!
+                    `Cadastre-se!`
                   </Link>
                 </Typography>
               </Stack>
