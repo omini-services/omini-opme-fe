@@ -1,9 +1,14 @@
 export const breadcrumbNameMap: { [key: string]: string } = {
   '/': 'Home',
   '/orders': 'Ordens',
-  '/registrations': 'Cadastros',
   '/dashboard': 'Dashboard',
   '/test': 'Test',
+  '/registry': 'Cadastros',
+  '/registry/company': 'Empresa',
+  '/registry/order': 'Ordem',
+  '/registry/specialty': 'Especialidade',
+  '/registry/procedure': 'Procedimento',
+  '/registry/item': 'Item',
 };
 
 export const ROUTES = {
@@ -12,32 +17,33 @@ export const ROUTES = {
   signin: { name: 'signin', label: 'Sign In', to: '/signin' },
   signout: { name: 'signout', label: 'Sign Out', to: '/signout' },
   dashboard: { name: 'dashboard', label: 'Dashboard', to: '/dashboard' },
-  home: { name: 'home', label: 'Home', to: '/home' },
   orders: { name: 'orders', label: 'Orders', to: '/orders' },
-  registryCompany: {
-    name: 'registryCompany',
-    label: 'Register Company',
-    to: '/registry/company',
-  },
-  registryOrder: {
-    name: 'registryOrder',
-    label: 'Register Order',
-    to: '/registry/order',
-  },
-  registrySpecialty: {
-    name: 'registrySpecialty',
-    label: 'Register Specialty',
-    to: '/registry/specialty',
-  },
-  registryProcedure: {
-    name: 'registryProcedure',
-    label: 'Register Procedure',
-    to: '/registry/procedure',
-  },
-  registryItem: {
-    name: 'registryItem',
-    label: 'Register Item',
-    to: '/registry/item',
+  registry: {
+    company: {
+      name: 'Empresa',
+      label: 'Register Company',
+      to: '/registry/company',
+    },
+    order: {
+      name: 'Ordem',
+      label: 'Register Order',
+      to: '/registry/order',
+    },
+    specialty: {
+      name: 'Especialidade',
+      label: 'Register Specialty',
+      to: '/registry/specialty',
+    },
+    procedure: {
+      name: 'Procedimento',
+      label: 'Register Procedure',
+      to: '/registry/procedure',
+    },
+    item: {
+      name: 'Item',
+      label: 'Register Item',
+      to: '/registry/item',
+    },
   },
 };
 

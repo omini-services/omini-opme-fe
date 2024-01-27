@@ -103,10 +103,6 @@ export const AuthProvider = ({ children }: TAuthProvider) => {
     navigate(ROUTES.signin.to);
   }, [navigate, removeCookie]);
 
-  useEffect(() => {
-    console.log('cookies => ', { cookies });
-  }, [cookies]);
-
   return (
     <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
       {children}

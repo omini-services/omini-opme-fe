@@ -10,6 +10,7 @@ import Home from '@pages/Home';
 import Orders from '@pages/Orders';
 import Signin from '@pages/Signin';
 import Signup from '@pages/Signup';
+import Company from '@pages/Company';
 
 import PrivateRoute from './PrivateRoute';
 
@@ -24,6 +25,7 @@ export function Router() {
             <Route path={ROUTES.root.to} element={<Home />} />
             <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
             <Route path={ROUTES.orders.to} element={<Orders />} />
+            <Route path={ROUTES.registry.company.to} element={<Company />} />
           </Route>
         </Routes>
       </AuthProvider>
