@@ -167,7 +167,7 @@ const TaskApp = () => {
             selectedTaskIds={selectedTaskIds}
             key={columnId}
             draggingTaskId={draggingTaskId}
-            toggleSelection={() => console.log}
+            toggleSelection={toggleSelection}
             toggleSelectionInGroup={toggleSelectionInGroup}
             multiSelectTo={multiSelectTo}
           />
