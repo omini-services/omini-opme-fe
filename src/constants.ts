@@ -56,3 +56,5 @@ export const INITIAL_TOKEN_STATE = {
   TokenType: 'Bearer',
   ExpiresIn: 3600,
 };
+
+export const AUTH_TOKEN = 'token';
