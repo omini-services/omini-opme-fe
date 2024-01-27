@@ -26,7 +26,7 @@ export default function Day({ day }) {
         }
       : {};
 
-  console.log(day.format('DD-MM-YY'));
+  // console.log(day.format('DD-MM-YY'));
 
   return (
     <Stack
