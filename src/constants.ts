@@ -57,4 +57,8 @@ export const INITIAL_TOKEN_STATE = {
   ExpiresIn: 3600,
 };
 
-export const AUTH_TOKEN = 'token';
+export const COOKIE_ACCESS_TOKEN = 'AccessToken';
+export const COOKIE_EXPIRES_IN = 'ExpiresIn';
+export const COOKIE_ID_TOKEN = 'IdToken';
+export const COOKIE_REFRESH_TOKEN = 'RefreshToken';
+export const COOKIE_TOKEN_TYPE = 'TokenType';
