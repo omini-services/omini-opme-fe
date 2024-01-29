@@ -1,7 +1,5 @@
 // @flow
-import { Id, Task } from '@/types/DragNDrop';
-
-import type { Column, Entities, TaskMap } from './types';
+import { Id, Task, Column, Entities, TaskMap } from '@/types/DragNDrop';
 
 const tasks: Task[] = Array.from({ length: 20 }, (v, k) => k).map(
   (val: number): Task => ({
@@ -18,23 +16,23 @@ const taskMap: TaskMap = tasks.reduce(
   {},
 );
 
-const todo: Column = {
+const items: Column = {
   id: 'items',
   title: 'Items',
   taskIds: tasks.map((task: Task): Id => task.id),
 };
 
-const done: Column = {
+const cart: Column = {
   id: 'cart',
   title: 'Carrinho',
   taskIds: [],
 };
 
 const entities: Entities = {
-  columnOrder: [todo.id, done.id],
+  columnOrder: [items.id, cart.id],
   columns: {
-    [todo.id]: todo,
-    [done.id]: done,
+    [items.id]: items,
+    [cart.id]: cart,
   },
   tasks: taskMap,
 };

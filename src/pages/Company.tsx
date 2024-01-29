@@ -1,4 +1,4 @@
-import TaskApp from '@components/MultiDrag/task-app';
+import TaskApp from '@/components/MultiDrag';
 
 const Company = () => <TaskApp />;
 

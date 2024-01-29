@@ -3,10 +3,9 @@ import styled from '@emotion/styled';
 import memoizeOne from 'memoize-one';
 import { Droppable } from 'react-beautiful-dnd';
 
-import { Id, Task as TaskType } from '@/types/DragNDrop';
+import { Id, Task as TaskType, Column as ColumnType } from '@/types/DragNDrop';
 
 import Task from './task';
-import type { Column as ColumnType } from './types';
 
 export const grid = 8;
 export const borderRadius = 2;

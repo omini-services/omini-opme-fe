@@ -1,21 +1,9 @@
 import type { DraggableLocation } from 'react-beautiful-dnd';
 
-import { Id } from '@/types/DragNDrop';
+import { Column, ColumnMap, Entities, Id } from '@/types/DragNDrop';
+import { reorder } from '@/utils/dragNdrop';
 
 import { invariant } from './invariant';
-import type { Column, ColumnMap, Entities } from './types';
-
-export const reorder = (
-  list: any[],
-  startIndex: number,
-  endIndex: number,
-): any[] => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
 
 type Args = {
   entities: Entities;

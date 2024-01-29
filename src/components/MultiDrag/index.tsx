@@ -2,11 +2,10 @@ import styled from '@emotion/styled';
 import { useState, useEffect, useCallback } from 'react';
 import { DragStart, DropResult, DragDropContext } from 'react-beautiful-dnd';
 
-import { Id, Task } from '@/types/DragNDrop';
+import { Id, Task, Entities } from '@/types/DragNDrop';
 
 import Column from './column';
 import initial from './data';
-import type { Entities } from './types';
 import { mutliDragAwareReorder, multiSelectTo as multiSelect } from './utils';
 
 const Container = styled.div`
