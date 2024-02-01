@@ -1,24 +1,35 @@
 // eslint-disable-next-line import/no-unresolved
-import { ROUTES } from '@constants';
+
+// eslint-disable-next-line import/order
+import Layout from '@/components/Layout';
+// eslint-disable-next-line import/order
+import { ROUTES } from '@/constants';
+
 // eslint-disable-next-line import/no-unresolved
-import { AuthProvider } from '@contexts/AuthContext';
+// import { AuthProvider } from '@contexts/AuthContext';
+
+import { PublicClientApplication } from '@azure/msal-browser';
+import { MsalProvider } from '@azure/msal-react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import Layout from '@/components/Layout';
 import Dashboard from '@/pages/Dashboard';
+import Company from '@pages/Company';
 import Home from '@pages/Home';
+import Order from '@pages/Order';
 import Orders from '@pages/Orders';
 import Signin from '@pages/Signin';
 import Signup from '@pages/Signup';
-import Company from '@pages/Company';
-import Order from '@pages/Order';
+
+import { msalConfig } from '../configs/authConfig';
 
 import PrivateRoute from './PrivateRoute';
+
+const msalInstance = new PublicClientApplication(msalConfig);
 
 export function Router() {
   return (
     <BrowserRouter>
-      <AuthProvider>
+      <MsalProvider instance={msalInstance}>
         <Routes>
           <Route path={ROUTES.signin.to} element={<Signin />} />
           <Route path={ROUTES.signup.to} element={<Signup />} />
@@ -30,7 +41,7 @@ export function Router() {
             <Route path={ROUTES.registry.order.to} element={<Order />} />
           </Route>
         </Routes>
-      </AuthProvider>
+      </MsalProvider>
     </BrowserRouter>
   );
 }

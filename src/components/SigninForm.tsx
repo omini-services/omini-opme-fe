@@ -1,67 +1,49 @@
-// eslint-disable-next-line import/no-unresolved
-import { notificationState } from '@atoms/notification';
-// eslint-disable-next-line import/no-unresolved
-import { AuthContext } from '@contexts/AuthContext';
-import {
-  FormControl,
-  FormLabel,
-  Input,
-  Stack,
-  Box,
-  Checkbox,
-  Button,
-} from '@mui/joy';
-import { useContext } from 'react';
-import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useMsal } from '@azure/msal-react';
+import Box from '@mui/joy/Box';
+import FormControl from '@mui/joy/FormControl';
+import MenuItem from '@mui/joy/MenuItem';
+import Select from '@mui/joy/Select';
+import InputLabel from '@mui/material/InputLabel';
+import { useEffect, useState } from 'react';
 
-import { SignInData } from '@/types/SignIn';
+import { loginRequest } from '../configs/authConfig';
 
 const SigninForm = () => {
-  const setNotification = useSetRecoilState(notificationState);
-  const { register, handleSubmit } = useForm();
-  const { signIn } = useContext(AuthContext);
+  const [loginType, setLoginType] = useState('');
+  const { instance } = useMsal();
 
-  async function handleSignIn(data: SignInData) {
-    await signIn(data);
-    setNotification('Usuario logado com sucesso');
-  }
+  const handleLogin = (value) => {
+    setLoginType(value);
+  };
+
+  useEffect(() => {
+    if (loginType === 'popup') {
+      instance.loginPopup(loginRequest).catch((e) => {
+        console.log(e);
+      });
+    } else if (loginType === 'redirect') {
+      instance.loginRedirect(loginRequest).catch((e) => {
+        console.log(e);
+      });
+    }
+  }, [loginType, instance]);
 
   return (
-    <form
-      onSubmit={
-        // @ts-ignore
-        handleSubmit(handleSignIn)
-      }
-    >
-      <FormControl required>
-        <FormLabel>Email</FormLabel>
-        <Input {...register('email')} type="email" name="email" />
-      </FormControl>
-      <FormControl required>
-        <FormLabel>Password</FormLabel>
-        <Input {...register('password')} type="password" name="password" />
-      </FormControl>
-      <Stack gap={4} sx={{ mt: 2 }}>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="login-type-label">Login Type</InputLabel>
+        <Select
+          labelId="login-type-label"
+          id="login-type-select"
+          value={loginType}
+          label="Login Type"
+          onChange={handleLogin}
         >
-          <Checkbox size="sm" label="Remember me" name="persistent" />
-          {/* @ts-ignore */}
-          <Link level="title-sm" href="#replace-with-a-link">
-            Forgot your password?
-          </Link>
-        </Box>
-        <Button type="submit" fullWidth>
-          Sign in
-        </Button>
-      </Stack>
-    </form>
+          <MenuItem value="popup">Sign in using Popup</MenuItem>
+          <MenuItem value="redirect">Sign in using Redirect</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
   );
 };
 

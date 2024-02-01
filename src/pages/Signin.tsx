@@ -1,5 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
-import { ROUTES } from '@constants';
 import Box from '@mui/joy/Box';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Divider from '@mui/joy/Divider';
@@ -10,6 +8,7 @@ import Stack from '@mui/joy/Stack';
 import { CssVarsProvider } from '@mui/joy/styles';
 import Typography from '@mui/joy/Typography';
 
+import { ROUTES } from '@/constants';
 import ColorSchemeToggle from '@components/ColorSchemeToggle';
 import FraterLogo from '@components/FraterLogo/FraterLogo';
 import SigninForm from '@components/SigninForm';
