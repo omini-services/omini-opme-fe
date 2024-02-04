@@ -1,15 +1,17 @@
+import { useIsAuthenticated } from '@azure/msal-react';
 import Box from '@mui/joy/Box';
 import CssBaseline from '@mui/joy/CssBaseline';
 import { formLabelClasses } from '@mui/joy/FormLabel';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import { CssVarsProvider } from '@mui/joy/styles';
 import Typography from '@mui/joy/Typography';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '@/constants';
 import ColorSchemeToggle from '@components/ColorSchemeToggle';
 import FraterLogo from '@components/FraterLogo/FraterLogo';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { SignInButton } from '@/components/Profile/SignInButton';
 
 export default function Signin() {
   const isAuthenticated = useIsAuthenticated();
@@ -17,7 +19,7 @@ export default function Signin() {
 
   useEffect(() => {
     navigate(ROUTES.root.to);
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>

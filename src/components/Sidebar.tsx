@@ -42,7 +42,7 @@ export default function Sidebar() {
 
   const handlSignOut = () => {
     instance.logoutRedirect({
-      postLogoutRedirectUri: '/',
+      postLogoutRedirectUri: `${window.location.origin}/signin`,
     });
   };
 
