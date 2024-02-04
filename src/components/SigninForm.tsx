@@ -4,7 +4,7 @@ import FormControl from '@mui/joy/FormControl';
 import MenuItem from '@mui/joy/MenuItem';
 import Select from '@mui/joy/Select';
 import InputLabel from '@mui/material/InputLabel';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 
 import { loginRequest } from '../configs/authConfig';
 
@@ -12,7 +12,7 @@ const SigninForm = () => {
   const [loginType, setLoginType] = useState('');
   const { instance } = useMsal();
 
-  const handleLogin = (value) => {
+  const handleLogin = (value: SetStateAction<string>) => {
     setLoginType(value);
   };
 
