@@ -8,10 +8,10 @@ import Typography from '@mui/joy/Typography';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { SignInButton } from '@/components/Profile/SignInButton';
 import { ROUTES } from '@/constants';
 import ColorSchemeToggle from '@components/ColorSchemeToggle';
 import FraterLogo from '@components/FraterLogo/FraterLogo';
-import { SignInButton } from '@/components/Profile/SignInButton';
 
 export default function Signin() {
   const isAuthenticated = useIsAuthenticated();

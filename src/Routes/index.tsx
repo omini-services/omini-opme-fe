@@ -18,7 +18,6 @@ import Home from '@pages/Home';
 import Order from '@pages/Order';
 import Orders from '@pages/Orders';
 import Signin from '@pages/Signin';
-import Signup from '@pages/Signup';
 
 import { msalConfig } from '../configs/authConfig';
 
@@ -32,7 +31,6 @@ export function Router() {
       <MsalProvider instance={msalInstance}>
         <Routes>
           <Route path={ROUTES.signin.to} element={<Signin />} />
-          <Route path={ROUTES.signup.to} element={<Signup />} />
           <Route element={<PrivateRoute component={Layout} />}>
             <Route path={ROUTES.root.to} element={<Home />} />
             <Route path={ROUTES.dashboard.to} element={<Dashboard />} />

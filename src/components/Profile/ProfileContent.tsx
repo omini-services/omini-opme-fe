@@ -7,6 +7,7 @@ import { ProfileData } from '@/components/Profile/ProfileData';
 import { loginRequest } from '@/configs/authConfig';
 import { callMsGraph } from '@/configs/graph';
 
+// TODO: here we can see how to get a token to make requests on the API
 const ProfileContent = () => {
   const { instance, accounts } = useMsal();
   const [graphData, setGraphData] = useState(null);
