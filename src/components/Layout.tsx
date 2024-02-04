@@ -36,17 +36,7 @@ const Layout = () => (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <AutoBreadcrumbs />
       </Box>
-      {/* <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-          height: '100%',
-        }}
-      > */}
       <Outlet />
-      {/* </Box> */}
     </Box>
   </Box>
 );

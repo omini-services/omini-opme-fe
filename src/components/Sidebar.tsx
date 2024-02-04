@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-unresolved
-import { AuthContext } from '@contexts/AuthContext';
+import { useMsal } from '@azure/msal-react';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
@@ -18,14 +17,13 @@ import ListItemButton, { listItemButtonClasses } from '@mui/joy/ListItemButton';
 import ListItemContent from '@mui/joy/ListItemContent';
 import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
-import { useContext } from 'react';
 
+import { ROUTES } from '@/constants';
 import FraterLogo from '@components/FraterLogo/FraterLogo';
 import ListItemLink from '@components/ListItemLink';
 import ThemeModeToggle from '@components/ThemeModeToggle';
 import Toggler from '@components/Toggler';
 import { closeSidebar } from '@utils/sidebar';
-import { ROUTES } from '@/constants';
 
 const renderListItems = () =>
   [
@@ -40,9 +38,13 @@ const renderListItems = () =>
   ));
 
 export default function Sidebar() {
-  const { signOut } = useContext(AuthContext);
+  const { instance } = useMsal();
 
-  const handlSignOut = () => signOut();
+  const handlSignOut = () => {
+    instance.logoutRedirect({
+      postLogoutRedirectUri: `${window.location.origin}/signin`,
+    });
+  };
 
   return (
     <Sheet

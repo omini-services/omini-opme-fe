@@ -32,6 +32,7 @@
       "@types/*": ["./src/types/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@atoms/*": ["./src/atoms/*"],
+      "@configs/*": ["./src/configs/*"],
       // files
       "@constants": ["./src/constants.ts"],
     }

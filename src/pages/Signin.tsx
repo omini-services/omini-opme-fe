@@ -1,20 +1,26 @@
-// eslint-disable-next-line import/no-unresolved
-import { ROUTES } from '@constants';
+import { useIsAuthenticated } from '@azure/msal-react';
 import Box from '@mui/joy/Box';
 import CssBaseline from '@mui/joy/CssBaseline';
-import Divider from '@mui/joy/Divider';
 import { formLabelClasses } from '@mui/joy/FormLabel';
 import GlobalStyles from '@mui/joy/GlobalStyles';
-import Link from '@mui/joy/Link';
-import Stack from '@mui/joy/Stack';
 import { CssVarsProvider } from '@mui/joy/styles';
 import Typography from '@mui/joy/Typography';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import { SignInButton } from '@/components/Profile/SignInButton';
+import { ROUTES } from '@/constants';
 import ColorSchemeToggle from '@components/ColorSchemeToggle';
 import FraterLogo from '@components/FraterLogo/FraterLogo';
-import SigninForm from '@components/SigninForm';
 
 export default function Signin() {
+  const isAuthenticated = useIsAuthenticated();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate(ROUTES.root.to);
+  }, [isAuthenticated, navigate]);
+
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
@@ -93,33 +99,7 @@ export default function Signin() {
               },
             }}
           >
-            <Stack gap={4} sx={{ mt: 2 }}>
-              <SigninForm />
-            </Stack>
-
-            <Divider
-              sx={(theme) => ({
-                [theme.getColorSchemeSelector('light')]: {
-                  color: { xs: '#FFF', md: 'text.tertiary' },
-                  '--Divider-lineColor': {
-                    xs: '#FFF',
-                    md: 'var(--joy-palette-divider)',
-                  },
-                },
-              })}
-            >
-              or
-            </Divider>
-            <Stack gap={4} sx={{ mb: 2 }}>
-              <Stack gap={1}>
-                <Typography level="body-sm">
-                  Novo cadastro?{' '}
-                  <Link href={ROUTES.signup.to} level="title-sm">
-                    `Cadastre-se!`
-                  </Link>
-                </Typography>
-              </Stack>
-            </Stack>
+            <SignInButton />
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body-xs" textAlign="center">
