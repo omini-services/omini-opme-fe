@@ -27,6 +27,7 @@
     "@mui/icons-material": "5.15.6",
     "@mui/joy": "5.0.0-beta.22",
     "@mui/material": "5.15.4",
+    "@sentry/browser": "^7.99.0",
     "axios": "1.6.5",
     "crypto": "^1.0.1",
     "dayjs": "^1.11.10",
