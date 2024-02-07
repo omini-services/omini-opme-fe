@@ -47,24 +47,4 @@ export const ROUTES = {
   },
 };
 
-export const AWS_CLIENT_ID = '1ufuhqlfu1h6fneitjkglbavm3';
-export const AWS_REGION = 'us-east-1';
-
-export const INITIAL_USER_STATE = {
-  name: '',
-  email: '',
-};
-
-export const INITIAL_TOKEN_STATE = {
-  AccessToken: '',
-  IdToken: '',
-  RefreshToken: '',
-  TokenType: 'Bearer',
-  ExpiresIn: 3600,
-};
-
-export const COOKIE_ACCESS_TOKEN = 'AccessToken';
-export const COOKIE_EXPIRES_IN = 'ExpiresIn';
-export const COOKIE_ID_TOKEN = 'IdToken';
-export const COOKIE_REFRESH_TOKEN = 'RefreshToken';
-export const COOKIE_TOKEN_TYPE = 'TokenType';
+export const INITIAL_USER_STATE = null;
