@@ -1,5 +1,12 @@
-import ProfileContent from '@/components/Profile/ProfileContent';
+import { useRecoilValue } from 'recoil';
 
-const Dashboard = () => <ProfileContent />;
+import { userState } from '@/atoms/auth';
+
+const Dashboard = () => {
+  const userData = useRecoilValue(userState);
+  const { userPrincipalName } = userData;
+
+  return <>{userPrincipalName}</>;
+};
 
 export default Dashboard;
