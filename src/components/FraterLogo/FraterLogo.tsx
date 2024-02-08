@@ -1,7 +1,6 @@
-import logo from './logo.png';
+// eslint-disable-next-line import/no-unresolved
+import './logo.css';
 
-function FraterLogo() {
-  return <img src={logo} alt="Frater Medical" width="90px" height="30px" />;
-}
+const FraterLogo = () => <div className="logo" />;
 
 export default FraterLogo;
