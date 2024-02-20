@@ -1,0 +1,8 @@
+.logo {
+    width: 250px; /* largura da div */
+    height: 50px; /* altura da div */
+    background-image: url('./frater-logo.jpg'); /* substitua pelo caminho da sua imagem */
+    background-size: cover; /* cobre completamente a área da div */
+    background-position: center; /* centraliza a imagem na div */
+  }
+  
