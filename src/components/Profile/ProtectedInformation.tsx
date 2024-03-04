@@ -4,10 +4,9 @@ import { useRecoilState } from 'recoil';
 
 // eslint-disable-next-line import/extensions
 import { userState } from '@/atoms/auth';
-import { loginRequest } from '@/configs/authConfig';
+import { loginRequest, graphConfig } from '@/configs/authConfig';
 import { callMsGraph } from '@/configs/graph';
 
-// TODO: here we can see how to get a token to make requests on the API
 const ProtectedInformation = () => {
   const { instance, accounts } = useMsal();
   const [userData, setUserData] = useRecoilState(userState);
@@ -20,7 +19,11 @@ const ProtectedInformation = () => {
         account: accounts[0],
       })
       .then((response) => {
-        callMsGraph(response.accessToken).then((res) => setUserData(res));
+        callMsGraph(
+          graphConfig.graphMeEndpoint,
+          response.accessToken,
+          'GET',
+        ).then((res) => setUserData(res));
       });
   });
 
