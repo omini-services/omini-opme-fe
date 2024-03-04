@@ -15,6 +15,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Dashboard from '@/pages/Dashboard';
 import Company from '@pages/Company';
 import Home from '@pages/Home';
+import Item from '@pages/Item';
 import Order from '@pages/Order';
 import Orders from '@pages/Orders';
 import Signin from '@pages/Signin';
@@ -37,6 +38,7 @@ export function Router() {
             <Route path={ROUTES.orders.to} element={<Orders />} />
             <Route path={ROUTES.registry.company.to} element={<Company />} />
             <Route path={ROUTES.registry.order.to} element={<Order />} />
+            <Route path={ROUTES.registry.item.to} element={<Item />} />
           </Route>
         </Routes>
       </MsalProvider>
