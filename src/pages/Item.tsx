@@ -21,7 +21,7 @@ interface IFormData {
   cst: string;
   sus_code: string;
   ncm_code: string;
-  foreign_description: string;
+  sales_name: string;
 }
 
 const ItemForm = () => {
@@ -36,7 +36,7 @@ const ItemForm = () => {
     cst: '',
     sus_code: '',
     ncm_code: '',
-    foreign_description: '',
+    sales_name: '',
   });
 
   const handleChange = (
@@ -71,10 +71,12 @@ const ItemForm = () => {
           account: accounts[0],
         })
         .then((res) => {
+          console.log('got token => ', res);
           callMsGraph(
-            'https://app-eng-opmebe-prd-eastus.azurewebsites.net/items',
+            'https://app-eng-opmebe-prd-eastus.azurewebsites.net/api/items',
             res.accessToken,
             'POST',
+            formData,
           ).then((result) => console.log(result.data));
         });
 
@@ -155,8 +157,8 @@ const ItemForm = () => {
           variant="soft"
         />
         <Textarea
-          name="foreign_description"
-          value={formData.foreign_description}
+          name="sales_name"
+          value={formData.sales_name}
           onChange={handleChange}
           placeholder="Descrição Estrangeira"
           color="primary"
