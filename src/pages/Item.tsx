@@ -3,40 +3,52 @@ import { Input, Textarea, Button } from '@mui/joy';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import axios from 'axios';
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 
-import { useRecoilState } from 'recoil';
-
-// eslint-disable-next-line import/extensions
-import { loginRequest } from '@/configs/authConfig';
-import { callMsGraph } from '@/configs/graph';
+import { callApi } from '@/configs/api';
+import { apiConfig } from '@/configs/authConfig';
 
 interface IFormData {
+  code: string;
+  name: string;
+  salesName: string;
   description: string;
   uom: string;
-  anvisa_code: string;
-  anvisa_duedate: Date | null;
-  supplier_code: string;
+  anvisaCode: string;
+  anvisaDueDate: Date | null;
+  supplierCode: string;
   cst: string;
-  sus_code: string;
-  ncm_code: string;
-  sales_name: string;
+  susCode: string;
+  ncmCode: string;
 }
+
+// Code          string    json:"code"
+// Description   string    json:"description"
+// Name          string    json:"name"
+// SalesName     string    json:"salesName"
+// Uom           string    json:"uom"
+// anvisaCode    string    json:"anvisaCode"
+// anvisaDueDate time.Time json:"anvisaDueDate"
+// supplierCode  string    json:"supplierCode"
+// Cst           string    json:"cst"
+// susCode       string    json:"susCode"
+// ncmCode       string    json:"ncmCode"
 
 const ItemForm = () => {
   const { instance, accounts } = useMsal();
 
   const [formData, setFormData] = useState<IFormData>({
+    code: '',
+    name: '',
     description: '',
     uom: '',
-    anvisa_code: '',
-    anvisa_duedate: null,
-    supplier_code: '',
+    anvisaCode: '',
+    anvisaDueDate: null,
+    supplierCode: '',
     cst: '',
-    sus_code: '',
-    ncm_code: '',
-    sales_name: '',
+    susCode: '',
+    ncmCode: '',
+    salesName: '',
   });
 
   const handleChange = (
@@ -52,44 +64,49 @@ const ItemForm = () => {
   const handleDateChange = (newValue: Date | null) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      anvisa_duedate: newValue,
+      anvisaDueDate: newValue,
     }));
   };
 
   const handleSubmit = async (event: FormEvent) => {
-    console.log('handleSubmit');
     event.preventDefault();
     try {
-      // const response = await axios.post(
-      //   'https://app-eng-opmebe-prd-eastus.azurewebsites.net/items',
-      //   formData,
-      // );
-
       instance
         .acquireTokenSilent({
-          ...loginRequest,
+          scopes: apiConfig.scopes,
           account: accounts[0],
         })
         .then((res) => {
-          console.log('got token => ', res);
-          callMsGraph(
-            'https://app-eng-opmebe-prd-eastus.azurewebsites.net/api/items',
-            res.accessToken,
-            'POST',
-            formData,
-          ).then((result) => console.log(result.data));
+          callApi(apiConfig.endpoint, res.accessToken, 'POST', formData).then(
+            (result) => console.log(result.data),
+          );
         });
-
-      // Lógica para lidar com a resposta bem-sucedida
     } catch (error) {
       console.error('Erro ao enviar o formulário:', error);
-      // Lógica para lidar com erro
     }
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form onSubmit={handleSubmit}>
+        <Input
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="name"
+          color="primary"
+          size="sm"
+          variant="soft"
+        />
+        <Input
+          name="code"
+          value={formData.code}
+          onChange={handleChange}
+          placeholder="code"
+          color="primary"
+          size="sm"
+          variant="soft"
+        />
         <Textarea
           name="description"
           value={formData.description}
@@ -106,8 +123,8 @@ const ItemForm = () => {
           variant="soft"
         />
         <Input
-          name="anvisa_code"
-          value={formData.anvisa_code}
+          name="anvisaCode"
+          value={formData.anvisaCode}
           onChange={handleChange}
           placeholder="Código ANVISA"
           color="primary"
@@ -116,13 +133,13 @@ const ItemForm = () => {
         />
         {/* <DatePicker
           format="MM/dd/yyyy"
-          value={formData.anvisa_duedate}
+          value={formData.anvisaDueDate}
           onChange={handleDateChange}
           //   renderInput={(params) => <Input {...params} />}
         /> */}
         <Input
-          name="supplier_code"
-          value={formData.supplier_code}
+          name="supplierCode"
+          value={formData.supplierCode}
           onChange={handleChange}
           placeholder="Código do Fornecedor"
           color="primary"
@@ -139,8 +156,8 @@ const ItemForm = () => {
           variant="soft"
         />
         <Input
-          name="sus_code"
-          value={formData.sus_code}
+          name="susCode"
+          value={formData.susCode}
           onChange={handleChange}
           placeholder="Código SUS"
           color="primary"
@@ -148,8 +165,8 @@ const ItemForm = () => {
           variant="soft"
         />
         <Input
-          name="ncm_code"
-          value={formData.ncm_code}
+          name="ncmCode"
+          value={formData.ncmCode}
           onChange={handleChange}
           placeholder="Código NCM"
           color="primary"
@@ -157,8 +174,8 @@ const ItemForm = () => {
           variant="soft"
         />
         <Textarea
-          name="sales_name"
-          value={formData.sales_name}
+          name="salesName"
+          value={formData.salesName}
           onChange={handleChange}
           placeholder="Descrição Estrangeira"
           color="primary"

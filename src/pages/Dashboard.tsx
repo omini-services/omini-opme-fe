@@ -6,7 +6,7 @@ const Dashboard = () => {
   const userData = useRecoilValue(userState);
   const { userPrincipalName } = userData;
 
-  return <>{userPrincipalName}</>;
+  return <span>{userPrincipalName}</span>;
 };
 
 export default Dashboard;
