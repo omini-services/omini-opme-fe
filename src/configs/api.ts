@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { v4 } from 'uuid';
+
 export async function callMsGraph(
   url: string | undefined,
   accessToken: string | undefined,
@@ -12,15 +15,11 @@ export async function callMsGraph(
   };
 
   try {
-    // const response = await axios(config);
-    // return response.data; // Retorna os dados diretamente
-
     return fetch(url, config)
       .then((response) => response.json())
       .catch((error) => console.log(error));
   } catch (error) {
     console.log(error);
-    // Tratar ou relançar o erro conforme necessário
     throw error;
   }
 }
@@ -31,25 +30,35 @@ export async function callApi(
   method: string,
   body: object,
 ) {
-  const headers = new Headers();
-  const bearer = `Bearer ${accessToken}`;
-  headers.append('Authorization', bearer);
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  };
 
   const config = {
     method,
     headers,
-    body,
   };
 
-  try {
-    // const response = await axios(config);
-    // return response.data; // Retorna os dados diretamente
+  body.id = v4();
 
-    return fetch(url, config)
-      .then((response) => response.json())
-      .catch((error) => console.log(error));
+  try {
+    if (method.toLowerCase() === 'post') {
+      // Para uma solicitação POST
+      return axios
+        .post(url, body, config)
+        .then((response) => response.data)
+        .catch((error) => console.error(error));
+    }
+    if (method.toLowerCase() === 'get') {
+      // Para uma solicitação GET (assumindo que 'body' não é necessário)
+      return axios
+        .get(url, config)
+        .then((response) => response.data)
+        .catch((error) => console.error(error));
+    }
+    // Adicione mais condicionais aqui para outros métodos HTTP se necessário
   } catch (error) {
-    console.log(error);
+    console.error(error);
     // Tratar ou relançar o erro conforme necessário
     throw error;
   }
