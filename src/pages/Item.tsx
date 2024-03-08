@@ -1,7 +1,7 @@
-import ItemForm from '@components/Item/Form';
+import Form from '@components/Item/Form';
 
 const Item = () => {
-  const renderForm = () => <ItemForm />;
+  const renderForm = () => <Form />;
 
   return <>{renderForm()}</>;
 };
