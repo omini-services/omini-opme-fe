@@ -23,7 +23,7 @@ const ProtectedInformation = () => {
           setUserData(res),
         );
       });
-  });
+  }, []);
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
   return <></>;
