@@ -1,4 +1,4 @@
-import { colors } from '@atlaskit/theme';
+import { red, pink, purple } from '@mui/material/colors';
 
 import QuoteApp from '@/components/GroupDragNDrop';
 import bmoImg from '@/components/GroupDragNDrop/images/bmo-min.png';
@@ -13,8 +13,8 @@ const jake: Author = {
   url: 'http://adventuretime.wikia.com/wiki/Jake',
   avatarUrl: jakeImg,
   colors: {
-    soft: colors.Y50,
-    hard: colors.N400A,
+    soft: red[50],
+    hard: pink[100],
   },
 };
 
@@ -24,8 +24,8 @@ const BMO: Author = {
   url: 'http://adventuretime.wikia.com/wiki/BMO',
   avatarUrl: bmoImg,
   colors: {
-    soft: colors.G50,
-    hard: colors.N400A,
+    soft: purple[50],
+    hard: pink[100],
   },
 };
 
@@ -35,8 +35,8 @@ const finn: Author = {
   url: 'http://adventuretime.wikia.com/wiki/Finn',
   avatarUrl: finnImg,
   colors: {
-    soft: colors.B50,
-    hard: colors.N400A,
+    soft: purple[200],
+    hard: pink[100],
   },
 };
 
@@ -46,8 +46,8 @@ const princess: Author = {
   url: 'http://adventuretime.wikia.com/wiki/Princess_Bubblegum',
   avatarUrl: princessImg,
   colors: {
-    soft: colors.P50,
-    hard: colors.N400A,
+    soft: red[100],
+    hard: pink[100],
   },
 };
 

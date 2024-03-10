@@ -1,11 +1,14 @@
 import path from 'path';
 
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  optimizeDeps: {
+    include: ['@emotion/react', '@emotion/styled'],
+  },
   server: {
     open: true,
   },
@@ -24,6 +27,7 @@ export default defineConfig({
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@atoms': path.resolve(__dirname, './src/atoms'),
       '@configs': path.resolve(__dirname, './src/configs'),
+      '@themes': path.resolve(__dirname, './src/themes'),
       // files
       '@constants': path.resolve(__dirname, './src/constants.ts'),
     },

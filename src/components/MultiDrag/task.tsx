@@ -1,5 +1,5 @@
-import { colors } from '@atlaskit/theme';
 import styled from '@emotion/styled';
+import { red, pink, purple, grey } from '@mui/material/colors';
 import { useCallback } from 'react';
 import {
   Draggable,
@@ -30,14 +30,14 @@ const getBackgroundColor = ({
   isGhosting,
 }: GetBackgroundColorArgs): string => {
   if (isGhosting) {
-    return colors.N10;
+    return red[50];
   }
 
   if (isSelected) {
-    return colors.B50;
+    return pink[50];
   }
 
-  return colors.N10;
+  return red[50];
 };
 
 const getColor = ({ isSelected, isGhosting }): string => {
@@ -45,9 +45,9 @@ const getColor = ({ isSelected, isGhosting }): string => {
     return 'darkgrey';
   }
   if (isSelected) {
-    return colors.B200;
+    return pink[200];
   }
-  return colors.N900;
+  return purple[900];
 };
 
 const Container = styled.div`
@@ -57,9 +57,9 @@ const Container = styled.div`
   margin-bottom: ${grid}px;
   border-radius: ${borderRadius}px;
   font-size: 18px;
-  border: 3px solid ${colors.N90};
+  border: 3px solid ${purple[90]};
   ${(props) =>
-    props.isDragging ? `box-shadow: 2px 2px 1px ${colors.N90};` : ''} ${(
+    props.isDragging ? `box-shadow: 2px 2px 1px ${purple[900]};` : ''} ${(
     props,
   ) => (props.isGhosting ? 'opacity: 0.8;' : '')}
   
@@ -69,7 +69,7 @@ const Container = styled.div`
   /* avoid default outline which looks lame with the position: absolute; */
   &:focus {
     outline: none;
-    border-color: ${colors.G200};
+    border-color: ${grey[200]};
   }
 `;
 /* stylelint-disable block-no-empty */
@@ -80,8 +80,8 @@ const size: number = 30;
 const SelectionCount = styled.div`
   right: -${grid}px;
   top: -${grid}px;
-  color: ${colors.N0};
-  background: ${colors.N200};
+  color: ${red[50]};
+  background: ${purple[200]};
   border-radius: 50%;
   height: ${size}px;
   width: ${size}px;

@@ -216,8 +216,6 @@ export const multiSelectTo = (
   selectedTaskIds: Id[],
   newTaskId: TaskId,
 ) => {
-  console.log('selectedTaskIds => ', selectedTaskIds);
-
   // Nothing already selected
   if (!selectedTaskIds.length) {
     return [newTaskId];

@@ -1,5 +1,6 @@
 import { useMsal } from '@azure/msal-react';
-import { Input, Textarea, Button } from '@mui/joy';
+import AddIcon from '@mui/icons-material/Add';
+import { Input, Textarea, Button, Modal, Box } from '@mui/joy';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useState, ChangeEvent, FormEvent } from 'react';
@@ -21,8 +22,23 @@ interface IFormData {
   ncmCode: string;
 }
 
-export const ItemForm = () => {
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
+
+export const Form = () => {
   const { instance, accounts } = useMsal();
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const [formData, setFormData] = useState<IFormData>({
     code: '',
@@ -64,8 +80,11 @@ export const ItemForm = () => {
           account: accounts[0],
         })
         .then((res) => {
-          callApi(apiConfig.endpoint, res.accessToken, 'POST', formData).then(
-            (result) => console.log(result.data),
+          callApi(
+            `${apiConfig.endpoint}/items`,
+            res.accessToken,
+            'POST',
+            formData,
           );
         });
     } catch (error) {
@@ -73,7 +92,7 @@ export const ItemForm = () => {
     }
   };
 
-  return (
+  const renderModalBody = () => (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form onSubmit={handleSubmit}>
         <Input
@@ -119,11 +138,11 @@ export const ItemForm = () => {
           variant="soft"
         />
         {/* <DatePicker
-            format="MM/dd/yyyy"
-            value={formData.anvisaDueDate}
-            onChange={handleDateChange}
-            //   renderInput={(params) => <Input {...params} />}
-          /> */}
+          format="MM/dd/yyyy"
+          value={formData.anvisaDueDate}
+          onChange={handleDateChange}
+          //   renderInput={(params) => <Input {...params} />}
+        /> */}
         <Input
           name="supplierCode"
           value={formData.supplierCode}
@@ -173,6 +192,37 @@ export const ItemForm = () => {
       </form>
     </LocalizationProvider>
   );
+
+  return (
+    <div>
+      <Button
+        variant="outlined"
+        startIcon={<AddIcon />}
+        onClick={handleOpen}
+        sx={{
+          position: 'fixed',
+          // TODO: fix it here to set top 60px when less then 512
+          top: '20px',
+          '@media (max-width: 512px)': {
+            top: '60px',
+          },
+          right: '20px',
+          padding: '15px',
+          cursor: 'pointer',
+        }}
+      >
+        Novo Item
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>{renderModalBody()}</Box>
+      </Modal>
+    </div>
+  );
 };
 
-export default ItemForm;
+export default Form;

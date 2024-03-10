@@ -1,7 +1,6 @@
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 
 import App from '@/App';
 
-const AppWrapper = () => <App />;
-
-ReactDOM.createRoot(document.getElementById('root')!).render(<AppWrapper />);
+// eslint-disable-next-line react/no-deprecated
+ReactDOM.render(<App />, document.getElementById('root'));

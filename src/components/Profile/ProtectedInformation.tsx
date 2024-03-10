@@ -19,7 +19,6 @@ const ProtectedInformation = () => {
         account: accounts[0],
       })
       .then((response) => {
-        console.log('response => ', { graphConfig, response });
         callMsGraph(graphConfig.endpoint, response.accessToken).then((res) =>
           setUserData(res),
         );

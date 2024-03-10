@@ -1,6 +1,6 @@
 // @flow
-import { colors } from '@atlaskit/theme';
 import styled from '@emotion/styled';
+import { pink } from '@mui/material/colors';
 
 import { grid } from './utils';
 
@@ -13,7 +13,7 @@ export default styled.h4`
   position: relative;
 
   &:focus {
-    outline: 2px solid ${colors.P100};
+    outline: 2px solid ${pink[100]};
     outline-offset: 2px;
   }
 `;

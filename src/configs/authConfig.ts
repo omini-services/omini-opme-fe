@@ -60,6 +60,7 @@ export const graphConfig = {
 };
 
 export const apiConfig = {
-  endpoint: 'https://app-eng-opmebe-prd-eastus.azurewebsites.net/api/items',
+  endpoint: 'https://app-eng-opmebe-prd-eastus.azurewebsites.net/api',
+  // endpoint: 'http://192.168.15.154/api',
   scopes: ['api://35133114-8f8f-4094-9c95-51a22540c178/Api.Full'],
 };

@@ -1,5 +1,5 @@
-import { colors } from '@atlaskit/theme';
 import styled from '@emotion/styled';
+import { red, pink } from '@mui/material/colors';
 import { useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
@@ -9,12 +9,12 @@ import QuoteList from './QuoteList';
 import { reorderQuoteMap, grid } from './utils';
 
 const Root = styled.div`
-  background: ${colors.B200};
+  background: ${red[200]};
   display: flex;
 `;
 
 const Column = styled.div`
-  background-color: ${colors.B50};
+  background-color: ${pink[200]};
   height: 100vh;
   overflow: auto;
   display: flex;
