@@ -33,6 +33,7 @@
       "@hooks/*": ["./src/hooks/*"],
       "@atoms/*": ["./src/atoms/*"],
       "@configs/*": ["./src/configs/*"],
+      "@themes": ["./src/themes"],
       // files
       "@constants": ["./src/constants.ts"],
     }

@@ -81,7 +81,7 @@ export const Form = () => {
           account: accounts[0],
         })
         .then((res) => {
-          callApi(apiConfig.endpoint, res.accessToken, 'POST', formData).then(
+          callApi(`${apiConfig.endpoint}/items`, res.accessToken, 'POST', formData).then(
             (result) => console.log(result.data),
           );
         });
@@ -190,17 +190,26 @@ export const Form = () => {
     </form>
   </LocalizationProvider>
   }
-  
 
   return (
     <div>
       <Button 
-        variant="contained" 
+        variant="outlined" 
         startIcon={<AddIcon />} 
         onClick={handleOpen}
-        sx={{backgroundColor: 'blue', '&:hover': { backgroundColor: 'darkblue' }}}
+        sx={{
+          position: "fixed",
+          // TODO: fix it here to set top 60px when less then 512
+          top: '20px',
+          '@media (max-width: 512px)': { 
+            top: '60px',
+          },
+          right: "20px",
+          padding: "15px",
+          cursor: "pointer",
+        }}
       >
-        Abrir Modal
+        Novo Item
       </Button>
       <Modal
         open={open}
@@ -209,12 +218,7 @@ export const Form = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Texto do Modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Aqui vai o conteúdo do seu modal.
-          </Typography>
+          {renderModalBody()}
         </Box>
       </Modal>
     </div>

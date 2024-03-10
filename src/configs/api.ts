@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { v4 } from 'uuid';
 
 export async function callMsGraph(
   url: string | undefined,
@@ -28,7 +27,7 @@ export async function callApi(
   url: string | undefined,
   accessToken: string | undefined,
   method: string,
-  body: object,
+  body: object | undefined,
 ) {
   const headers = {
     Authorization: `Bearer ${accessToken}`,
@@ -38,8 +37,6 @@ export async function callApi(
     method,
     headers,
   };
-
-  body.id = v4();
 
   try {
     if (method.toLowerCase() === 'post') {
