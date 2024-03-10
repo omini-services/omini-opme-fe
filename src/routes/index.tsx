@@ -19,6 +19,8 @@ import Item from '@pages/Item';
 import Order from '@pages/Order';
 import Orders from '@pages/Orders';
 import Signin from '@pages/Signin';
+import Specialty from '@pages/Specialty';
+import Procedure from '@pages/Procedure';
 
 import { msalConfig } from '../configs/authConfig';
 
@@ -39,6 +41,14 @@ export function Router() {
             <Route path={ROUTES.registry.company.to} element={<Company />} />
             <Route path={ROUTES.registry.order.to} element={<Order />} />
             <Route path={ROUTES.registry.item.to} element={<Item />} />
+            <Route
+              path={ROUTES.registry.specialty.to}
+              element={<Specialty />}
+            />
+            <Route
+              path={ROUTES.registry.procedure.to}
+              element={<Procedure />}
+            />
           </Route>
         </Routes>
       </MsalProvider>

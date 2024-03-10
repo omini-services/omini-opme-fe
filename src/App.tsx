@@ -1,20 +1,29 @@
-import { CssBaseline, CssVarsProvider } from '@mui/joy';
-import { ThemeProvider } from '@mui/styles';
+import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import {
+  experimental_extendTheme as materialExtendTheme,
+  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  THEME_ID as MATERIAL_THEME_ID,
+} from '@mui/material/styles';
 import { RecoilRoot } from 'recoil';
-import theme from "@/themes/theme"
 
 import { Router } from '@/routes';
 
+const materialTheme = materialExtendTheme();
+
 export function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <RecoilRoot>
-        <CssVarsProvider disableTransitionOnChange>
-          <CssBaseline />
+    <MaterialCssVarsProvider
+      defaultMode="system"
+      theme={{ [MATERIAL_THEME_ID]: materialTheme }}
+    >
+      <JoyCssVarsProvider defaultMode="system">
+        <CssBaseline enableColorScheme />
+        <RecoilRoot>
           <Router />
-        </CssVarsProvider>
-      </RecoilRoot>
-    </ThemeProvider>
+        </RecoilRoot>
+      </JoyCssVarsProvider>
+    </MaterialCssVarsProvider>
   );
 }
 

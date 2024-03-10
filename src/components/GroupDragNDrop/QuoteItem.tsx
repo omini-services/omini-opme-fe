@@ -1,6 +1,6 @@
 // @flow
-import { colors } from '@atlaskit/theme';
 import styled from '@emotion/styled';
+import { red, pink, purple } from '@mui/material/colors';
 import React from 'react';
 import type { DraggableProvided } from 'react-beautiful-dnd';
 
@@ -28,10 +28,10 @@ const getBackgroundColor = (
   }
 
   if (isGroupedOver) {
-    return colors.N30;
+    return red[200];
   }
 
-  return colors.N0;
+  return pink[500];
 };
 
 const getBorderColor = (isDragging: boolean, authorColors: AuthorColors) =>
@@ -40,9 +40,9 @@ const getBorderColor = (isDragging: boolean, authorColors: AuthorColors) =>
 const imageSize: number = 40;
 
 const CloneBadge = styled.div`
-  background: ${colors.G100};
+  background: ${purple[100]};
   bottom: ${grid / 2}px;
-  border: 2px solid ${colors.G200};
+  border: 2px solid ${purple[200]};
   border-radius: 50%;
   box-sizing: border-box;
   font-size: 10px;
@@ -74,11 +74,11 @@ const Container = styled.a`
   user-select: none;
 
   /* anchor overrides */
-  color: ${colors.N900};
+  color: ${red[900]};
 
   &:hover,
   &:active {
-    color: ${colors.N900};
+    color: ${red[900]};
     text-decoration: none;
   }
 

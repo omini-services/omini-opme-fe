@@ -1,4 +1,4 @@
-import { colors } from '@atlaskit/theme';
+import { red } from '@mui/material/colors';
 import styled from '@emotion/styled';
 import memoizeOne from 'memoize-one';
 import { Droppable } from 'react-beautiful-dnd';
@@ -24,8 +24,8 @@ const Container = styled.div`
   width: 300px;
   margin: ${grid}px;
   border-radius: ${borderRadius}px;
-  border: 1px solid ${colors.N100};
-  background-color: ${colors.N50};
+  border: 1px solid ${red[100]};
+  background-color: ${red[50]};
   display: flex;
   flex-direction: column;
 `;
@@ -40,8 +40,7 @@ const TaskList = styled.div`
   min-height: 200px;
   flex-grow: 1;
   transition: background-color 0.2s ease;
-  ${(props) =>
-    props.isDraggingOver ? `background-color: ${colors.N200}` : ''};
+  ${(props) => (props.isDraggingOver ? `background-color: ${red[200]}` : '')};
 `;
 
 const getSelectedMap = memoizeOne((selectedTaskIds: Id[]) =>

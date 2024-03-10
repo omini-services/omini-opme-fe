@@ -7,7 +7,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ['@emotion/styled', '@emotion/react'],
+    include: ['@emotion/react', '@emotion/styled'],
   },
   server: {
     open: true,

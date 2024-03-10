@@ -1,6 +1,6 @@
 // @flow
-import { colors } from '@atlaskit/theme';
 import styled from '@emotion/styled';
+import { purple, red } from '@mui/material/colors';
 import { memo } from 'react';
 import {
   Droppable,
@@ -22,12 +22,12 @@ export const getBackgroundColor = (
   isDraggingFrom: boolean,
 ): string => {
   if (isDraggingOver) {
-    return colors.R50;
+    return red[50];
   }
   if (isDraggingFrom) {
-    return colors.T50;
+    return pink[50];
   }
-  return colors.N30;
+  return purple[50];
 };
 
 const Wrapper = styled.div`
