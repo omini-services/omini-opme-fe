@@ -10,9 +10,6 @@ const Item = () => {
   const [rows, setRows] = useState([]);
   const { instance, accounts } = useMsal();
 
-  const renderForm = () => <Form />;
-  const renderTable = () => <Table rows={rows} />;
-
   useEffect(() => {
     const callItems = async () => {
       try {
@@ -28,7 +25,7 @@ const Item = () => {
           {},
         );
 
-        console.log(response.data);
+        // console.log(response.data);
 
         setRows(response.data);
       } catch (error) {
@@ -41,8 +38,8 @@ const Item = () => {
 
   return (
     <>
-      {renderForm()}
-      {renderTable()}
+      <Form />
+      <Table rows={rows} />
     </>
   );
 };

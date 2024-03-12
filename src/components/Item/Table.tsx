@@ -7,33 +7,13 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 import { Order, IData } from '@/types/Item';
 import EnhancedTableHead from '@components/Item/EnhancedTableHead';
 import EnhancedTableToolbar from '@components/Item/EnhancedTableToolbar';
 import Filter from '@components/Item/Filter';
-
-// const rows = [
-//   {
-//     id: '00000000-0000-0000-0000-000000000000',
-//     code: 'ltzgbrbclmhbcftwrgl',
-//     name: 'wczkkejxkfpeoxnpmhl',
-//     salesName: 'fyyzwhoeeidokddwtqk',
-//     description: 'ultkkofqpcbzaglynlp',
-//     uom: 'dzyupwjickfqbefsusl',
-//     anvisaCode: 'letcnczgaqwqotppppc',
-//     anvisaDueDate: '0001-01-01T00:00:00Z',
-//     supplierCode: 'bmeuewgfsrdmamccnwc',
-//     cst: 'llzeakjnmqaiwetwrow',
-//     susCode: 'colpuxeihukdtbivngd',
-//     ncmCode: 'jijkjoyzenjjzhuycmv',
-//     createdBy: '00000000-0000-0000-0000-000000000000',
-//     createdAt: '0001-01-01T00:00:00Z',
-//     updatedBy: '00000000-0000-0000-0000-000000000000',
-//     updatedAt: '0001-01-01T00:00:00Z',
-//   },
-// ];
+import { stableSort } from '@utils/tables';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -55,25 +35,6 @@ function getComparator<Key extends keyof any>(
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number,
-) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
 }
 
 // TODO: add the menu of each row later
@@ -103,6 +64,10 @@ const ItemTable = ({ rows }) => {
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  useEffect(() => {
+    console.log(rows);
+  }, [rows]);
 
   const handleRequestSort = (_event: any, property: keyof IData) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -159,7 +124,7 @@ const ItemTable = ({ rows }) => {
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage,
       ),
-    [order, orderBy, page, rowsPerPage],
+    [order, orderBy, page, rows, rowsPerPage],
   );
 
   const renderFilters = () => <Filter />;
