@@ -1,3 +1,5 @@
+import { Order } from '@/types/Item';
+
 // Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
 // stableSort() brings sort stability to non-modern browsers (notably IE11). If you
 // only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
@@ -16,3 +18,24 @@ export const stableSort = <T>(
   });
   return stabilizedThis.map((el) => el[0]);
 };
+
+export const descendingComparator = <T>(a: T, b: T, orderBy: keyof T) => {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+};
+
+export const getComparator = <Key extends keyof any>(
+  order: Order,
+  orderBy: Key,
+): ((
+  a: { [key in Key]: number | string },
+  b: { [key in Key]: number | string },
+) => number) =>
+  order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);

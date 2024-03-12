@@ -7,6 +7,7 @@ import Form from '@components/Item/Form';
 import Table from '@components/Item/Table';
 
 const Item = () => {
+  const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
   const { instance, accounts } = useMsal();
 
@@ -17,17 +18,14 @@ const Item = () => {
           scopes: apiConfig.scopes,
           account: accounts[0],
         });
-
         const response = await callApi(
           `${apiConfig.endpoint}/items`,
           token.accessToken,
           'GET',
           {},
         );
-
-        // console.log(response.data);
-
         setRows(response.data);
+        setLoading(false);
       } catch (error) {
         console.error('Erro ao retornar dados:', error);
       }
@@ -39,7 +37,7 @@ const Item = () => {
   return (
     <>
       <Form />
-      <Table rows={rows} />
+      <Table rows={rows} loading={loading} />
     </>
   );
 };
