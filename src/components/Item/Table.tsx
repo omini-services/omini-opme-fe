@@ -7,9 +7,11 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 
 import { Order, IData } from '@/types/Item';
+import { filterState } from '@atoms/item';
 import EnhancedTableHead from '@components/Item/EnhancedTableHead';
 import EnhancedTableToolbar from '@components/Item/EnhancedTableToolbar';
 import Filter from '@components/Item/Filter';
@@ -37,12 +39,28 @@ import { stableSort, getComparator } from '@utils/tables';
 //     );
 // }
 
+export const searchItems = (items, searchText) =>
+  items.filter((item) => {
+    // Realize a busca em cada propriedade do item
+    for (const key in item) {
+      // Se a propriedade do item for uma string e incluir o texto de pesquisa, retorne true
+      if (
+        typeof item[key] === 'string' &&
+        item[key].toLowerCase().includes(searchText.toLowerCase())
+      ) {
+        return true;
+      }
+    }
+    return false; // Caso contrário, retorne false
+  });
+
 const ItemTable = ({ rows, loading }) => {
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof IData>('code');
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const filter = useRecoilValue(filterState); // Use o estado do átomo de Recoil
 
   const handleRequestSort = (_event: any, property: keyof IData) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -93,14 +111,17 @@ const ItemTable = ({ rows, loading }) => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const visibleRows = useMemo(
-    () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-      ),
-    [order, orderBy, page, rows, rowsPerPage],
-  );
+  const visibleRows = useMemo(() => {
+    let filtered = rows;
+    if (filter.search) {
+      filtered = searchItems(rows, filter.search);
+    }
+
+    return stableSort(filtered, getComparator(order, orderBy)).slice(
+      page * rowsPerPage,
+      page * rowsPerPage + rowsPerPage,
+    );
+  }, [order, orderBy, page, rows, rowsPerPage, filter.search]);
 
   const renderFilters = () => <Filter />;
 

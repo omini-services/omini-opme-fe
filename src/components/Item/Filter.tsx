@@ -14,9 +14,20 @@ import Typography from '@mui/joy/Typography';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+
+import { filterState } from '@atoms/item';
 
 const Filter = () => {
+  const [filter, setFilter] = useRecoilState(filterState);
+
+  const handleInputChange = (event) => {
+    console.log('handleInputChange => ', event.target.value);
+    setFilter({ ...filter, search: event.target.value });
+  };
+
   const [open, setOpen] = useState(false);
+
   return (
     <>
       <Sheet
@@ -32,6 +43,8 @@ const Filter = () => {
           placeholder="Search"
           startDecorator={<SearchIcon />}
           sx={{ flexGrow: 1 }}
+          value={filter.search}
+          onChange={handleInputChange}
         />
         <IconButton
           size="sm"
@@ -71,11 +84,14 @@ const Filter = () => {
         }}
       >
         <FormControl sx={{ flex: 1 }} size="sm">
-          <FormLabel>Search for order</FormLabel>
+          <FormLabel>Search for item</FormLabel>
           <Input
             size="sm"
             placeholder="Search"
             startDecorator={<SearchIcon />}
+            sx={{ flexGrow: 1 }}
+            value={filter.search}
+            onChange={handleInputChange}
           />
         </FormControl>
         <FormControl size="sm">
