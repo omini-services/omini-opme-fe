@@ -1,4 +1,4 @@
-import SearchIcon from '@mui/icons-material/SearchOffOutlined';
+import SearchIcon from '@mui/icons-material/SearchOutlined';
 import { Select } from '@mui/joy';
 import Button from '@mui/joy/Button';
 import Divider from '@mui/joy/Divider';
@@ -14,11 +14,23 @@ import Typography from '@mui/joy/Typography';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+
+import { filterState } from '@atoms/item';
 
 const Filter = () => {
+  const [filter, setFilter] = useRecoilState(filterState);
+
+  const handleInputChange = (event) => {
+    console.log('handleInputChange => ', event.target.value);
+    setFilter({ ...filter, search: event.target.value });
+  };
+
   const [open, setOpen] = useState(false);
+
   return (
     <>
+      {/* MOBILE SIZE */}
       <Sheet
         className="SearchAndFilters-mobile"
         sx={{
@@ -30,8 +42,9 @@ const Filter = () => {
         <Input
           size="sm"
           placeholder="Search"
-          startDecorator={<SearchIcon />}
           sx={{ flexGrow: 1 }}
+          value={filter.search}
+          onChange={handleInputChange}
         />
         <IconButton
           size="sm"
@@ -57,6 +70,8 @@ const Filter = () => {
           </ModalDialog>
         </Modal>
       </Sheet>
+
+      {/* MOBILE NORMAL */}
       <Box
         className="SearchAndFilters-tabletUp"
         sx={{
@@ -71,14 +86,16 @@ const Filter = () => {
         }}
       >
         <FormControl sx={{ flex: 1 }} size="sm">
-          <FormLabel>Search for order</FormLabel>
           <Input
             size="sm"
             placeholder="Search"
             startDecorator={<SearchIcon />}
+            sx={{ flexGrow: 1 }}
+            value={filter.search}
+            onChange={handleInputChange}
           />
         </FormControl>
-        <FormControl size="sm">
+        {/* <FormControl size="sm">
           <FormLabel>Status</FormLabel>
           <Select
             size="sm"
@@ -111,7 +128,7 @@ const Filter = () => {
             <Option value="charles">Charles Fulton</Option>
             <Option value="jay">Jay Hoper</Option>
           </Select>
-        </FormControl>
+        </FormControl> */}
       </Box>
     </>
   );

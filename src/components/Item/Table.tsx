@@ -7,74 +7,16 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 
 import { Order, IData } from '@/types/Item';
+import { filterState } from '@atoms/item';
 import EnhancedTableHead from '@components/Item/EnhancedTableHead';
 import EnhancedTableToolbar from '@components/Item/EnhancedTableToolbar';
 import Filter from '@components/Item/Filter';
-
-// const rows = [
-//   {
-//     id: '00000000-0000-0000-0000-000000000000',
-//     code: 'ltzgbrbclmhbcftwrgl',
-//     name: 'wczkkejxkfpeoxnpmhl',
-//     salesName: 'fyyzwhoeeidokddwtqk',
-//     description: 'ultkkofqpcbzaglynlp',
-//     uom: 'dzyupwjickfqbefsusl',
-//     anvisaCode: 'letcnczgaqwqotppppc',
-//     anvisaDueDate: '0001-01-01T00:00:00Z',
-//     supplierCode: 'bmeuewgfsrdmamccnwc',
-//     cst: 'llzeakjnmqaiwetwrow',
-//     susCode: 'colpuxeihukdtbivngd',
-//     ncmCode: 'jijkjoyzenjjzhuycmv',
-//     createdBy: '00000000-0000-0000-0000-000000000000',
-//     createdAt: '0001-01-01T00:00:00Z',
-//     updatedBy: '00000000-0000-0000-0000-000000000000',
-//     updatedAt: '0001-01-01T00:00:00Z',
-//   },
-// ];
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key,
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string },
-) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number,
-) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+import TableSkeleton from '@components/Item/Skeleton';
+import { stableSort, getComparator } from '@utils/tables';
 
 // TODO: add the menu of each row later
 // function RowMenu() {
@@ -97,12 +39,28 @@ function stableSort<T>(
 //     );
 // }
 
-const ItemTable = ({ rows }) => {
+export const searchItems = (items, searchText) =>
+  items.filter((item) => {
+    // Realize a busca em cada propriedade do item
+    for (const key in item) {
+      // Se a propriedade do item for uma string e incluir o texto de pesquisa, retorne true
+      if (
+        typeof item[key] === 'string' &&
+        item[key].toLowerCase().includes(searchText.toLowerCase())
+      ) {
+        return true;
+      }
+    }
+    return false; // Caso contrário, retorne false
+  });
+
+const ItemTable = ({ rows, loading }) => {
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof IData>('code');
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const filter = useRecoilValue(filterState); // Use o estado do átomo de Recoil
 
   const handleRequestSort = (_event: any, property: keyof IData) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -153,14 +111,17 @@ const ItemTable = ({ rows }) => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const visibleRows = useMemo(
-    () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-      ),
-    [order, orderBy, page, rowsPerPage],
-  );
+  const visibleRows = useMemo(() => {
+    let filtered = rows;
+    if (filter.search) {
+      filtered = searchItems(rows, filter.search);
+    }
+
+    return stableSort(filtered, getComparator(order, orderBy)).slice(
+      page * rowsPerPage,
+      page * rowsPerPage + rowsPerPage,
+    );
+  }, [order, orderBy, page, rows, rowsPerPage, filter.search]);
 
   const renderFilters = () => <Filter />;
 
@@ -172,89 +133,93 @@ const ItemTable = ({ rows }) => {
 
       <Box sx={{ width: '100%' }}>
         <EnhancedTableToolbar numSelected={selected.length} />
-        <Paper sx={{ width: '100%', mb: 2 }}>
-          <TableContainer>
-            <Table
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size="small"
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={rows.length}
-              />
-              <TableBody>
-                {visibleRows.map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+        {loading ? (
+          <TableSkeleton />
+        ) : (
+          <Paper sx={{ width: '100%', mb: 2 }}>
+            <TableContainer>
+              <Table
+                sx={{ minWidth: 750 }}
+                aria-labelledby="tableTitle"
+                size="small"
+              >
+                <EnhancedTableHead
+                  numSelected={selected.length}
+                  order={order}
+                  orderBy={orderBy}
+                  onSelectAllClick={handleSelectAllClick}
+                  onRequestSort={handleRequestSort}
+                  rowCount={rows.length}
+                />
+                <TableBody>
+                  {visibleRows.map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                      sx={{ cursor: 'pointer' }}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell align="right">{row.code}</TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
+                    return (
+                      <TableRow
+                        hover
+                        onClick={(event) => handleClick(event, row.id)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={isItemSelected}
+                        sx={{ cursor: 'pointer' }}
                       >
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">{row.salesName}</TableCell>
-                      <TableCell align="right">{row.description}</TableCell>
-                      <TableCell align="right">{row.uom}</TableCell>
-                      <TableCell align="right">{row.anvisaCode}</TableCell>
-                      <TableCell align="right">{row.anvisaDueDate}</TableCell>
-                      <TableCell align="right">{row.supplierCode}</TableCell>
-                      <TableCell align="right">{row.cst}</TableCell>
-                      <TableCell align="right">{row.susCode}</TableCell>
-                      <TableCell align="right">{row.ncmCode}</TableCell>
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell align="right">{row.code}</TableCell>
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                        >
+                          {row.name}
+                        </TableCell>
+                        <TableCell align="right">{row.salesName}</TableCell>
+                        <TableCell align="right">{row.description}</TableCell>
+                        <TableCell align="right">{row.uom}</TableCell>
+                        <TableCell align="right">{row.anvisaCode}</TableCell>
+                        <TableCell align="right">{row.anvisaDueDate}</TableCell>
+                        <TableCell align="right">{row.supplierCode}</TableCell>
+                        <TableCell align="right">{row.cst}</TableCell>
+                        <TableCell align="right">{row.susCode}</TableCell>
+                        <TableCell align="right">{row.ncmCode}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                  {emptyRows > 0 && (
+                    <TableRow
+                      style={{
+                        height: 33 * emptyRows,
+                      }}
+                    >
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: 33 * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        )}
       </Box>
     </>
   );
