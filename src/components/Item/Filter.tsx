@@ -1,4 +1,4 @@
-import SearchIcon from '@mui/icons-material/SearchOffOutlined';
+import SearchIcon from '@mui/icons-material/SearchOutlined';
 import { Select } from '@mui/joy';
 import Button from '@mui/joy/Button';
 import Divider from '@mui/joy/Divider';
@@ -30,6 +30,7 @@ const Filter = () => {
 
   return (
     <>
+      {/* MOBILE SIZE */}
       <Sheet
         className="SearchAndFilters-mobile"
         sx={{
@@ -41,7 +42,6 @@ const Filter = () => {
         <Input
           size="sm"
           placeholder="Search"
-          startDecorator={<SearchIcon />}
           sx={{ flexGrow: 1 }}
           value={filter.search}
           onChange={handleInputChange}
@@ -70,6 +70,8 @@ const Filter = () => {
           </ModalDialog>
         </Modal>
       </Sheet>
+
+      {/* MOBILE NORMAL */}
       <Box
         className="SearchAndFilters-tabletUp"
         sx={{
@@ -84,7 +86,6 @@ const Filter = () => {
         }}
       >
         <FormControl sx={{ flex: 1 }} size="sm">
-          <FormLabel>Search for item</FormLabel>
           <Input
             size="sm"
             placeholder="Search"
@@ -94,7 +95,7 @@ const Filter = () => {
             onChange={handleInputChange}
           />
         </FormControl>
-        <FormControl size="sm">
+        {/* <FormControl size="sm">
           <FormLabel>Status</FormLabel>
           <Select
             size="sm"
@@ -127,7 +128,7 @@ const Filter = () => {
             <Option value="charles">Charles Fulton</Option>
             <Option value="jay">Jay Hoper</Option>
           </Select>
-        </FormControl>
+        </FormControl> */}
       </Box>
     </>
   );
