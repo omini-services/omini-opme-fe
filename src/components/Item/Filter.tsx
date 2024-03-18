@@ -1,14 +1,11 @@
 import SearchIcon from '@mui/icons-material/SearchOutlined';
-import { Select } from '@mui/joy';
 import Button from '@mui/joy/Button';
 import Divider from '@mui/joy/Divider';
-import FormLabel from '@mui/joy/FormLabel';
 import IconButton from '@mui/joy/IconButton';
 import Input from '@mui/joy/Input';
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
-import Option from '@mui/joy/Option';
 import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
 import Box from '@mui/material/Box';
@@ -18,13 +15,16 @@ import { useRecoilState } from 'recoil';
 
 import { filterState } from '@atoms/item';
 
-const Filter = () => {
+interface IFilter {
+  loading: boolean;
+}
+
+const Filter = (props: IFilter) => {
+  const { loading } = props;
   const [filter, setFilter] = useRecoilState(filterState);
 
-  const handleInputChange = (event) => {
-    console.log('handleInputChange => ', event.target.value);
+  const handleInputChange = (event) =>
     setFilter({ ...filter, search: event.target.value });
-  };
 
   const [open, setOpen] = useState(false);
 
@@ -45,6 +45,7 @@ const Filter = () => {
           sx={{ flexGrow: 1 }}
           value={filter.search}
           onChange={handleInputChange}
+          disabled={loading}
         />
         <IconButton
           size="sm"
@@ -71,7 +72,7 @@ const Filter = () => {
         </Modal>
       </Sheet>
 
-      {/* MOBILE NORMAL */}
+      {/* NORMAL SIZE */}
       <Box
         className="SearchAndFilters-tabletUp"
         sx={{
@@ -93,6 +94,7 @@ const Filter = () => {
             sx={{ flexGrow: 1 }}
             value={filter.search}
             onChange={handleInputChange}
+            disabled={loading}
           />
         </FormControl>
         {/* <FormControl size="sm">

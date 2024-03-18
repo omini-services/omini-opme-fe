@@ -16,7 +16,7 @@ import EnhancedTableHead from '@components/Item/EnhancedTableHead';
 import EnhancedTableToolbar from '@components/Item/EnhancedTableToolbar';
 import Filter from '@components/Item/Filter';
 import TableSkeleton from '@components/Item/Skeleton';
-import { stableSort, getComparator } from '@utils/tables';
+import { stableSort, getComparator, searchItems } from '@utils/tables';
 
 // TODO: add the menu of each row later
 // function RowMenu() {
@@ -38,21 +38,6 @@ import { stableSort, getComparator } from '@utils/tables';
 //         </Dropdown>
 //     );
 // }
-
-export const searchItems = (items, searchText) =>
-  items.filter((item) => {
-    // Realize a busca em cada propriedade do item
-    for (const key in item) {
-      // Se a propriedade do item for uma string e incluir o texto de pesquisa, retorne true
-      if (
-        typeof item[key] === 'string' &&
-        item[key].toLowerCase().includes(searchText.toLowerCase())
-      ) {
-        return true;
-      }
-    }
-    return false; // Caso contrário, retorne false
-  });
 
 const ItemTable = ({ rows, loading }) => {
   const [order, setOrder] = useState<Order>('asc');
@@ -123,7 +108,7 @@ const ItemTable = ({ rows, loading }) => {
     );
   }, [order, orderBy, page, rows, rowsPerPage, filter.search]);
 
-  const renderFilters = () => <Filter />;
+  const renderFilters = () => <Filter loading={loading} />;
 
   return (
     <>
