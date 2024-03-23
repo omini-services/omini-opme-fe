@@ -8,5 +8,7 @@ export const dialogState = atom({
     body: 'test',
     positive: 'ok',
     negative: 'cancel',
-  }
+    positiveCallback: () => {},
+    negativeCallback: () => {},
+  },
 });

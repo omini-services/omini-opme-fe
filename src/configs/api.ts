@@ -38,6 +38,8 @@ export async function callApi(
     headers,
   };
 
+  console.log('callApi => ', { url, body, config });
+
   try {
     if (method.toLowerCase() === 'post') {
       // Para uma solicitação POST
