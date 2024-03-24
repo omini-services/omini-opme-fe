@@ -8,9 +8,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { useState, useMemo } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 
 import { Order, IData } from '@/types/Item';
+import { dialogState } from '@atoms/dialog';
 import { filterState } from '@atoms/item';
 import EnhancedTableHead from '@components/Item/EnhancedTableHead';
 import EnhancedTableToolbar from '@components/Item/EnhancedTableToolbar';
@@ -39,13 +40,22 @@ import { stableSort, getComparator, searchItems } from '@utils/tables';
 //     );
 // }
 
-const ItemTable = ({ rows, loading }) => {
+interface IItemTable {
+  rows: Array<Object>;
+  loading: boolean;
+  dialogOptions: Object;
+  tableAtom: Array<string>;
+}
+
+const ItemTable = (props: IItemTable) => {
+  const { rows, loading, dialogOptions, tableAtom } = props;
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof IData>('code');
-  const [selected, setSelected] = useState<readonly string[]>([]);
+  const [selected, setSelected] = useRecoilState<any>(tableAtom);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const filter = useRecoilValue(filterState); // Use o estado do átomo de Recoil
+  const filter = useRecoilValue(filterState);
+  const setDialog = useSetRecoilState(dialogState);
 
   const handleRequestSort = (_event: any, property: keyof IData) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -110,6 +120,8 @@ const ItemTable = ({ rows, loading }) => {
 
   const renderFilters = () => <Filter loading={loading} />;
 
+  const handleOnDelete = () => setDialog(dialogOptions);
+
   return (
     <>
       {renderFilters()}
@@ -117,7 +129,10 @@ const ItemTable = ({ rows, loading }) => {
       {/* Table */}
 
       <Box sx={{ width: '100%' }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          onDelete={handleOnDelete}
+        />
         {loading ? (
           <TableSkeleton />
         ) : (

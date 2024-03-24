@@ -44,6 +44,8 @@ export async function callApi(props: ICallApi) {
     headers,
   };
 
+  console.log('callApi => ', { url, body, config });
+
   try {
     if (method.toLowerCase() === 'post') {
       // Para uma solicitação POST

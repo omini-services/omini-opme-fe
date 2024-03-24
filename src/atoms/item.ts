@@ -6,3 +6,8 @@ export const filterState = atom({
     search: '',
   },
 });
+
+export const tableSelectedItemsState = atom({
+  key: 'tableSelectedItemsState',
+  default: [],
+});
