@@ -18,13 +18,15 @@ const Item = () => {
           scopes: apiConfig.scopes,
           account: accounts[0],
         });
-        const response = await callApi(
-          `${apiConfig.endpoint}/items`,
-          token.accessToken,
-          'GET',
-          {},
-        );
-        setRows(response.data);
+        const data = await callApi({
+          url: `${apiConfig.endpoint}/items`,
+          accessToken: token.accessToken,
+          method: 'GET',
+          customHeaders: {
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+        setRows(data);
         setLoading(false);
       } catch (error) {
         console.error('Erro ao retornar dados:', error);
