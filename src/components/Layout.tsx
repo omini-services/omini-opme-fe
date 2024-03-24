@@ -1,16 +1,17 @@
 import Box from '@mui/joy/Box';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
 
 import AutoBreadcrumbs from '@/components/AutoBreadcrumbs';
+import DialogCenter from '@components/DialogCenter';
 import Header from '@components/Header';
 import NotificationCenter from '@components/NotificationCenter';
-import DialogCenter from '@components/DialogCenter';
 import Sidebar from '@components/Sidebar';
 
 const Layout = () => (
   <Box sx={{ display: 'flex', minHeight: '100dvh' }}>
     <NotificationCenter />
-    <DialogCenter/>
+    <DialogCenter />
     <Header />
     <Sidebar />
 

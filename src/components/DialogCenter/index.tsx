@@ -5,6 +5,7 @@ import {
   DialogActions,
   Button,
 } from '@mui/material';
+import React from 'react';
 import { useRecoilState } from 'recoil';
 
 import { dialogState } from '@atoms/dialog'; // Importe o átomo do Recoil

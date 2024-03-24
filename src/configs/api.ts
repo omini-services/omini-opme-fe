@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-export async function callMsGraph(
-  url: string | undefined,
-  accessToken: string | undefined,
-) {
+export async function callMsGraph(props: any) {
+  const { url, accessToken } = props;
   const headers = new Headers();
   const bearer = `Bearer ${accessToken}`;
   headers.append('Authorization', bearer);
@@ -24,47 +22,42 @@ export async function callMsGraph(
 }
 
 interface ICallApi {
-  url: string | undefined;
+  url: string;
   accessToken: string | undefined;
   method: string;
   body?: object | undefined;
   customHeaders?: object | undefined;
 }
 
-export async function callApi(props: ICallApi) {
-  const { url, accessToken, method, body = {}, customHeaders = {} } = props;
-
+// eslint-disable-next-line consistent-return
+export async function callApi({
+  url,
+  accessToken,
+  method,
+  body = {},
+  customHeaders = {},
+}: ICallApi) {
   const headers = {
+    'Content-Type': 'application/json', // Garanta que este cabeçalho esteja definido se for utilizar JSON
     Authorization: `Bearer ${accessToken}`,
     ...customHeaders,
   };
 
+  // Configuração para axios, incluindo o corpo da requisição se necessário
   const config = {
     method,
     headers,
+    ...(Object.keys(body).length > 0 && { data: body }), // Inclui o corpo se não estiver vazio
+    url,
   };
 
-  console.log('callApi => ', { url, body, config });
-
   try {
-    if (method.toLowerCase() === 'post') {
-      // Para uma solicitação POST
-      return axios
-        .post(url, body, config)
-        .then((response) => response.data)
-        .catch((error) => console.error(error));
-    }
-    if (method.toLowerCase() === 'get') {
-      // Para uma solicitação GET (assumindo que 'body' não é necessário)
-      return axios
-        .get(url, config)
-        .then((response) => response.data)
-        .catch((error) => console.error(error));
-    }
-    // Adicione mais condicionais aqui para outros métodos HTTP se necessário
+    // Realiza a chamada de API utilizando axios diretamente com a configuração
+    const response = await axios(config);
+    return response.data;
   } catch (error) {
     console.error(error);
-    // Tratar ou relançar o erro conforme necessário
+    // Dependendo da necessidade, você pode querer tratar o erro de maneiras específicas aqui
     throw error;
   }
 }

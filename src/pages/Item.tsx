@@ -1,18 +1,23 @@
 import { useMsal } from '@azure/msal-react';
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { callApi } from '@/configs/api';
 import { apiConfig } from '@/configs/authConfig';
 import { tableSelectedItemsState } from '@atoms/item';
+import { notificationState } from '@atoms/notification';
 import Form from '@components/Item/Form';
 import Table from '@components/Item/Table';
+import React from 'react';
 
 const Item = () => {
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
   const { instance, accounts } = useMsal();
-  const items = useRecoilValue<any>(tableSelectedItemsState);
+  const setNotification = useSetRecoilState(notificationState);
+  const [selectedItems, setSelectedItems] = useRecoilState<any>(
+    tableSelectedItemsState,
+  );
 
   useEffect(() => {
     const callItems = async () => {
@@ -45,15 +50,37 @@ const Item = () => {
       account: accounts[0],
     });
 
-    items.forEach(async (item) => {
-      const response = await callApi(
-        `${apiConfig.endpoint}/items/${item}`,
-        token.accessToken,
-        'DELETE',
+    try {
+      const promises = selectedItems.map((item) =>
+        callApi({
+          url: `${apiConfig.endpoint}/items/${item}`,
+          accessToken: token.accessToken,
+          method: 'DELETE',
+          customHeaders: {
+            'Access-Control-Allow-Origin': '*',
+          },
+        }).then(() => item),
       );
 
-      console.log('response => ', response);
-    });
+      const resolvedItems = await Promise.all(promises);
+
+      // TODO: corrigir notification
+
+      const message = (
+        <ul>
+          {resolvedItems.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      );
+      setNotification(message);
+
+      setRows(rows.filter((row) => !resolvedItems.includes(row.id)));
+      setSelectedItems([]);
+    } catch (error) {
+      console.error(error);
+      // Trate o erro conforme necessário
+    }
   };
 
   const dialogOptions = {
