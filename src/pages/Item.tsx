@@ -45,14 +45,17 @@ const Item = () => {
       account: accounts[0],
     });
 
-    items.forEach(async (item) => {
-      const response = await callApi(
-        `${apiConfig.endpoint}/items/${item}`,
-        token.accessToken,
-        'DELETE',
-      );
+    items.forEach(async (item: any) => {
+      const data = await callApi({
+        url: `${apiConfig.endpoint}/items/${item}`,
+        accessToken: token.accessToken,
+        method: 'DELETE',
+        customHeaders: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
 
-      console.log('response => ', response);
+      console.log('response => ', data);
     });
   };
 
