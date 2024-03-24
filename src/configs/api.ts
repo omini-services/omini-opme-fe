@@ -23,14 +23,20 @@ export async function callMsGraph(
   }
 }
 
-export async function callApi(
-  url: string | undefined,
-  accessToken: string | undefined,
-  method: string,
-  body: object | undefined,
-) {
+interface ICallApi {
+  url: string | undefined;
+  accessToken: string | undefined;
+  method: string;
+  body?: object | undefined;
+  customHeaders?: object | undefined;
+}
+
+export async function callApi(props: ICallApi) {
+  const { url, accessToken, method, body = {}, customHeaders = {} } = props;
+
   const headers = {
     Authorization: `Bearer ${accessToken}`,
+    ...customHeaders,
   };
 
   const config = {
