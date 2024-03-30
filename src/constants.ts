@@ -18,33 +18,34 @@ export const ROUTES = {
   signout: { name: 'signout', label: 'Sign Out', to: '/signout' },
   dashboard: { name: 'dashboard', label: 'Dashboard', to: '/dashboard' },
   orders: { name: 'orders', label: 'Orders', to: '/orders' },
-  registry: {
-    company: {
-      name: 'Empresa',
-      label: 'Register Company',
-      to: '/registry/company',
-    },
-    order: {
-      name: 'Ordem',
-      label: 'Register Order',
-      to: '/registry/order',
-    },
-    specialty: {
-      name: 'Especialidade',
-      label: 'Register Specialty',
-      to: '/registry/specialty',
-    },
-    procedure: {
-      name: 'Procedimento',
-      label: 'Register Procedure',
-      to: '/registry/procedure',
-    },
-    item: {
-      name: 'Item',
-      label: 'Register Item',
-      to: '/registry/item',
-    },
-  },
+  registry: { name: 'registry', label: 'Cadastros', to: '/registry' },
+  // registry: {
+  //   company: {
+  //     name: 'Empresa',
+  //     label: 'Register Company',
+  //     to: '/registry/company',
+  //   },
+  //   order: {
+  //     name: 'Ordem',
+  //     label: 'Register Order',
+  //     to: '/registry/order',
+  //   },
+  //   specialty: {
+  //     name: 'Especialidade',
+  //     label: 'Register Specialty',
+  //     to: '/registry/specialty',
+  //   },
+  //   procedure: {
+  //     name: 'Procedimento',
+  //     label: 'Register Procedure',
+  //     to: '/registry/procedure',
+  //   },
+  //   item: {
+  //     name: 'Item',
+  //     label: 'Register Item',
+  //     to: '/registry/item',
+  //   },
+  // },
 };
 
 export const INITIAL_USER_STATE = null;

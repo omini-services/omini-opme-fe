@@ -1,18 +1,20 @@
 import Box from '@mui/joy/Box';
-import { ReactNode, Dispatch, SetStateAction, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
+
+interface IToggler {
+  defaultExpanded?: boolean;
+  children: ReactNode;
+  renderToggle: (params: {
+    open: boolean;
+    setOpen: (value: boolean) => void;
+  }) => ReactNode;
+}
 
 const Toggler = ({
   defaultExpanded = false,
   renderToggle,
   children,
-}: {
-  defaultExpanded?: boolean;
-  children: ReactNode;
-  renderToggle: (params: {
-    open: boolean;
-    setOpen: Dispatch<SetStateAction<boolean>>;
-  }) => ReactNode;
-}) => {
+}: IToggler) => {
   const [open, setOpen] = useState(defaultExpanded);
   return (
     <>

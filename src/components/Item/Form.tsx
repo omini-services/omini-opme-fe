@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useState, ChangeEvent, FormEvent } from 'react';
 
 import { callApi } from '@/configs/api';
-import { apiConfig } from '@/configs/authConfig';
+import { API_CONFIG } from '@/configs/authConfig';
 
 interface IFormData {
   code: string;
@@ -76,12 +76,12 @@ export const Form = () => {
     try {
       instance
         .acquireTokenSilent({
-          scopes: apiConfig.scopes,
+          scopes: API_CONFIG.scopes,
           account: accounts[0],
         })
         .then((res) => {
           callApi(
-            `${apiConfig.endpoint}/items`,
+            `${API_CONFIG.endpoint}/items`,
             res.accessToken,
             'POST',
             formData,

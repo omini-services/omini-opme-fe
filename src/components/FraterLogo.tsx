@@ -1,4 +1,5 @@
 import AspectRatio, { AspectRatioProps } from '@mui/joy/AspectRatio';
+import React from 'react';
 
 export default function FraterLogo(props: AspectRatioProps) {
   const { sx, ...other } = props;

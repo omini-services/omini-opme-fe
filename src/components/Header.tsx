@@ -1,5 +1,6 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import { GlobalStyles, IconButton, Sheet } from '@mui/joy';
+import React from 'react';
 
 import { toggleSidebar } from '@utils/sidebar';
 

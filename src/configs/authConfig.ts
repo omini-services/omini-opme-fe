@@ -54,12 +54,12 @@ export const msalConfig = {
  * Add here the scopes to request when obtaining an access token for MS Graph API. For more information, see:
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md
  */
-export const graphConfig = {
+export const GRAPH_CONFIG = {
   endpoint: 'https://graph.microsoft.com/v1.0/me',
   scopes: ['User.Read'],
 };
 
-export const apiConfig = {
+export const API_CONFIG = {
   // endpoint: 'https://app-eng-opmebe-prd-eastus.azurewebsites.net/api',
   endpoint: 'http://localhost:6868/api',
   scopes: ['api://35133114-8f8f-4094-9c95-51a22540c178/Api.Full'],

@@ -2,7 +2,7 @@ import { useMsal } from '@azure/msal-react';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+// import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
@@ -14,15 +14,16 @@ import IconButton from '@mui/joy/IconButton';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListItemButton, { listItemButtonClasses } from '@mui/joy/ListItemButton';
-import ListItemContent from '@mui/joy/ListItemContent';
+// import ListItemContent from '@mui/joy/ListItemContent';
 import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
+import React from 'react';
 
-import { ROUTES } from '@/constants';
+// import { ROUTES } from '@/constants';
 import FraterLogo from '@components/FraterLogo/FraterLogo';
-import ListItemLink from '@components/ListItemLink';
+import ListItemLink from '@components/Sidebar/ListItemLink';
 import ThemeModeToggle from '@components/ThemeModeToggle';
-import Toggler from '@components/Toggler';
+// import Toggler from '@components/Toggler';
 import { closeSidebar } from '@utils/sidebar';
 
 const renderListItems = () =>
@@ -30,6 +31,7 @@ const renderListItems = () =>
     { title: 'Home', to: '/', icon: HomeRoundedIcon },
     { title: 'Dashboard', to: '/dashboard', icon: DashboardRoundedIcon },
     { title: 'Orders', to: '/orders', icon: ShoppingCartRoundedIcon },
+    { title: 'Cadastros', to: '/registry', icon: AssignmentRoundedIcon },
   ].map((item) => (
     <ListItemLink key={item.title} title={item.title} to={item.to}>
       {/* @ts-ignore */}
@@ -130,7 +132,8 @@ export default function Sidebar() {
           }}
         >
           {renderListItems()}
-          <ListItem nested>
+
+          {/* <ListItem nested>
             <Toggler
               renderToggle={({ open, setOpen }) => (
                 <ListItemButton onClick={() => setOpen(!open)}>
@@ -181,7 +184,7 @@ export default function Sidebar() {
                 </ListItemLink>
               </List>
             </Toggler>
-          </ListItem>
+          </ListItem> */}
         </List>
 
         <List

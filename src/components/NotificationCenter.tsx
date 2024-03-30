@@ -10,7 +10,6 @@ const NotificationCenter = () => {
   const notification = useRecoilValue(notificationState);
 
   useEffect(() => {
-    console.log('NotificationCenter => ', notification);
     if (notification) {
       toast(notification);
     }
