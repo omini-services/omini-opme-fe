@@ -33,6 +33,7 @@ const Item = () => {
             'Access-Control-Allow-Origin': '*',
           },
         });
+        console.log(data);
         setRows(data);
         setLoading(false);
       } catch (error) {

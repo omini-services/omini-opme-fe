@@ -11,8 +11,8 @@ import Home from '@pages/Home';
 import Item from '@pages/Item';
 import Order from '@pages/Order';
 import Orders from '@pages/Orders';
-import Registers from '@pages/Registers';
 import Procedure from '@pages/Procedure';
+import Registers from '@pages/Registers';
 import Signin from '@pages/Signin';
 import Specialty from '@pages/Specialty';
 
@@ -32,19 +32,19 @@ export function Router() {
             <Route path={ROUTES.root.to} element={<Home />} />
             <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
             <Route path={ROUTES.orders.to} element={<Orders />} />
-            <Route path={ROUTES.registry.to} element={<Registers />} />
-            {/* lista de cadastros */}
-            {/* <Route path={ROUTES.registry.company.to} element={<Company />} />
-            <Route path={ROUTES.registry.order.to} element={<Order />} />
-            <Route path={ROUTES.registry.item.to} element={<Item />} />
-            <Route
-              path={ROUTES.registry.specialty.to}
-              element={<Specialty />}
-            />
-            <Route
-              path={ROUTES.registry.procedure.to}
-              element={<Procedure />}
-            /> */}
+            <Route path={ROUTES.registry.root.to} element={<Registers />}>
+              <Route path={ROUTES.registry.company.to} element={<Company />} />
+              <Route path={ROUTES.registry.order.to} element={<Order />} />
+              <Route path={ROUTES.registry.item.to} element={<Item />} />
+              <Route
+                path={ROUTES.registry.specialty.to}
+                element={<Specialty />}
+              />
+              <Route
+                path={ROUTES.registry.procedure.to}
+                element={<Procedure />}
+              />
+            </Route>
           </Route>
         </Routes>
       </MsalProvider>

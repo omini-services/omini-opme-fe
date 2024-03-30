@@ -6,6 +6,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 
+import { ROUTES } from '@constants';
+
 const Registers = () => {
   const navigate = useNavigate();
 
@@ -14,41 +16,48 @@ const Registers = () => {
   const handleSelectChange = (event: SelectChangeEvent) => {
     if (event) {
       const selectedValue = event.target.value;
-      console.log(event.target);
       setSelectedOption(selectedValue); // Atualiza o estado com a opção selecionada.
-      //   navigate(selectedValue); // Navega para a rota da opção selecionada.
+      navigate(selectedValue); // Navega para a rota da opção selecionada.
     }
   };
+
+  const renderMenuItems = () =>
+    Object.values(ROUTES.registry)
+      .filter((item) => item.name !== 'registry') // Opcional: filtrar a rota 'root', se não quiser incluí-la.
+      .map((item) => (
+        <MenuItem
+          key={item.name} // Recomendado para ajudar o React na identificação dos componentes da lista
+          value={item.to}
+        >
+          {item.label}
+        </MenuItem>
+      ));
 
   return (
     <>
       <Box
         sx={{
           borderRadius: 'sm',
-          py: 2,
-          display: { xs: 'none', sm: 'flex' },
           flexWrap: 'wrap',
-          gap: 1.5,
-          '& > *': {
-            minWidth: { xs: '120px', md: '160px' },
-          },
         }}
       >
-        <FormControl sx={{ flex: 1 }} size="sm">
-          <InputLabel>Cadastro</InputLabel>
+        <FormControl
+          variant="standard"
+          sx={{
+            width: { xs: '50%', md: '200px' },
+          }}
+        >
+          <InputLabel id="registry-select-lable">
+            Selecione um cadastro
+          </InputLabel>
           <Select
-            size="sm"
-            placeholder="Selecione um cadastro"
+            labelId="registry-select-lable"
+            label="Selecione um cadastro"
             value={selectedOption}
-            onChange={handleSelectChange} // Adiciona o manipulador de evento onChange.
+            onChange={handleSelectChange}
             slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
           >
-            {/* Atualize o value de cada Option para as rotas desejadas */}
-            <MenuItem value="/registry/order">Orçamento</MenuItem>
-            <MenuItem value="/registry/item">Item</MenuItem>
-            <MenuItem value="/registry/company">Empresa</MenuItem>
-            <MenuItem value="/registry/specialty">Especialidade</MenuItem>
-            <MenuItem value="/registry/procedure">Procedimento</MenuItem>
+            {renderMenuItems()}
           </Select>
         </FormControl>
       </Box>
