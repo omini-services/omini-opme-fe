@@ -19,26 +19,7 @@ import Filter from '@components/Item/Filter';
 import TableSkeleton from '@components/Item/Skeleton';
 import { stableSort, getComparator, searchItems } from '@utils/tables';
 
-// TODO: add the menu of each row later
-// function RowMenu() {
-//     return (
-//         <Dropdown>
-//             <MenuButton
-//                 slots={{ root: IconButton }}
-//                 slotProps={{ root: { variant: 'plain', color: 'neutral', size: 'sm' } }}
-//             >
-//                 <MoreHorizRoundedIcon />
-//             </MenuButton>
-//             <Menu size="sm" sx={{ minWidth: 140 }}>
-//                 <MenuItem>Edit</MenuItem>
-//                 <MenuItem>Rename</MenuItem>
-//                 <MenuItem>Move</MenuItem>
-//                 <Divider />
-//                 <MenuItem color="danger">Delete</MenuItem>
-//             </Menu>
-//         </Dropdown>
-//     );
-// }
+import RowMenu from './RowMenu';
 
 interface IItemTable {
   rows: Array<Object>;
@@ -159,7 +140,6 @@ const ItemTable = (props: IItemTable) => {
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.code)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
@@ -169,6 +149,7 @@ const ItemTable = (props: IItemTable) => {
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
+                            onClick={(event) => handleClick(event, row.code)}
                             color="primary"
                             checked={isItemSelected}
                             inputProps={{
@@ -186,14 +167,20 @@ const ItemTable = (props: IItemTable) => {
                           {row.name}
                         </TableCell>
                         <TableCell align="right">{row.salesName}</TableCell>
-                        <TableCell align="right">{row.description}</TableCell>
+                        {/* <TableCell align="right">{row.description}</TableCell>
                         <TableCell align="right">{row.uom}</TableCell>
                         <TableCell align="right">{row.anvisaCode}</TableCell>
                         <TableCell align="right">{row.anvisaDueDate}</TableCell>
                         <TableCell align="right">{row.supplierCode}</TableCell>
                         <TableCell align="right">{row.cst}</TableCell>
                         <TableCell align="right">{row.susCode}</TableCell>
-                        <TableCell align="right">{row.ncmCode}</TableCell>
+                        <TableCell align="right">{row.ncmCode}</TableCell> */}
+                        <TableCell align="right">
+                          <RowMenu
+                            onDelete={handleOnDelete}
+                            rowKey={row.code}
+                          />
+                        </TableCell>
                       </TableRow>
                     );
                   })}

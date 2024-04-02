@@ -24,20 +24,18 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      // folders
+      // src folders
       "@/*": ["./src/*"],
-      "@public/*": ["./public/*"],
-      "@features/*": ["./src/features/*"],
-      "@components/*": ["./src/components/*"],
-      "@contexts/*": ["./src/contexts/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@services/*": ["./src/services/*"],
-      "@pages/*": ["./src/pages/*"],
-      "@types/*": ["./src/types/*"],
-      "@hooks/*": ["./src/hooks/*"],
+      "@api/*": ["./src/api/*"],
       "@atoms/*": ["./src/atoms/*"],
+      "@components/*": ["./src/components/*"],
       "@configs/*": ["./src/configs/*"],
+      "@pages/*": ["./src/pages/*"],
       "@themes": ["./src/themes"],
+      "@types/*": ["./src/types/*"],
+      "@utils/*": ["./src/utils/*"],
+      // root folders
+      "@public/*": ["./public/*"],
       // files
       "@constants": ["./src/constants.ts"],
     },

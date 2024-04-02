@@ -12,4 +12,5 @@ export interface IData {
   cst: string;
   susCode: string;
   ncmCode: string;
+  menu: any;
 }

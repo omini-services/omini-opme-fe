@@ -14,20 +14,18 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // folders
+      // src folders
       '@': path.resolve(__dirname, './src'),
-      '@public': path.resolve(__dirname, './public'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@contexts': path.resolve(__dirname, './src/contexts'),
-      '@utils': path.resolve(__dirname, './src/utils'),
-      '@features': path.resolve(__dirname, './src/features'),
-      '@services': path.resolve(__dirname, './src/services'),
-      '@pages': path.resolve(__dirname, './src/pages'),
-      '@types': path.resolve(__dirname, './src/types'),
-      '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@api': path.resolve(__dirname, './api'),
       '@atoms': path.resolve(__dirname, './src/atoms'),
+      '@components': path.resolve(__dirname, './src/components'),
       '@configs': path.resolve(__dirname, './src/configs'),
+      '@pages': path.resolve(__dirname, './src/pages'),
       '@themes': path.resolve(__dirname, './src/themes'),
+      '@types': path.resolve(__dirname, './src/types'),
+      '@utils': path.resolve(__dirname, './src/utils'),
+      // root folders
+      '@public': path.resolve(__dirname, './public'),
       // files
       '@constants': path.resolve(__dirname, './src/constants.ts'),
     },

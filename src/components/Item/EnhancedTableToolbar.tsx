@@ -2,6 +2,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
+import React from 'react';
 
 interface IEnhancedTableToolbarProps {
   numSelected: number;
@@ -47,7 +48,7 @@ const EnhancedTableToolbar = (props: IEnhancedTableToolbarProps) => {
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton onClick={onDelete}>
-            <DeleteIcon/>
+            <DeleteIcon />
           </IconButton>
         </Tooltip>
       ) : (

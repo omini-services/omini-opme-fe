@@ -2,6 +2,7 @@ import { useMsal } from '@azure/msal-react';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
+import { deleteApiRequest } from '@/api/item';
 import { callApi } from '@/configs/api';
 import { API_CONFIG } from '@/configs/authConfig';
 import { tableSelectedItemsState } from '@atoms/item';
@@ -33,7 +34,6 @@ const Item = () => {
             'Access-Control-Allow-Origin': '*',
           },
         });
-        console.log(data);
         setRows(data);
         setLoading(false);
       } catch (error) {
@@ -45,36 +45,30 @@ const Item = () => {
   }, []);
 
   const deleteItemsCallback = async () => {
-    const token = await instance.acquireTokenSilent({
-      scopes: API_CONFIG.scopes,
-      account: accounts[0],
-    });
-
     try {
       const promises = selectedItems.map((item) =>
-        callApi({
-          url: `${API_CONFIG.endpoint}/items/${item}`,
-          accessToken: token.accessToken,
-          method: 'DELETE',
-          customHeaders: {
-            'Access-Control-Allow-Origin': '*',
-          },
-        }).then(() => item),
+        deleteApiRequest({
+          instance,
+          accounts,
+          model: 'items',
+          id: item,
+        }),
       );
 
       const resolvedItems = await Promise.all(promises);
 
       // TODO: corrigir notification
 
+      console.log(resolvedItems);
+
       const message = (
         <ul>
           {resolvedItems.map((item) => (
-            <li>{item}</li>
+            <li>{item.id}</li>
           ))}
         </ul>
       );
       setNotification(message);
-
       setRows(rows.filter((row) => !resolvedItems.includes(row.id)));
       setSelectedItems([]);
     } catch (error) {
