@@ -102,6 +102,7 @@ const ItemTable = (props: IItemTable) => {
   const renderFilters = () => <Filter loading={loading} />;
 
   const handleOnDelete = () => setDialog(dialogOptions);
+  const handleOnUpdate = (p) => console.log(p);
 
   return (
     <>
@@ -178,6 +179,7 @@ const ItemTable = (props: IItemTable) => {
                         <TableCell align="right">
                           <RowMenu
                             onDelete={handleOnDelete}
+                            onUpdate={handleOnUpdate}
                             rowKey={row.code}
                           />
                         </TableCell>

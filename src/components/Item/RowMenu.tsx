@@ -9,11 +9,12 @@ import React from 'react';
 
 interface IRowMenu {
   onDelete: Function;
-  rowKey: string;
+  onUpdate: Function;
+  rowKey: string | number;
 }
 
 const RowMenu = (props: IRowMenu) => {
-  const { onDelete, rowKey } = props;
+  const { onDelete, onUpdate, rowKey } = props;
 
   return (
     <Dropdown>
@@ -24,8 +25,7 @@ const RowMenu = (props: IRowMenu) => {
         <MoreHorizRoundedIcon />
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
-        <MenuItem onClick={() => {}}>Editar</MenuItem>
-        <MenuItem onClick={() => {}}>Atualizar</MenuItem>
+        <MenuItem onClick={() => onUpdate(rowKey)}>Editar</MenuItem>
         <Divider />
         <MenuItem color="danger" onClick={() => onDelete(rowKey)}>
           Deletar

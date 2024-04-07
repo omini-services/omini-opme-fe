@@ -1,12 +1,21 @@
 import { useMsal } from '@azure/msal-react';
 import AddIcon from '@mui/icons-material/Add';
-import { Input, Textarea, Button, Modal, Box } from '@mui/joy';
+import Button from '@mui/joy/Button';
+import DialogContent from '@mui/joy/DialogContent';
+import DialogTitle from '@mui/joy/DialogTitle';
+import Input from '@mui/joy/Input';
+import Modal from '@mui/joy/Modal';
+import ModalClose from '@mui/joy/ModalClose';
+import ModalDialog from '@mui/joy/ModalDialog';
+import Stack from '@mui/joy/Stack';
+import Textarea from '@mui/joy/Textarea';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useSetRecoilState } from 'recoil';
 
-import { callApi } from '@/configs/api';
-import { API_CONFIG } from '@/configs/authConfig';
+import { createApiRequest } from '@/api/item';
+import { notificationState } from '@atoms/notification';
 
 interface IFormData {
   code: string;
@@ -54,6 +63,8 @@ export const Form = () => {
     salesName: '',
   });
 
+  const setNotification = useSetRecoilState(notificationState);
+
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -72,27 +83,25 @@ export const Form = () => {
   };
 
   const handleSubmit = async (event: FormEvent) => {
+    console.log('event ', event);
     event.preventDefault();
     try {
-      instance
-        .acquireTokenSilent({
-          scopes: API_CONFIG.scopes,
-          account: accounts[0],
-        })
-        .then((res) => {
-          callApi(
-            `${API_CONFIG.endpoint}/items`,
-            res.accessToken,
-            'POST',
-            formData,
-          );
-        });
+      const result = await createApiRequest({
+        instance,
+        accounts,
+        model: 'items',
+        body: formData,
+      });
+      if (result.code) {
+        handleClose();
+        setNotification(`Item: '${result.code}' criado com sucesso`);
+      }
     } catch (error) {
       console.error('Erro ao enviar o formulário:', error);
     }
   };
 
-  const renderModalBody = () => (
+  const renderForm = () => (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form onSubmit={handleSubmit}>
         <Input
@@ -138,11 +147,11 @@ export const Form = () => {
           variant="soft"
         />
         {/* <DatePicker
-          format="MM/dd/yyyy"
-          value={formData.anvisaDueDate}
-          onChange={handleDateChange}
-          //   renderInput={(params) => <Input {...params} />}
-        /> */}
+                  format="MM/dd/yyyy"
+                  value={formData.anvisaDueDate}
+                  onChange={handleDateChange}
+                  //   renderInput={(params) => <Input {...params} />}
+                /> */}
         <Input
           name="supplierCode"
           value={formData.supplierCode}
@@ -213,13 +222,18 @@ export const Form = () => {
       >
         Novo Item
       </Button>
+
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
       >
-        <Box sx={style}>{renderModalBody()}</Box>
+        <ModalDialog color="primary" size="sm" variant="plain">
+          <ModalClose />
+          <DialogTitle>Criar Novo Item</DialogTitle>
+          <DialogContent>Fill in the information of the project.</DialogContent>
+          <Stack spacing={2}>{renderForm()}</Stack>
+        </ModalDialog>
       </Modal>
     </div>
   );
