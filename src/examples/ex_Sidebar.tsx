@@ -28,45 +28,11 @@ import Sheet from '@mui/joy/Sheet';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
 import * as React from 'react';
-import { ReactNode } from 'react';
 
 import FraterLogo from '@components/FraterLogo/FraterLogo';
 import ThemeModeToggle from '@components/ThemeModeToggle';
+import Toggler from '@components/Toggler';
 import { closeSidebar } from '@utils/sidebar';
-
-interface IToggler {
-  defaultExpanded?: boolean;
-  children: ReactNode;
-  renderToggle: (params: {
-    open: boolean;
-    setOpen: (value: boolean) => void;
-  }) => ReactNode;
-}
-
-function Toggler({
-  defaultExpanded = false,
-  renderToggle,
-  children,
-}: IToggler) {
-  const [open, setOpen] = React.useState(defaultExpanded);
-  return (
-    <>
-      {renderToggle({ open, setOpen })}
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateRows: open ? '1fr' : '0fr',
-          transition: '0.2s ease',
-          '& > *': {
-            overflow: 'hidden',
-          },
-        }}
-      >
-        {children}
-      </Box>
-    </>
-  );
-}
 
 export default function Sidebar() {
   return (

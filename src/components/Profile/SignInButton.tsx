@@ -1,7 +1,7 @@
 import { useMsal } from '@azure/msal-react';
 import Button from '@mui/joy/Button';
 
-import { graphConfig } from '@/configs/authConfig';
+import { GRAPH_CONFIG } from '@/configs/authConfig';
 
 /**
  * Renders a drop down button with child buttons for logging in with a popup or redirect
@@ -12,7 +12,7 @@ export const SignInButton = () => {
   const { instance } = useMsal();
 
   const handleLogin = () => {
-    instance.loginRedirect(graphConfig.scopes).catch((e) => {
+    instance.loginRedirect(GRAPH_CONFIG.scopes).catch((e) => {
       console.log(e);
     });
   };

@@ -5,6 +5,7 @@ import {
   Experimental_CssVarsProvider as MaterialCssVarsProvider,
   THEME_ID as MATERIAL_THEME_ID,
 } from '@mui/material/styles';
+import React from 'react';
 import { RecoilRoot } from 'recoil';
 
 import { Router } from '@/routes';

@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
 // eslint-disable-next-line import/extensions
-import { userState } from '@/atoms/auth';
-import { callMsGraph } from '@/configs/api';
-import { graphConfig } from '@/configs/authConfig';
+import { userState } from '@atoms/auth';
+import { callMsGraph } from '@configs/api';
+import { GRAPH_CONFIG } from '@configs/authConfig';
 
 const ProtectedInformation = () => {
   const { instance, accounts } = useMsal();
@@ -15,13 +15,14 @@ const ProtectedInformation = () => {
     if (userData) return;
     instance
       .acquireTokenSilent({
-        scopes: graphConfig.scopes,
+        scopes: GRAPH_CONFIG.scopes,
         account: accounts[0],
       })
       .then((response) => {
-        callMsGraph(graphConfig.endpoint, response.accessToken).then((res) =>
-          setUserData(res),
-        );
+        callMsGraph({
+          url: GRAPH_CONFIG.endpoint,
+          accessToken: response.accessToken,
+        }).then((res) => setUserData(res));
       });
   }, []);
 

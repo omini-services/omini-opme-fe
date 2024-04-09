@@ -2,7 +2,7 @@ import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import IconButton, { IconButtonProps } from '@mui/joy/IconButton';
 import { useColorScheme } from '@mui/joy/styles';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ColorSchemeToggle = (props: IconButtonProps) => {
   const { onClick, ...other } = props;

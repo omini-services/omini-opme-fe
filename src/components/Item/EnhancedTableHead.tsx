@@ -5,6 +5,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
+import React from 'react';
 
 import { Order, IData } from '@/types/Item';
 
@@ -33,34 +34,40 @@ const headCells: readonly IHeadCell[] = [
     disablePadding: true,
     label: 'Sales Name',
   },
+  // {
+  //   id: 'description',
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: 'Description',
+  // },
+  // { id: 'uom', numeric: false, disablePadding: true, label: 'UOM' },
+  // {
+  //   id: 'anvisaCode',
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: 'ANVISA Code',
+  // },
+  // {
+  //   id: 'anvisaDueDate',
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: 'ANVISA Due Date',
+  // },
+  // {
+  //   id: 'supplierCode',
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: 'Supplier Code',
+  // },
+  // { id: 'cst', numeric: false, disablePadding: true, label: 'CST' },
+  // { id: 'susCode', numeric: false, disablePadding: true, label: 'SUS Code' },
+  // { id: 'ncmCode', numeric: false, disablePadding: true, label: 'NCM Code' },
   {
-    id: 'description',
+    id: 'menu',
     numeric: false,
     disablePadding: true,
-    label: 'Description',
+    label: '',
   },
-  { id: 'uom', numeric: false, disablePadding: true, label: 'UOM' },
-  {
-    id: 'anvisaCode',
-    numeric: false,
-    disablePadding: true,
-    label: 'ANVISA Code',
-  },
-  {
-    id: 'anvisaDueDate',
-    numeric: false,
-    disablePadding: true,
-    label: 'ANVISA Due Date',
-  },
-  {
-    id: 'supplierCode',
-    numeric: false,
-    disablePadding: true,
-    label: 'Supplier Code',
-  },
-  { id: 'cst', numeric: false, disablePadding: true, label: 'CST' },
-  { id: 'susCode', numeric: false, disablePadding: true, label: 'SUS Code' },
-  { id: 'ncmCode', numeric: false, disablePadding: true, label: 'NCM Code' },
 ];
 
 const EnhancedTableHead = (props: IEnhancedTableProps) => {

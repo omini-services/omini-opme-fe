@@ -20,7 +20,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { withTheme } from '@mui/styles';
 import { visuallyHidden } from '@mui/utils';
-import { ChangeEvent, useState, useMemo } from 'react';
+import React, { ChangeEvent, useState, useMemo } from 'react';
 
 interface IData {
   id: number;
@@ -407,7 +407,7 @@ const EnhancedTable = () => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

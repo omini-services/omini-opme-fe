@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function callMsGraph(props: any) {
+export const callMsGraph = async (props: any) => {
   const { url, accessToken } = props;
   const headers = new Headers();
   const bearer = `Bearer ${accessToken}`;
@@ -13,13 +13,13 @@ export async function callMsGraph(props: any) {
 
   try {
     return fetch(url, config)
-      .then((response) => response.json())
-      .catch((error) => console.log(error));
+      .then(async (response) => response.json())
+      .catch((error) => console.log('error when getting msg => ', error));
   } catch (error) {
     console.log(error);
     throw error;
   }
-}
+};
 
 interface ICallApi {
   url: string;
@@ -30,13 +30,13 @@ interface ICallApi {
 }
 
 // eslint-disable-next-line consistent-return
-export async function callApi({
+export const callApi = async ({
   url,
   accessToken,
   method,
   body = {},
   customHeaders = {},
-}: ICallApi) {
+}: ICallApi) => {
   const headers = {
     'Content-Type': 'application/json', // Garanta que este cabeçalho esteja definido se for utilizar JSON
     Authorization: `Bearer ${accessToken}`,
@@ -60,4 +60,4 @@ export async function callApi({
     // Dependendo da necessidade, você pode querer tratar o erro de maneiras específicas aqui
     throw error;
   }
-}
+};
