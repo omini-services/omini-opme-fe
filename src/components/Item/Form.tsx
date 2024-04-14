@@ -1,5 +1,4 @@
 import { useMsal } from '@azure/msal-react';
-import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/joy/Button';
 import DialogContent from '@mui/joy/DialogContent';
 import DialogTitle from '@mui/joy/DialogTitle';
@@ -11,57 +10,37 @@ import Stack from '@mui/joy/Stack';
 import Textarea from '@mui/joy/Textarea';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 
-import { createApiRequest } from '@/api/item';
+import { createApiRequest, updateApiRequest } from '@/api/item';
 import { notificationState } from '@atoms/notification';
 
-interface IFormData {
-  code: string;
-  name: string;
-  salesName: string;
-  description: string;
-  uom: string;
-  anvisaCode: string;
-  anvisaDueDate: Date | null;
-  supplierCode: string;
-  cst: string;
-  susCode: string;
-  ncmCode: string;
-}
+import { IFormData, IFormProps } from './types';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
+export const initialState = {
+  code: '',
+  name: '',
+  description: '',
+  uom: '',
+  anvisaCode: '',
+  anvisaDueDate: null,
+  supplierCode: '',
+  cst: '',
+  susCode: '',
+  ncmCode: '',
+  salesName: '',
 };
 
-export const Form = () => {
+export const Form = ({ initialData, open, handleClose }: IFormProps) => {
   const { instance, accounts } = useMsal();
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [formData, setFormData] = useState<IFormData>(
+    initialData || initialState,
+  );
 
-  const [formData, setFormData] = useState<IFormData>({
-    code: '',
-    name: '',
-    description: '',
-    uom: '',
-    anvisaCode: '',
-    anvisaDueDate: null,
-    supplierCode: '',
-    cst: '',
-    susCode: '',
-    ncmCode: '',
-    salesName: '',
-  });
+  useEffect(() => console.log(initialData), [initialData]);
 
   const setNotification = useSetRecoilState(notificationState);
 
@@ -83,18 +62,45 @@ export const Form = () => {
   };
 
   const handleSubmit = async (event: FormEvent) => {
-    console.log('event ', event);
+    // event.preventDefault();
+    // try {
+    //   const result = await createApiRequest({
+    //     instance,
+    //     accounts,
+    //     model: 'items',
+    //     body: formData,
+    //   });
+    //   if (result.code) {
+    //     handleClose();
+    //     setNotification(`Item: '${result.code}' criado com sucesso`);
+    //   }
+    // } catch (error) {
+    //   console.error('Erro ao enviar o formulário:', error);
+    // }
     event.preventDefault();
+    const isUpdating = !!initialData; // Verifica se é atualização
+
     try {
-      const result = await createApiRequest({
-        instance,
-        accounts,
-        model: 'items',
-        body: formData,
-      });
+      const result = await (isUpdating
+        ? updateApiRequest({
+            instance,
+            accounts,
+            model: 'items',
+            body: formData,
+            id: initialData?.code, // Assume que `code` é um identificador único
+          })
+        : createApiRequest({
+            instance,
+            accounts,
+            model: 'items',
+            body: formData,
+          }));
+
       if (result.code) {
         handleClose();
-        setNotification(`Item: '${result.code}' criado com sucesso`);
+        setNotification(
+          `Item: '${result.code}' ${isUpdating ? 'atualizado' : 'criado'} com sucesso`,
+        );
       }
     } catch (error) {
       console.error('Erro ao enviar o formulário:', error);
@@ -146,12 +152,12 @@ export const Form = () => {
           size="sm"
           variant="soft"
         />
-        {/* <DatePicker
-                  format="MM/dd/yyyy"
-                  value={formData.anvisaDueDate}
-                  onChange={handleDateChange}
-                  //   renderInput={(params) => <Input {...params} />}
-                /> */}
+        <DatePicker
+          format="MM/dd/yyyy"
+          value={formData.anvisaDueDate}
+          onChange={handleDateChange}
+          //   renderInput={(params) => <Input {...params} />}
+        />
         <Input
           name="supplierCode"
           value={formData.supplierCode}
@@ -203,39 +209,18 @@ export const Form = () => {
   );
 
   return (
-    <div>
-      <Button
-        variant="outlined"
-        startIcon={<AddIcon />}
-        onClick={handleOpen}
-        sx={{
-          position: 'fixed',
-          // TODO: fix it here to set top 60px when less then 512
-          top: '20px',
-          '@media (max-width: 512px)': {
-            top: '60px',
-          },
-          right: '20px',
-          padding: '15px',
-          cursor: 'pointer',
-        }}
-      >
-        Novo Item
-      </Button>
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-      >
-        <ModalDialog color="primary" size="sm" variant="plain">
-          <ModalClose />
-          <DialogTitle>Criar Novo Item</DialogTitle>
-          <DialogContent>Fill in the information of the project.</DialogContent>
-          <Stack spacing={2}>{renderForm()}</Stack>
-        </ModalDialog>
-      </Modal>
-    </div>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+    >
+      <ModalDialog color="primary" size="sm" variant="plain">
+        <ModalClose />
+        <DialogTitle>Criar Novo Item</DialogTitle>
+        <DialogContent>Fill in the information of the project.</DialogContent>
+        <Stack spacing={2}>{renderForm()}</Stack>
+      </ModalDialog>
+    </Modal>
   );
 };
 
