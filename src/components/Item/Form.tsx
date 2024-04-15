@@ -217,7 +217,6 @@ export const Form = ({ initialData, open, handleClose }: IFormProps) => {
       <ModalDialog color="primary" size="sm" variant="plain">
         <ModalClose />
         <DialogTitle>Criar Novo Item</DialogTitle>
-        <DialogContent>Fill in the information of the project.</DialogContent>
         <Stack spacing={2}>{renderForm()}</Stack>
       </ModalDialog>
     </Modal>
