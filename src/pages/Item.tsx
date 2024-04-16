@@ -60,8 +60,6 @@ const Item = () => {
           id: updateItem,
         });
 
-        console.log(data);
-
         await setUpdateData(data);
         setOpen(true);
       } catch (error) {
