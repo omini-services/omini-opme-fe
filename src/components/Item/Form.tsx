@@ -1,5 +1,231 @@
+// import { useMsal } from '@azure/msal-react';
+// import Button from '@mui/joy/Button';
+// import DialogContent from '@mui/joy/DialogContent';
+// import DialogTitle from '@mui/joy/DialogTitle';
+// import Input from '@mui/joy/Input';
+// import Modal from '@mui/joy/Modal';
+// import ModalClose from '@mui/joy/ModalClose';
+// import ModalDialog from '@mui/joy/ModalDialog';
+// import Stack from '@mui/joy/Stack';
+// import Textarea from '@mui/joy/Textarea';
+// import { LocalizationProvider } from '@mui/x-date-pickers';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+// import { useSetRecoilState } from 'recoil';
+
+// import { createApiRequest, updateApiRequest } from '@/api/item';
+// import { notificationState } from '@atoms/notification';
+
+// import { IFormData, IFormProps } from './types';
+
+// export const initialState = {
+//   code: '',
+//   name: '',
+//   description: '',
+//   uom: '',
+//   anvisaCode: '',
+//   anvisaDueDate: null,
+//   supplierCode: '',
+//   cst: '',
+//   susCode: '',
+//   ncmCode: '',
+//   salesName: '',
+// };
+
+// export const Form = ({ initialData, open, handleClose }: IFormProps) => {
+//   const { instance, accounts } = useMsal();
+
+//   const [formData, setFormData] = useState<IFormData>(
+//     initialData || initialState,
+//   );
+
+//   useEffect(() => console.log(initialData), [initialData]);
+
+//   const setNotification = useSetRecoilState(notificationState);
+
+//   const handleChange = (
+//     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+//   ) => {
+//     const { name, value } = event.target;
+//     setFormData((prevFormData) => ({
+//       ...prevFormData,
+//       [name]: value,
+//     }));
+//   };
+
+//   const handleDateChange = (newValue: Date | null) => {
+//     setFormData((prevFormData) => ({
+//       ...prevFormData,
+//       anvisaDueDate: newValue,
+//     }));
+//   };
+
+//   const handleSubmit = async (event: FormEvent) => {
+//     // event.preventDefault();
+//     // try {
+//     //   const result = await createApiRequest({
+//     //     instance,
+//     //     accounts,
+//     //     model: 'items',
+//     //     body: formData,
+//     //   });
+//     //   if (result.code) {
+//     //     handleClose();
+//     //     setNotification(`Item: '${result.code}' criado com sucesso`);
+//     //   }
+//     // } catch (error) {
+//     //   console.error('Erro ao enviar o formulário:', error);
+//     // }
+//     event.preventDefault();
+//     const isUpdating = !!initialData; // Verifica se é atualização
+
+//     try {
+//       const result = await (isUpdating
+//         ? updateApiRequest({
+//             instance,
+//             accounts,
+//             model: 'items',
+//             body: formData,
+//             id: initialData?.code, // Assume que `code` é um identificador único
+//           })
+//         : createApiRequest({
+//             instance,
+//             accounts,
+//             model: 'items',
+//             body: formData,
+//           }));
+
+//       if (result.code) {
+//         handleClose();
+//         setNotification(
+//           `Item: '${result.code}' ${isUpdating ? 'atualizado' : 'criado'} com sucesso`,
+//         );
+//       }
+//     } catch (error) {
+//       console.error('Erro ao enviar o formulário:', error);
+//     }
+//   };
+
+//   const renderForm = () => (
+//     <LocalizationProvider dateAdapter={AdapterDayjs}>
+//       <form onSubmit={handleSubmit}>
+//         <Input
+//           name="name"
+//           value={formData.name}
+//           onChange={handleChange}
+//           placeholder="name"
+//           color="primary"
+//           size="sm"
+//           variant="soft"
+//         />
+//         <Input
+//           name="code"
+//           value={formData.code}
+//           onChange={handleChange}
+//           placeholder="code"
+//           color="primary"
+//           size="sm"
+//           variant="soft"
+//         />
+//         <Textarea
+//           name="description"
+//           value={formData.description}
+//           onChange={handleChange}
+//           placeholder="Descrição"
+//         />
+//         <Input
+//           name="uom"
+//           value={formData.uom}
+//           onChange={handleChange}
+//           placeholder="UOM"
+//           color="primary"
+//           size="sm"
+//           variant="soft"
+//         />
+//         <Input
+//           name="anvisaCode"
+//           value={formData.anvisaCode}
+//           onChange={handleChange}
+//           placeholder="Código ANVISA"
+//           color="primary"
+//           size="sm"
+//           variant="soft"
+//         />
+//         <DatePicker
+//           format="MM/dd/yyyy"
+//           value={formData.anvisaDueDate}
+//           onChange={handleDateChange}
+//           //   renderInput={(params) => <Input {...params} />}
+//         />
+//         <Input
+//           name="supplierCode"
+//           value={formData.supplierCode}
+//           onChange={handleChange}
+//           placeholder="Código do Fornecedor"
+//           color="primary"
+//           size="sm"
+//           variant="soft"
+//         />
+//         <Input
+//           name="cst"
+//           value={formData.cst}
+//           onChange={handleChange}
+//           placeholder="CST"
+//           color="primary"
+//           size="sm"
+//           variant="soft"
+//         />
+//         <Input
+//           name="susCode"
+//           value={formData.susCode}
+//           onChange={handleChange}
+//           placeholder="Código SUS"
+//           color="primary"
+//           size="sm"
+//           variant="soft"
+//         />
+//         <Input
+//           name="ncmCode"
+//           value={formData.ncmCode}
+//           onChange={handleChange}
+//           placeholder="Código NCM"
+//           color="primary"
+//           size="sm"
+//           variant="soft"
+//         />
+//         <Textarea
+//           name="salesName"
+//           value={formData.salesName}
+//           onChange={handleChange}
+//           placeholder="Descrição Estrangeira"
+//           color="primary"
+//           size="sm"
+//           variant="soft"
+//         />
+//         <Button type="submit">Enviar</Button>
+//       </form>
+//     </LocalizationProvider>
+//   );
+
+//   return (
+//     <Modal
+//       open={open}
+//       onClose={handleClose}
+//       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+//     >
+//       <ModalDialog color="primary" size="sm" variant="plain">
+//         <ModalClose />
+//         <DialogTitle>Criar Novo Item</DialogTitle>
+//         <Stack spacing={2}>{renderForm()}</Stack>
+//       </ModalDialog>
+//     </Modal>
+//   );
+// };
+
+// export default Form;
+
 import { useMsal } from '@azure/msal-react';
-import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/joy/Button';
 import DialogContent from '@mui/joy/DialogContent';
 import DialogTitle from '@mui/joy/DialogTitle';
@@ -11,68 +237,45 @@ import Stack from '@mui/joy/Stack';
 import Textarea from '@mui/joy/Textarea';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 
-import { createApiRequest } from '@/api/item';
+import { createApiRequest, updateApiRequest } from '@/api/item';
 import { notificationState } from '@atoms/notification';
 
-interface IFormData {
-  code: string;
-  name: string;
-  salesName: string;
-  description: string;
-  uom: string;
-  anvisaCode: string;
-  anvisaDueDate: Date | null;
-  supplierCode: string;
-  cst: string;
-  susCode: string;
-  ncmCode: string;
-}
+import { IFormData, IFormProps } from './types';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
+export const initialState = {
+  code: '',
+  name: '',
+  description: '',
+  uom: '',
+  anvisaCode: '',
+  anvisaDueDate: null,
+  supplierCode: '',
+  cst: '',
+  susCode: '',
+  ncmCode: '',
+  salesName: '',
 };
 
-export const Form = () => {
+export const Form = ({ initialData, open, handleClose }: IFormProps) => {
   const { instance, accounts } = useMsal();
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const [formData, setFormData] = useState<IFormData>({
-    code: '',
-    name: '',
-    description: '',
-    uom: '',
-    anvisaCode: '',
-    anvisaDueDate: null,
-    supplierCode: '',
-    cst: '',
-    susCode: '',
-    ncmCode: '',
-    salesName: '',
-  });
-
+  const [formData, setFormData] = useState<IFormData>(
+    initialData || initialState,
+  );
   const setNotification = useSetRecoilState(notificationState);
+
+  useEffect(() => {
+    setFormData({ ...formData, ...initialData });
+  }, [initialData]);
 
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
   const handleDateChange = (newValue: Date | null) => {
@@ -83,159 +286,103 @@ export const Form = () => {
   };
 
   const handleSubmit = async (event: FormEvent) => {
-    console.log('event ', event);
     event.preventDefault();
+    const isUpdating = !!initialData; // Verifica se é atualização
+
     try {
-      const result = await createApiRequest({
-        instance,
-        accounts,
-        model: 'items',
-        body: formData,
-      });
-      if (result.code) {
+      const result = await (isUpdating
+        ? updateApiRequest({
+            instance,
+            accounts,
+            model: 'items',
+            body: formData,
+            id: initialData?.code,
+          })
+        : createApiRequest({
+            instance,
+            accounts,
+            model: 'items',
+            body: formData,
+          }));
+
+      console.log('result => ', result);
+
+      if (result.message === 'Item was updated successfully.') {
         handleClose();
-        setNotification(`Item: '${result.code}' criado com sucesso`);
+        setNotification(
+          `Item: ${isUpdating && initialData.code} ${isUpdating ? 'atualizado' : 'criado'} com sucesso`,
+        );
+      } else {
+        handleClose();
+        setNotification(
+          `Item: '${result.code}' nao foi ${isUpdating ? 'atualizado!' : 'criado'}`,
+        );
       }
     } catch (error) {
       console.error('Erro ao enviar o formulário:', error);
+      handleClose();
+      setNotification(
+        `Item: '${result.code}' nao foi ${isUpdating ? 'atualizado!' : 'criado'}`,
+      );
     }
   };
 
   const renderForm = () => (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form onSubmit={handleSubmit}>
-        <Input
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="name"
-          color="primary"
-          size="sm"
-          variant="soft"
-        />
-        <Input
-          name="code"
-          value={formData.code}
-          onChange={handleChange}
-          placeholder="code"
-          color="primary"
-          size="sm"
-          variant="soft"
-        />
-        <Textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Descrição"
-        />
-        <Input
-          name="uom"
-          value={formData.uom}
-          onChange={handleChange}
-          placeholder="UOM"
-          color="primary"
-          size="sm"
-          variant="soft"
-        />
-        <Input
-          name="anvisaCode"
-          value={formData.anvisaCode}
-          onChange={handleChange}
-          placeholder="Código ANVISA"
-          color="primary"
-          size="sm"
-          variant="soft"
-        />
-        {/* <DatePicker
-                  format="MM/dd/yyyy"
-                  value={formData.anvisaDueDate}
-                  onChange={handleDateChange}
-                  //   renderInput={(params) => <Input {...params} />}
-                /> */}
-        <Input
-          name="supplierCode"
-          value={formData.supplierCode}
-          onChange={handleChange}
-          placeholder="Código do Fornecedor"
-          color="primary"
-          size="sm"
-          variant="soft"
-        />
-        <Input
-          name="cst"
-          value={formData.cst}
-          onChange={handleChange}
-          placeholder="CST"
-          color="primary"
-          size="sm"
-          variant="soft"
-        />
-        <Input
-          name="susCode"
-          value={formData.susCode}
-          onChange={handleChange}
-          placeholder="Código SUS"
-          color="primary"
-          size="sm"
-          variant="soft"
-        />
-        <Input
-          name="ncmCode"
-          value={formData.ncmCode}
-          onChange={handleChange}
-          placeholder="Código NCM"
-          color="primary"
-          size="sm"
-          variant="soft"
-        />
-        <Textarea
-          name="salesName"
-          value={formData.salesName}
-          onChange={handleChange}
-          placeholder="Descrição Estrangeira"
-          color="primary"
-          size="sm"
-          variant="soft"
-        />
-        <Button type="submit">Enviar</Button>
+        <Stack spacing={3}>
+          {[
+            'name',
+            'code',
+            'description',
+            'uom',
+            'anvisaCode',
+            'supplierCode',
+            'cst',
+            'susCode',
+            'ncmCode',
+            'salesName',
+          ].map((field) => (
+            <Input
+              key={field}
+              name={field}
+              value={formData[field]}
+              onChange={handleChange}
+              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+              color="primary"
+              size="md"
+              variant="soft"
+              fullWidth
+            />
+          ))}
+          {/* <DatePicker
+            format="MM/dd/yyyy"
+            value={formData.anvisaDueDate}
+            onChange={handleDateChange}
+            renderInput={(params) => <Input {...params} fullWidth />}
+          /> */}
+          <Button type="submit">Enviar</Button>
+        </Stack>
       </form>
     </LocalizationProvider>
   );
 
   return (
-    <div>
-      <Button
-        variant="outlined"
-        startIcon={<AddIcon />}
-        onClick={handleOpen}
-        sx={{
-          position: 'fixed',
-          // TODO: fix it here to set top 60px when less then 512
-          top: '20px',
-          '@media (max-width: 512px)': {
-            top: '60px',
-          },
-          right: '20px',
-          padding: '15px',
-          cursor: 'pointer',
-        }}
+    <Modal
+      open={open}
+      onClose={handleClose}
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+    >
+      <ModalDialog
+        sx={{ width: '500px' }} // Definindo um tamanho maior para o modal
+        color="primary"
+        variant="plain"
       >
-        Novo Item
-      </Button>
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-      >
-        <ModalDialog color="primary" size="sm" variant="plain">
-          <ModalClose />
-          <DialogTitle>Criar Novo Item</DialogTitle>
-          <DialogContent>Fill in the information of the project.</DialogContent>
-          <Stack spacing={2}>{renderForm()}</Stack>
-        </ModalDialog>
-      </Modal>
-    </div>
+        <ModalClose />
+        <DialogTitle>Criar Novo Item</DialogTitle>
+        <DialogContent sx={{ padding: '20px' }}>{renderForm()}</DialogContent>
+      </ModalDialog>
+    </Modal>
   );
 };
 

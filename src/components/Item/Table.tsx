@@ -8,10 +8,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import React, { useState, useMemo } from 'react';
-import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 
 import { Order, IData } from '@/types/Item';
-import { dialogState } from '@atoms/dialog';
 import { filterState } from '@atoms/item';
 import EnhancedTableHead from '@components/Item/EnhancedTableHead';
 import EnhancedTableToolbar from '@components/Item/EnhancedTableToolbar';
@@ -24,19 +23,19 @@ import RowMenu from './RowMenu';
 interface IItemTable {
   rows: Array<Object>;
   loading: boolean;
-  dialogOptions: Object;
   tableAtom: Array<string>;
+  handleOnDelete: Function;
+  handleOnUpdate: Function;
 }
 
 const ItemTable = (props: IItemTable) => {
-  const { rows, loading, dialogOptions, tableAtom } = props;
+  const { rows, loading, tableAtom, handleOnDelete, handleOnUpdate } = props;
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof IData>('code');
   const [selected, setSelected] = useRecoilState<any>(tableAtom);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const filter = useRecoilValue(filterState);
-  const setDialog = useSetRecoilState(dialogState);
 
   const handleRequestSort = (_event: any, property: keyof IData) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -100,9 +99,6 @@ const ItemTable = (props: IItemTable) => {
   }, [order, orderBy, page, rows, rowsPerPage, filter.search]);
 
   const renderFilters = () => <Filter loading={loading} />;
-
-  const handleOnDelete = () => setDialog(dialogOptions);
-  const handleOnUpdate = (p) => console.log(p);
 
   return (
     <>
