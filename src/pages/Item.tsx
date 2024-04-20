@@ -6,15 +6,16 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/item';
 import { dialogState } from '@atoms/dialog';
-import { tableSelectedItemsState } from '@atoms/item';
+import { tableSelectedItemsState, formOpen } from '@atoms/item';
 import { notificationState } from '@atoms/notification';
+import Filter from '@components/Item/Filter';
 import Form, { initialState } from '@components/Item/Form';
 import Table from '@components/Item/Table';
+import { Box } from '@mui/joy';
 
 const Item = () => {
   const { instance, accounts } = useMsal();
 
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
   const [updateItem, setUpdateItem] = useState(null);
@@ -25,6 +26,8 @@ const Item = () => {
   const [selectedItems, setSelectedItems] = useRecoilState<any>(
     tableSelectedItemsState,
   );
+
+  const [open, setOpen] = useRecoilState(formOpen);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -113,25 +116,27 @@ const Item = () => {
 
   return (
     <>
-      <Button
-        variant="outlined"
-        startIcon={<AddIcon />}
-        onClick={handleOpen}
+      <Box
+        className="page-toolbar-wrapper"
         sx={{
-          position: 'fixed',
-          // TODO: fix it here to set top 60px when less then 512
-          top: '20px',
-          '@media (max-width: 512px)': {
-            top: '60px',
-          },
-          right: '20px',
-          padding: '15px',
-          cursor: 'pointer',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 1.5,
+          paddingTop: 2,
         }}
       >
-        Novo Item
-      </Button>
-      <Form open={open} handleClose={handleClose} initialData={updateData} />
+        <Filter loading={loading} />
+        <Button
+          variant="outlined"
+          startIcon={<AddIcon />}
+          onClick={handleOpen}
+          sx={{
+            cursor: 'pointer',
+          }}
+        >
+          Novo Item
+        </Button>
+      </Box>
       <Table
         rows={rows}
         loading={loading}
@@ -139,6 +144,7 @@ const Item = () => {
         handleOnUpdate={(id) => setUpdateItem(id)}
         handleOnDelete={() => setDialog(dialogOptions)}
       />
+      <Form open={open} handleClose={handleClose} initialData={updateData} />
     </>
   );
 };

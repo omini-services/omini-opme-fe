@@ -14,7 +14,6 @@ import { Order, IData } from '@/types/Item';
 import { filterState } from '@atoms/item';
 import EnhancedTableHead from '@components/Item/EnhancedTableHead';
 import EnhancedTableToolbar from '@components/Item/EnhancedTableToolbar';
-import Filter from '@components/Item/Filter';
 import TableSkeleton from '@components/Item/Skeleton';
 import { stableSort, getComparator, searchItems } from '@utils/tables';
 
@@ -98,14 +97,9 @@ const ItemTable = (props: IItemTable) => {
     );
   }, [order, orderBy, page, rows, rowsPerPage, filter.search]);
 
-  const renderFilters = () => <Filter loading={loading} />;
-
   return (
     <>
-      {renderFilters()}
-
       {/* Table */}
-
       <Box sx={{ width: '100%' }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
