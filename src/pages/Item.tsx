@@ -1,24 +1,23 @@
 import { useMsal } from '@azure/msal-react';
 import AddIcon from '@mui/icons-material/Add';
+import { Box } from '@mui/joy';
 import Button from '@mui/joy/Button';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/item';
 import { dialogState } from '@atoms/dialog';
-import { tableSelectedItemsState, formOpen } from '@atoms/item';
+import { tableSelectedItemsState, formOpenAtom } from '@atoms/item';
 import { notificationState } from '@atoms/notification';
 import Filter from '@components/Item/Filter';
 import Form, { initialState } from '@components/Item/Form';
 import Table from '@components/Item/Table';
-import { Box } from '@mui/joy';
 
 const Item = () => {
   const { instance, accounts } = useMsal();
 
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
-  const [updateItem, setUpdateItem] = useState(null);
   const [updateData, setUpdateData] = useState(initialState);
 
   const setDialog = useSetRecoilState(dialogState);
@@ -27,13 +26,20 @@ const Item = () => {
     tableSelectedItemsState,
   );
 
-  const [open, setOpen] = useRecoilState(formOpen);
+  const [formOpen, setFormOpen] = useRecoilState(formOpenAtom);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => setFormOpen({ open: true, type: 'new' });
   const handleClose = () => {
-    setOpen(false);
+    setFormOpen({ open: false, type: '' });
     setUpdateData(initialState);
   };
+
+  useEffect(
+    () => () => {
+      setFormOpen({ open: false, type: '' });
+    },
+    [setFormOpen],
+  );
 
   useEffect(() => {
     const callItems = async () => {
@@ -53,25 +59,21 @@ const Item = () => {
     callItems();
   }, []);
 
-  useEffect(() => {
-    const getItem = async () => {
-      try {
-        const data = await getApiRequest({
-          instance,
-          accounts,
-          model: 'items',
-          id: updateItem,
-        });
+  const handleOpenUpdateForm = async (id) => {
+    try {
+      const data = await getApiRequest({
+        instance,
+        accounts,
+        model: 'items',
+        id,
+      });
 
-        await setUpdateData(data);
-        setOpen(true);
-      } catch (error) {
-        console.error('Erro ao retornar dados:', error);
-      }
-    };
-
-    if (updateItem) getItem();
-  }, [updateItem]);
+      await setUpdateData(data);
+      setFormOpen({ open: true, type: 'update' });
+    } catch (error) {
+      console.error('Erro ao retornar dados:', error);
+    }
+  };
 
   const deleteItemsCallback = async () => {
     try {
@@ -86,7 +88,7 @@ const Item = () => {
 
       const resolvedItems = await Promise.all(promises);
 
-      // TODO: corrigir notification
+      // TODO: corrigir notification error message
 
       const message = (
         <ul>
@@ -95,6 +97,12 @@ const Item = () => {
           ))}
         </ul>
       );
+
+      console.log('deleteItemsCallback => ', {
+        selectedItems,
+        resolvedItems,
+      });
+
       setNotification(message);
       setRows(rows.filter((row) => !resolvedItems.includes(row.id)));
       setSelectedItems([]);
@@ -114,6 +122,14 @@ const Item = () => {
     negativeCallback: () => {},
   };
 
+  const handleOnDelete = (id) => {
+    console.log('deleteItemsCallback => ', {
+      id,
+      selectedItems,
+    });
+    setDialog(dialogOptions);
+  };
+
   return (
     <>
       <Box
@@ -125,7 +141,6 @@ const Item = () => {
           paddingTop: 2,
         }}
       >
-        <Filter loading={loading} />
         <Button
           variant="outlined"
           startIcon={<AddIcon />}
@@ -136,15 +151,20 @@ const Item = () => {
         >
           Novo Item
         </Button>
+        <Filter loading={loading} />
       </Box>
       <Table
         rows={rows}
         loading={loading}
         tableAtom={tableSelectedItemsState}
-        handleOnUpdate={(id) => setUpdateItem(id)}
-        handleOnDelete={() => setDialog(dialogOptions)}
+        handleOnUpdate={(id) => handleOpenUpdateForm(id)}
+        handleOnDelete={(id) => handleOnDelete(id)}
       />
-      <Form open={open} handleClose={handleClose} initialData={updateData} />
+      <Form
+        open={formOpen.open}
+        handleClose={handleClose}
+        initialData={updateData}
+      />
     </>
   );
 };

@@ -151,7 +151,12 @@ export const Form = ({ initialData, open, handleClose }: IFormProps) => {
     <Modal
       open={open}
       onClose={handleClose}
-      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 10,
+      }}
     >
       <ModalDialog
         sx={{ width: '500px' }} // Definindo um tamanho maior para o modal
