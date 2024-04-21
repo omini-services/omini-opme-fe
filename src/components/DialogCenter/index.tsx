@@ -8,13 +8,13 @@ import {
 import React from 'react';
 import { useRecoilState } from 'recoil';
 
-import { dialogState } from '@atoms/dialog'; // Importe o átomo do Recoil
+import { dialogState } from '@atoms/dialog';
 
 const DialogCenter = () => {
   const [dialog, setDialog] = useRecoilState(dialogState);
 
   const handleClose = () => {
-    setDialog({ ...dialog, show: false }); // Definir a ação como negativa (cancelar) quando o diálogo é fechado
+    setDialog({ ...dialog, show: false });
   };
 
   const handlePositive = async () => {
@@ -24,7 +24,7 @@ const DialogCenter = () => {
 
   const handleNegative = async () => {
     await dialog.negativeCallback();
-    setDialog({ ...dialog, show: false }); // Definir a ação como negativa (cancelar) quando o botão negativo é clicado
+    setDialog({ ...dialog, show: false });
   };
 
   return (

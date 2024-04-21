@@ -23,12 +23,12 @@ interface IItemTable {
   rows: Array<Object>;
   loading: boolean;
   tableAtom: Array<string>;
-  handleOnDelete: Function;
-  handleOnUpdate: Function;
+  onDelete: Function;
+  onUpdate: Function;
 }
 
 const ItemTable = (props: IItemTable) => {
-  const { rows, loading, tableAtom, handleOnDelete, handleOnUpdate } = props;
+  const { rows, loading, tableAtom, onDelete, onUpdate } = props;
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof IData>('code');
   const [selected, setSelected] = useRecoilState<any>(tableAtom);
@@ -103,7 +103,7 @@ const ItemTable = (props: IItemTable) => {
       <Box sx={{ width: '100%' }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
-          onDelete={handleOnDelete}
+          onDelete={onDelete}
         />
         {loading ? (
           <TableSkeleton />
@@ -168,8 +168,8 @@ const ItemTable = (props: IItemTable) => {
                         <TableCell align="right">{row.ncmCode}</TableCell> */}
                         <TableCell align="right">
                           <RowMenu
-                            onDelete={handleOnDelete}
-                            onUpdate={handleOnUpdate}
+                            onDelete={onDelete}
+                            onUpdate={onUpdate}
                             rowKey={row.code}
                           />
                         </TableCell>

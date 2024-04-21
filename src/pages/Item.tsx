@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/item';
-import { dialogState } from '@atoms/dialog';
+import { dialogState, DIALOG_INITIAL_STATE } from '@atoms/dialog';
 import { tableSelectedItemsState, formOpenAtom } from '@atoms/item';
 import { notificationState } from '@atoms/notification';
 import Filter from '@components/Item/Filter';
@@ -75,37 +75,63 @@ const Item = () => {
     }
   };
 
-  const deleteItemsCallback = async () => {
+  const deleteItemsCallback = async (rowItemId) => {
     try {
-      const promises = selectedItems.map((item) =>
-        deleteApiRequest({
+      let message;
+
+      console.log('deleteItemsCallback ===> ', {
+        rowItemId,
+        selectedItems,
+        rule: !selectedItems.length && rowItemId,
+        rule2: selectedItems.length && !rowItemId,
+      });
+
+      if (selectedItems.length === 0 && rowItemId) {
+        const result = await deleteApiRequest({
           instance,
           accounts,
           model: 'items',
-          id: item,
-        }),
-      );
+          id: rowItemId,
+        });
 
-      const resolvedItems = await Promise.all(promises);
+        console.log('result => ', { result });
+        if (result.id) {
+          message = `Item ${result.id} foi removido com sucesso!`;
+          setNotification(message);
+          setRows(rows.filter((row) => row.id !== result.id));
+        }
+      } else if (selectedItems.length > 0 && !rowItemId) {
+        console.log('segundo');
+        const promises = selectedItems.map((item) =>
+          deleteApiRequest({
+            instance,
+            accounts,
+            model: 'items',
+            id: item,
+          }),
+        );
 
-      // TODO: corrigir notification error message
+        const resolvedItems = await Promise.all(promises);
 
-      const message = (
-        <ul>
-          {resolvedItems.map((item) => (
-            <li>{item.id}</li>
-          ))}
-        </ul>
-      );
+        // TODO: corrigir notification error message
 
-      console.log('deleteItemsCallback => ', {
-        selectedItems,
-        resolvedItems,
-      });
+        message = (
+          <ul>
+            {resolvedItems.map((item) => (
+              <li>{item.id}</li>
+            ))}
+          </ul>
+        );
 
-      setNotification(message);
-      setRows(rows.filter((row) => !resolvedItems.includes(row.id)));
-      setSelectedItems([]);
+        console.log('deleteItemsCallback => ', {
+          selectedItems,
+          resolvedItems,
+        });
+
+        setSelectedItems([]);
+        setNotification(message);
+        setRows(rows.filter((row) => !resolvedItems.includes(row.id)));
+      }
     } catch (error) {
       console.error(error);
       // Trate o erro conforme necessário
@@ -113,20 +139,24 @@ const Item = () => {
   };
 
   const dialogOptions = {
+    ...DIALOG_INITIAL_STATE,
     show: true,
     title: 'Confirmação',
     body: 'Tem certeza de que deseja excluir este(s) item(s)?',
     positive: 'Sim',
     negative: 'Cancelar',
     positiveCallback: deleteItemsCallback,
-    negativeCallback: () => {},
   };
 
+  // TODO: fix when clicking on cancel is not opening the modal again
   const handleOnDelete = (id) => {
     console.log('deleteItemsCallback => ', {
       id,
       selectedItems,
     });
+
+    dialogOptions.positiveCallback = () => deleteItemsCallback(id);
+
     setDialog(dialogOptions);
   };
 
@@ -157,8 +187,8 @@ const Item = () => {
         rows={rows}
         loading={loading}
         tableAtom={tableSelectedItemsState}
-        handleOnUpdate={(id) => handleOpenUpdateForm(id)}
-        handleOnDelete={(id) => handleOnDelete(id)}
+        onUpdate={(id) => handleOpenUpdateForm(id)}
+        onDelete={(id) => handleOnDelete(id)}
       />
       <Form
         open={formOpen.open}
