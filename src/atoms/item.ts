@@ -14,8 +14,5 @@ export const tableSelectedItemsState = atom({
 
 export const formOpenAtom = atom({
   key: 'formOpenAtom',
-  default: {
-    open: false,
-    type: '',
-  },
+  default: false,
 });

@@ -103,7 +103,7 @@ const ItemTable = (props: IItemTable) => {
       <Box sx={{ width: '100%' }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
-          onDelete={onDelete}
+          onDelete={() => onDelete(0)}
         />
         {loading ? (
           <TableSkeleton />

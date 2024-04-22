@@ -28,17 +28,19 @@ const Item = () => {
 
   const [formOpen, setFormOpen] = useRecoilState(formOpenAtom);
 
-  const handleOpen = () => setFormOpen({ open: true, type: 'new' });
+  const handleOpen = () => setFormOpen(true);
   const handleClose = () => {
-    setFormOpen({ open: false, type: '' });
+    setFormOpen(false);
     setUpdateData(initialState);
   };
 
   useEffect(
     () => () => {
-      setFormOpen({ open: false, type: '' });
+      setFormOpen(false);
+      setDialog(DIALOG_INITIAL_STATE);
+      setSelectedItems([]);
     },
-    [setFormOpen],
+    [setFormOpen, setDialog, setSelectedItems],
   );
 
   useEffect(() => {
@@ -69,22 +71,15 @@ const Item = () => {
       });
 
       await setUpdateData(data);
-      setFormOpen({ open: true, type: 'update' });
+      setFormOpen(true);
     } catch (error) {
       console.error('Erro ao retornar dados:', error);
     }
   };
 
-  const deleteItemsCallback = async (rowItemId) => {
+  const deleteItemsCallback = async (rowItemId = '') => {
     try {
       let message;
-
-      console.log('deleteItemsCallback ===> ', {
-        rowItemId,
-        selectedItems,
-        rule: !selectedItems.length && rowItemId,
-        rule2: selectedItems.length && !rowItemId,
-      });
 
       if (selectedItems.length === 0 && rowItemId) {
         const result = await deleteApiRequest({
@@ -94,7 +89,6 @@ const Item = () => {
           id: rowItemId,
         });
 
-        console.log('result => ', { result });
         if (result.id) {
           message = `Item ${result.id} foi removido com sucesso!`;
           setNotification(message);
@@ -123,41 +117,32 @@ const Item = () => {
           </ul>
         );
 
-        console.log('deleteItemsCallback => ', {
-          selectedItems,
-          resolvedItems,
-        });
-
-        setSelectedItems([]);
+        const resolvedIds = new Set(resolvedItems.map((item) => item.id));
+        setRows(rows.filter((row) => !resolvedIds.has(row.id)));
         setNotification(message);
-        setRows(rows.filter((row) => !resolvedItems.includes(row.id)));
+        setSelectedItems([]);
       }
     } catch (error) {
       console.error(error);
-      // Trate o erro conforme necessário
     }
   };
 
-  const dialogOptions = {
-    ...DIALOG_INITIAL_STATE,
-    show: true,
-    title: 'Confirmação',
-    body: 'Tem certeza de que deseja excluir este(s) item(s)?',
-    positive: 'Sim',
-    negative: 'Cancelar',
-    positiveCallback: deleteItemsCallback,
-  };
+  function createDialogOptions(id) {
+    return {
+      ...DIALOG_INITIAL_STATE,
+      show: true,
+      title: 'Confirmação',
+      body: 'Tem certeza de que deseja excluir este(s) item(s)?',
+      positive: 'Sim',
+      negative: 'Cancelar',
+      positiveCallback: () => deleteItemsCallback(id),
+    };
+  }
 
   // TODO: fix when clicking on cancel is not opening the modal again
   const handleOnDelete = (id) => {
-    console.log('deleteItemsCallback => ', {
-      id,
-      selectedItems,
-    });
-
-    dialogOptions.positiveCallback = () => deleteItemsCallback(id);
-
-    setDialog(dialogOptions);
+    console.log('deleteItemsCallback => ', { id, selectedItems });
+    setDialog(createDialogOptions(id));
   };
 
   return (
@@ -191,7 +176,7 @@ const Item = () => {
         onDelete={(id) => handleOnDelete(id)}
       />
       <Form
-        open={formOpen.open}
+        open={formOpen}
         handleClose={handleClose}
         initialData={updateData}
       />
