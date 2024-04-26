@@ -33,12 +33,19 @@ export const initialState = {
   salesName: '',
 };
 
-export const Form = ({ initialData, open, handleClose }: IFormProps) => {
+export const Form = ({
+  initialData,
+  open,
+  handleClose,
+  callbackAfterSubmit,
+}: IFormProps) => {
   const { instance, accounts } = useMsal();
   const [formData, setFormData] = useState<IFormData>(
     initialData || initialState,
   );
   const setNotification = useSetRecoilState(notificationState);
+
+  // useEffect(() => () => setFormData(initialState));
 
   useEffect(() => {
     setFormData({ ...formData, ...initialData });
@@ -60,15 +67,7 @@ export const Form = ({ initialData, open, handleClose }: IFormProps) => {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-
-    console.log('handleSubmit ===> ', {
-      event,
-      initialData,
-      res: !!initialData,
-    });
-
-    const isUpdating = !!initialData; // Verifica se é atualização
-
+    const isUpdating = !!initialData?.code;
     try {
       const result = await (isUpdating
         ? updateApiRequest({
@@ -85,8 +84,6 @@ export const Form = ({ initialData, open, handleClose }: IFormProps) => {
             body: formData,
           }));
 
-      console.log('result => ', result);
-
       if (result.message === 'Item was updated successfully.') {
         handleClose();
         setNotification(
@@ -98,6 +95,8 @@ export const Form = ({ initialData, open, handleClose }: IFormProps) => {
           `Item: '${result.code}' nao foi ${isUpdating ? 'atualizado!' : 'criado'}`,
         );
       }
+      callbackAfterSubmit(result, initialData, isUpdating);
+      setFormData(initialState);
     } catch (error) {
       console.error('Erro ao enviar o formulário:', error);
       handleClose();

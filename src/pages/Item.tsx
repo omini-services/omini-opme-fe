@@ -95,7 +95,6 @@ const Item = () => {
           setRows(rows.filter((row) => row.id !== result.id));
         }
       } else if (selectedItems.length > 0 && !rowItemId) {
-        console.log('segundo');
         const promises = selectedItems.map((item) =>
           deleteApiRequest({
             instance,
@@ -106,8 +105,6 @@ const Item = () => {
         );
 
         const resolvedItems = await Promise.all(promises);
-
-        // TODO: corrigir notification error message
 
         message = (
           <ul>
@@ -139,10 +136,34 @@ const Item = () => {
     };
   }
 
-  // TODO: fix when clicking on cancel is not opening the modal again
-  const handleOnDelete = (id) => {
-    console.log('deleteItemsCallback => ', { id, selectedItems });
-    setDialog(createDialogOptions(id));
+  const handleOnDelete = (id) => setDialog(createDialogOptions(id));
+
+  const handleCallbackAfterSubmit = async (result, initialData, isUpdating) => {
+    console.log('handleCallbackAfterSubmit => ', {
+      result,
+      initialData,
+      isUpdating,
+    });
+
+    if (isUpdating) {
+      const data = await getApiRequest({
+        instance,
+        accounts,
+        model: 'items',
+        id: initialData?.code,
+      });
+
+      setRows(
+        rows.map((row) => {
+          if (row.id == initialData?.code) {
+            return data;
+          }
+          return row;
+        }),
+      );
+    } else {
+      setRows([...rows, result]);
+    }
   };
 
   return (
@@ -179,6 +200,7 @@ const Item = () => {
         open={formOpen}
         handleClose={handleClose}
         initialData={updateData}
+        callbackAfterSubmit={handleCallbackAfterSubmit}
       />
     </>
   );
