@@ -10,7 +10,7 @@ import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 
 import { filterState } from '@atoms/item';
@@ -55,6 +55,7 @@ const Filter = (props: IFilter) => {
         >
           <SearchIcon />
         </IconButton>
+
         <Modal open={open} onClose={() => setOpen(false)}>
           <ModalDialog aria-labelledby="filter-modal" layout="fullscreen">
             <ModalClose />
@@ -77,12 +78,11 @@ const Filter = (props: IFilter) => {
         className="SearchAndFilters-tabletUp"
         sx={{
           borderRadius: 'sm',
-          py: 2,
           display: { xs: 'none', sm: 'flex' },
           flexWrap: 'wrap',
           gap: 1.5,
           '& > *': {
-            minWidth: { xs: '120px', md: '160px' },
+            minWidth: { xs: '100%', md: '300px' },
           },
         }}
       >
@@ -97,40 +97,6 @@ const Filter = (props: IFilter) => {
             disabled={loading}
           />
         </FormControl>
-        {/* <FormControl size="sm">
-          <FormLabel>Status</FormLabel>
-          <Select
-            size="sm"
-            placeholder="Filter by status"
-            slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
-          >
-            <Option value="paid">Paid</Option>
-            <Option value="pending">Pending</Option>
-            <Option value="refunded">Refunded</Option>
-            <Option value="cancelled">Cancelled</Option>
-          </Select>
-        </FormControl>
-        <FormControl size="sm">
-          <FormLabel>Category</FormLabel>
-          <Select size="sm" placeholder="All">
-            <Option value="all">All</Option>
-            <Option value="refund">Refund</Option>
-            <Option value="purchase">Purchase</Option>
-            <Option value="debit">Debit</Option>
-          </Select>
-        </FormControl>
-        <FormControl size="sm">
-          <FormLabel>Customer</FormLabel>
-          <Select size="sm" placeholder="All">
-            <Option value="all">All</Option>
-            <Option value="olivia">Olivia Rhye</Option>
-            <Option value="steve">Steve Hampton</Option>
-            <Option value="ciaran">Ciaran Murray</Option>
-            <Option value="marina">Marina Macdonald</Option>
-            <Option value="charles">Charles Fulton</Option>
-            <Option value="jay">Jay Hoper</Option>
-          </Select>
-        </FormControl> */}
       </Box>
     </>
   );

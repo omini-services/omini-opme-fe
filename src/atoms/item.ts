@@ -11,3 +11,8 @@ export const tableSelectedItemsState = atom({
   key: 'tableSelectedItemsState',
   default: [],
 });
+
+export const formOpenAtom = atom({
+  key: 'formOpenAtom',
+  default: false,
+});

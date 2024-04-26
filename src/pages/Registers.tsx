@@ -3,15 +3,21 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '@constants';
 
+const INITIAL_SELECTED_OPTION = '';
+
 const Registers = () => {
   const navigate = useNavigate();
 
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState(INITIAL_SELECTED_OPTION);
+
+  useEffect(() => {
+    setSelectedOption(INITIAL_SELECTED_OPTION);
+  }, []);
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     if (event) {

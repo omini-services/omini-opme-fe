@@ -2,7 +2,7 @@ import {
   AuthenticatedTemplate,
   UnauthenticatedTemplate,
 } from '@azure/msal-react';
-import { JSXElementConstructor } from 'react';
+import React, { JSXElementConstructor } from 'react';
 
 import ProtectedInformation from '@/components/Profile/ProtectedInformation';
 import Signin from '@/pages/Signin';
@@ -12,15 +12,16 @@ interface IPrivateRoute {
 }
 
 const PrivateRoute = ({ component: Component }: IPrivateRoute) => (
-  <div>
-    <AuthenticatedTemplate>
-      <ProtectedInformation />
-      <Component />
-    </AuthenticatedTemplate>
+  // <div>
+  //   <AuthenticatedTemplate>
+  //     <ProtectedInformation />
+  //     <Component />
+  //   </AuthenticatedTemplate>
 
-    <UnauthenticatedTemplate>
-      <Signin />
-    </UnauthenticatedTemplate>
-  </div>
+  //   <UnauthenticatedTemplate>
+  //     <Signin />
+  //   </UnauthenticatedTemplate>
+  // </div>
+  <Component />
 );
 export default PrivateRoute;

@@ -16,4 +16,5 @@ export interface IFormProps {
   open: Boolean;
   initialData?: IFormData;
   handleClose: Function;
+  callbackAfterSubmit: Function;
 }

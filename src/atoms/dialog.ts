@@ -1,14 +1,16 @@
 import { atom } from 'recoil';
 
+export const DIALOG_INITIAL_STATE = {
+  show: false,
+  title: '',
+  body: '',
+  positive: '',
+  negative: '',
+  positiveCallback: () => {},
+  negativeCallback: () => {},
+};
+
 export const dialogState = atom({
   key: 'dialogState',
-  default: {
-    show: false,
-    title: 'test',
-    body: 'test',
-    positive: 'ok',
-    negative: 'cancel',
-    positiveCallback: () => {},
-    negativeCallback: () => {},
-  },
+  default: DIALOG_INITIAL_STATE,
 });
