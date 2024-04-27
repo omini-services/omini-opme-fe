@@ -14,9 +14,13 @@ import { LogLevel } from '@azure/msal-browser';
 export const msalConfig = {
   auth: {
     clientId: import.meta.env.VITE_AZURE_CLIENT_ID,
-    authority: `https://login.microsoftonline.com/${
-      import.meta.env.VITE_AZURE_TENANT_ID
-    }`,
+    authority:
+      'https://ominiopme.b2clogin.com/ominiopme.onmicrosoft.com/B2C_1_SignUp_SignIn',
+    knownAuthorities: ['ominiopme.b2clogin.com'],
+    scope: [
+      'openid',
+      'https://ominiopme.onmicrosoft.com/ominiopme-api/api.access',
+    ],
     redirectUri: 'http://localhost:5173/',
   },
   cache: {
@@ -41,9 +45,8 @@ export const msalConfig = {
             return;
           case LogLevel.Warning:
             console.warn(message);
-            return;
+
           default:
-            return;
         }
       },
     },
