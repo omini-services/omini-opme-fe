@@ -22,7 +22,9 @@ const ProtectedInformation = () => {
         callMsGraph({
           url: GRAPH_CONFIG.endpoint,
           accessToken: response.accessToken,
-        }).then((res) => setUserData(res));
+        }).then((res) => {
+          setUserData(res);
+        });
       });
   }, []);
 
