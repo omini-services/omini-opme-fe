@@ -12,18 +12,18 @@ export const getAllApiRequest = async ({
   accounts,
   model,
 }: IGETA) => {
-  // const token = await instance.acquireTokenSilent({
-  //   scopes: API_CONFIG.scopes,
-  //   account: accounts[0],
-  // });
+  const token = await instance.acquireTokenSilent({
+    scopes: API_CONFIG.scopes,
+    account: accounts[0],
+  });
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}`,
-    // accessToken: token.accessToken,
+    accessToken: token.accessToken,
     method: 'GET',
-    customHeaders: {
-      'Access-Control-Allow-Origin': '*',
-    },
+    // customHeaders: {
+    //   'Access-Control-Allow-Origin': '*',
+    // },
   }).then((result) => result);
 };
 
@@ -37,14 +37,14 @@ export const getApiRequest = async ({
   model,
   id,
 }: IGET) => {
-  // const token = await instance.acquireTokenSilent({
-  //   scopes: API_CONFIG.scopes,
-  //   account: accounts[0],
-  // });
+  const token = await instance.acquireTokenSilent({
+    scopes: API_CONFIG.scopes,
+    account: accounts[0],
+  });
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}/${id}`,
-    // accessToken: token.accessToken,
+    accessToken: token.accessToken,
     method: 'GET',
     customHeaders: {
       'Access-Control-Allow-Origin': '*',
@@ -62,14 +62,14 @@ export const deleteApiRequest = async ({
   model,
   id,
 }: IDELETE) => {
-  // const token = await instance.acquireTokenSilent({
-  //   scopes: API_CONFIG.scopes,
-  //   account: accounts[0],
-  // });
+  const token = await instance.acquireTokenSilent({
+    scopes: API_CONFIG.scopes,
+    account: accounts[0],
+  });
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}/${id}`,
-    // accessToken: token.accessToken,
+    accessToken: token.accessToken,
     method: 'DELETE',
     customHeaders: {
       'Access-Control-Allow-Origin': '*',
@@ -87,14 +87,14 @@ export const createApiRequest = async ({
   model,
   body,
 }: ICREATE) => {
-  // const token = await instance.acquireTokenSilent({
-  //   scopes: API_CONFIG.scopes,
-  //   account: accounts[0],
-  // });
+  const token = await instance.acquireTokenSilent({
+    scopes: API_CONFIG.scopes,
+    account: accounts[0],
+  });
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}`,
-    // accessToken: token.accessToken,
+    accessToken: token.accessToken,
     method: 'POST',
     customHeaders: {
       'Access-Control-Allow-Origin': '*',
@@ -114,14 +114,14 @@ export const updateApiRequest = async ({
   body,
   id,
 }: IUPDATE) => {
-  // const token = await instance.acquireTokenSilent({
-  //   scopes: API_CONFIG.scopes,
-  //   account: accounts[0],
-  // });
+  const token = await instance.acquireTokenSilent({
+    scopes: API_CONFIG.scopes,
+    account: accounts[0],
+  });
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}/${id}`,
-    // accessToken: token.accessToken,
+    accessToken: token.accessToken,
     method: 'PUT',
     customHeaders: {
       'Access-Control-Allow-Origin': '*',

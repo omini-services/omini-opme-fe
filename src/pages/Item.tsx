@@ -51,7 +51,7 @@ const Item = () => {
           accounts,
           model: 'items',
         });
-        setRows(data);
+        setRows(data.data);
         setLoading(false);
       } catch (error) {
         console.error('Erro ao retornar dados:', error);
@@ -63,7 +63,7 @@ const Item = () => {
 
   const handleOpenUpdateForm = async (id) => {
     try {
-      const data = await getApiRequest({
+      const { data } = await getApiRequest({
         instance,
         accounts,
         model: 'items',
@@ -139,30 +139,24 @@ const Item = () => {
   const handleOnDelete = (id) => setDialog(createDialogOptions(id));
 
   const handleCallbackAfterSubmit = async (result, initialData, isUpdating) => {
-    console.log('handleCallbackAfterSubmit => ', {
-      result,
-      initialData,
-      isUpdating,
-    });
-
     if (isUpdating) {
-      const data = await getApiRequest({
+      const { data } = await getApiRequest({
         instance,
         accounts,
         model: 'items',
-        id: initialData?.code,
+        id: initialData?.id,
       });
 
       setRows(
         rows.map((row) => {
-          if (row.id == initialData?.code) {
+          if (row.id == initialData?.id) {
             return data;
           }
           return row;
         }),
       );
     } else {
-      setRows([...rows, result]);
+      setRows([...rows, result.data]);
     }
   };
 

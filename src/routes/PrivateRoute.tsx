@@ -12,16 +12,15 @@ interface IPrivateRoute {
 }
 
 const PrivateRoute = ({ component: Component }: IPrivateRoute) => (
-  // <div>
-  //   <AuthenticatedTemplate>
-  //     <ProtectedInformation />
-  //     <Component />
-  //   </AuthenticatedTemplate>
+  <div>
+    <AuthenticatedTemplate>
+      <ProtectedInformation />
+      <Component />
+    </AuthenticatedTemplate>
 
-  //   <UnauthenticatedTemplate>
-  //     <Signin />
-  //   </UnauthenticatedTemplate>
-  // </div>
-  <Component />
+    <UnauthenticatedTemplate>
+      <Signin />
+    </UnauthenticatedTemplate>
+  </div>
 );
 export default PrivateRoute;

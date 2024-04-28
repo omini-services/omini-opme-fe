@@ -44,7 +44,7 @@ const ItemTable = (props: IItemTable) => {
 
   const handleSelectAllClick = (_event: any) => {
     if (_event.target.checked) {
-      const newSelected = rows.map((row: any) => row.code);
+      const newSelected = rows.map((row: any) => row.id);
       setSelected(newSelected);
       return;
     }
@@ -125,7 +125,7 @@ const ItemTable = (props: IItemTable) => {
                 />
                 <TableBody>
                   {visibleRows.map((row, index) => {
-                    const isItemSelected = isSelected(row.code);
+                    const isItemSelected = isSelected(row.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
@@ -134,13 +134,13 @@ const ItemTable = (props: IItemTable) => {
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.code}
+                        key={row.id}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
-                            onClick={(event) => handleClick(event, row.code)}
+                            onClick={(event) => handleClick(event, row.id)}
                             color="primary"
                             checked={isItemSelected}
                             inputProps={{
@@ -148,7 +148,7 @@ const ItemTable = (props: IItemTable) => {
                             }}
                           />
                         </TableCell>
-                        <TableCell align="right">{row.code}</TableCell>
+                        <TableCell align="right">{row.id}</TableCell>
                         <TableCell
                           component="th"
                           id={labelId}
@@ -158,19 +158,19 @@ const ItemTable = (props: IItemTable) => {
                           {row.name}
                         </TableCell>
                         <TableCell align="right">{row.salesName}</TableCell>
-                        {/* <TableCell align="right">{row.description}</TableCell>
+                        <TableCell align="right">{row.description}</TableCell>
                         <TableCell align="right">{row.uom}</TableCell>
                         <TableCell align="right">{row.anvisaCode}</TableCell>
                         <TableCell align="right">{row.anvisaDueDate}</TableCell>
                         <TableCell align="right">{row.supplierCode}</TableCell>
                         <TableCell align="right">{row.cst}</TableCell>
                         <TableCell align="right">{row.susCode}</TableCell>
-                        <TableCell align="right">{row.ncmCode}</TableCell> */}
+                        <TableCell align="right">{row.ncmCode}</TableCell>
                         <TableCell align="right">
                           <RowMenu
                             onDelete={onDelete}
                             onUpdate={onUpdate}
-                            rowKey={row.code}
+                            rowKey={row.id}
                           />
                         </TableCell>
                       </TableRow>

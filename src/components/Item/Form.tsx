@@ -55,6 +55,7 @@ export const Form = ({
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = event.target;
+
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
@@ -67,7 +68,7 @@ export const Form = ({
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const isUpdating = !!initialData?.code;
+    const isUpdating = !!initialData?.id;
     try {
       const result = await (isUpdating
         ? updateApiRequest({
@@ -75,7 +76,7 @@ export const Form = ({
             accounts,
             model: 'items',
             body: formData,
-            id: initialData?.code,
+            id: initialData?.id,
           })
         : createApiRequest({
             instance,
@@ -100,9 +101,7 @@ export const Form = ({
     } catch (error) {
       console.error('Erro ao enviar o formulário:', error);
       handleClose();
-      setNotification(
-        `Item: '${result.code}' nao foi ${isUpdating ? 'atualizado!' : 'criado'}`,
-      );
+      setNotification(`Item nao foi ${isUpdating ? 'atualizado!' : 'criado'}`);
     }
   };
 
