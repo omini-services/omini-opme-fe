@@ -4,7 +4,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
 import { ROUTES } from '@constants';
 
@@ -12,12 +12,14 @@ const INITIAL_SELECTED_OPTION = '';
 
 const Registers = () => {
   const navigate = useNavigate();
-
-  const [selectedOption, setSelectedOption] = useState(INITIAL_SELECTED_OPTION);
+  const [selectedOption, setSelectedOption] = useState(
+    window.location.pathname || INITIAL_SELECTED_OPTION,
+  );
 
   useEffect(() => {
-    setSelectedOption(INITIAL_SELECTED_OPTION);
-  }, []);
+    const pathFromUrl = window.location.pathname;
+    setSelectedOption(pathFromUrl);
+  }, [window.location.pathname]);
 
   const handleSelectChange = (event: SelectChangeEvent) => {
     if (event) {
@@ -29,12 +31,9 @@ const Registers = () => {
 
   const renderMenuItems = () =>
     Object.values(ROUTES.registry)
-      .filter((item) => item.name !== 'registry') // Opcional: filtrar a rota 'root', se não quiser incluí-la.
+      .filter((item) => item.name !== 'registry')
       .map((item) => (
-        <MenuItem
-          key={item.name} // Recomendado para ajudar o React na identificação dos componentes da lista
-          value={item.to}
-        >
+        <MenuItem key={item.name} value={item.to}>
           {item.label}
         </MenuItem>
       ));
