@@ -4,13 +4,13 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '@constants';
 
 const INITIAL_SELECTED_OPTION = '';
 
-const Registers = () => {
+const Registry = () => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState(
     window.location.pathname || INITIAL_SELECTED_OPTION,
@@ -71,4 +71,4 @@ const Registers = () => {
   );
 };
 
-export default Registers;
+export default Registry;
