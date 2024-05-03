@@ -10,10 +10,9 @@ import TableRow from '@mui/material/TableRow';
 import React, { useState, useMemo } from 'react';
 import { useRecoilValue, useRecoilState } from 'recoil';
 
+import EnhancedTableToolbar from '@/components/Table/EnhancedTableToolbar';
 import { ITable, ITableData } from '@/components/Table/types';
 import { Order } from '@/types/Item';
-import { filterState } from '@atoms/item';
-import EnhancedTableToolbar from '@components/Item/EnhancedTableToolbar';
 import { stableSort, getComparator, searchRows } from '@utils/tables';
 
 import RowMenu from './RowMenu';
@@ -21,15 +20,17 @@ import RowMenu from './RowMenu';
 const CustomTable = (props: ITable) => {
   const {
     rows,
+    title,
     loading,
-    tableAtom,
     onDelete,
     onUpdate,
-    skeleton: TableSkeleton,
-    title,
-    tableHeader: TableHeader,
-    tableHeaderProps,
+    tableAtom,
+    filterAtom,
     tableCells,
+    tableHeaderProps,
+    tableSkeletonProps,
+    skeleton: TableSkeleton,
+    tableHeader: TableHeader,
   } = props;
   const { sortingInterface } = tableHeaderProps;
 
@@ -38,7 +39,7 @@ const CustomTable = (props: ITable) => {
   const [selected, setSelected] = useRecoilState<any>(tableAtom);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
-  const filter = useRecoilValue(filterState);
+  const filter = useRecoilValue(filterAtom);
 
   const handleRequestSort = (_event: any, property: any) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -118,7 +119,7 @@ const CustomTable = (props: ITable) => {
           title={title}
         />
         {loading ? (
-          <TableSkeleton />
+          <TableSkeleton {...tableSkeletonProps} />
         ) : (
           <Paper sx={{ width: '100%', mb: 2 }}>
             <TableContainer>

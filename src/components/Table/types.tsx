@@ -28,4 +28,6 @@ export interface ITable {
   tableHeaderProps: Array<Object>;
   sortingInterface: string;
   tableCells: Array<Object>;
+  filterAtom: any;
+  tableSkeletonProps: Object;
 }

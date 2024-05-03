@@ -5,13 +5,17 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/item';
+import ItemForm, { initialState } from '@/components/Forms/Item';
+import Filter from '@/components/Table/Filter';
+import TableSkeleton from '@/components/Table/Skeleton';
 import { IItem } from '@/types/Item';
 import { dialogState, DIALOG_INITIAL_STATE } from '@atoms/dialog';
-import { tableSelectedItemsState, formOpenAtom } from '@atoms/item';
+import {
+  tableSelectedItemsState,
+  formOpenAtom,
+  filterState,
+} from '@atoms/item';
 import { notificationState } from '@atoms/notification';
-import Filter from '@components/Item/Filter';
-import Form, { initialState } from '@components/Item/Form';
-import TableSkeleton from '@components/Item/Skeleton';
 import Table from '@components/Table';
 import TableHeader from '@components/Table/TableHeader';
 
@@ -277,7 +281,7 @@ const Item = () => {
         >
           Novo Item
         </Button>
-        <Filter loading={loading} />
+        <Filter loading={loading} atom={filterState} />
       </Box>
       <Table
         rows={rows}
@@ -290,8 +294,10 @@ const Item = () => {
         tableHeader={TableHeader}
         tableHeaderProps={{ headCells, sortingInterface: 'item' }}
         tableCells={tableCells}
+        filterAtom={filterState}
+        tableSkeletonProps={{ rows: 13, columns: 9 }}
       />
-      <Form
+      <ItemForm
         open={formOpen}
         handleClose={handleClose}
         initialData={updateData}

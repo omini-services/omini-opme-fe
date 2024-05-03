@@ -33,7 +33,7 @@ export const initialState = {
   salesName: '',
 };
 
-export const Form = ({
+export const ItemForm = ({
   initialData,
   open,
   handleClose,
@@ -169,4 +169,4 @@ export const Form = ({
   );
 };
 
-export default Form;
+export default ItemForm;
