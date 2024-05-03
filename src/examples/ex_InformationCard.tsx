@@ -7,6 +7,7 @@ import {
   Button,
 } from '@mui/joy';
 import Card from '@mui/joy/Card';
+import React from 'react';
 
 const InformationCard = () => (
   <Card

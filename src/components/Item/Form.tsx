@@ -15,9 +15,9 @@ import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 import { createApiRequest, updateApiRequest } from '@/api/item';
+import { IFormProps } from '@/components/Table/types';
+import { IFormData } from '@/types/Item';
 import { notificationState } from '@atoms/notification';
-
-import { IFormData, IFormProps } from './types';
 
 export const initialState = {
   code: '',

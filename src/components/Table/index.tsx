@@ -10,34 +10,43 @@ import TableRow from '@mui/material/TableRow';
 import React, { useState, useMemo } from 'react';
 import { useRecoilValue, useRecoilState } from 'recoil';
 
-import { Order, IData } from '@/types/Item';
+import { ITable, ITableData } from '@/components/Table/types';
+import { Order } from '@/types/Item';
 import { filterState } from '@atoms/item';
-import EnhancedTableHead from '@components/Item/EnhancedTableHead';
 import EnhancedTableToolbar from '@components/Item/EnhancedTableToolbar';
-import TableSkeleton from '@components/Item/Skeleton';
-import { stableSort, getComparator, searchItems } from '@utils/tables';
+import { stableSort, getComparator, searchRows } from '@utils/tables';
 
 import RowMenu from './RowMenu';
 
-interface IItemTable {
-  rows: Array<Object>;
-  loading: boolean;
-  tableAtom: Array<string>;
-  onDelete: Function;
-  onUpdate: Function;
-}
+const CustomTable = (props: ITable) => {
+  const {
+    rows,
+    loading,
+    tableAtom,
+    onDelete,
+    onUpdate,
+    skeleton: TableSkeleton,
+    title,
+    tableHeader: TableHeader,
+    tableHeaderProps,
+    tableCells,
+  } = props;
+  const { sortingInterface } = tableHeaderProps;
 
-const ItemTable = (props: IItemTable) => {
-  const { rows, loading, tableAtom, onDelete, onUpdate } = props;
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof IData>('code');
+  const [orderBy, setOrderBy] = useState<ITableData[sortingInterface]>('id');
   const [selected, setSelected] = useRecoilState<any>(tableAtom);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const filter = useRecoilValue(filterState);
 
-  const handleRequestSort = (_event: any, property: keyof IData) => {
+  const handleRequestSort = (_event: any, property: any) => {
     const isAsc = orderBy === property && order === 'asc';
+    console.log('handleRequestSort => ', {
+      order,
+      orderBy,
+      property,
+    });
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
@@ -88,10 +97,12 @@ const ItemTable = (props: IItemTable) => {
   const visibleRows = useMemo(() => {
     let filtered = rows;
     if (filter.search) {
-      filtered = searchItems(rows, filter.search);
+      filtered = searchRows(rows, filter.search);
     }
 
-    return stableSort(filtered, getComparator(order, orderBy)).slice(
+    const comparator = getComparator(order, orderBy);
+
+    return stableSort(filtered, comparator).slice(
       page * rowsPerPage,
       page * rowsPerPage + rowsPerPage,
     );
@@ -104,6 +115,7 @@ const ItemTable = (props: IItemTable) => {
         <EnhancedTableToolbar
           numSelected={selected.length}
           onDelete={() => onDelete(0)}
+          title={title}
         />
         {loading ? (
           <TableSkeleton />
@@ -115,12 +127,13 @@ const ItemTable = (props: IItemTable) => {
                 aria-labelledby="tableTitle"
                 size="small"
               >
-                <EnhancedTableHead
-                  numSelected={selected.length}
+                <TableHeader
+                  {...tableHeaderProps}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
                   order={order}
                   orderBy={orderBy}
-                  onSelectAllClick={handleSelectAllClick}
-                  onRequestSort={handleRequestSort}
+                  numSelected={selected.length}
                   rowCount={rows.length}
                 />
                 <TableBody>
@@ -138,7 +151,7 @@ const ItemTable = (props: IItemTable) => {
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
-                        <TableCell padding="checkbox">
+                        <TableCell padding="checkbox" id={labelId} scope="row">
                           <Checkbox
                             onClick={(event) => handleClick(event, row.id)}
                             color="primary"
@@ -148,24 +161,12 @@ const ItemTable = (props: IItemTable) => {
                             }}
                           />
                         </TableCell>
-                        <TableCell align="right">{row.id}</TableCell>
-                        <TableCell
-                          component="th"
-                          id={labelId}
-                          scope="row"
-                          padding="none"
-                        >
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.salesName}</TableCell>
-                        <TableCell align="right">{row.description}</TableCell>
-                        <TableCell align="right">{row.uom}</TableCell>
-                        <TableCell align="right">{row.anvisaCode}</TableCell>
-                        <TableCell align="right">{row.anvisaDueDate}</TableCell>
-                        <TableCell align="right">{row.supplierCode}</TableCell>
-                        <TableCell align="right">{row.cst}</TableCell>
-                        <TableCell align="right">{row.susCode}</TableCell>
-                        <TableCell align="right">{row.ncmCode}</TableCell>
+                        {/* cells */}
+                        {tableCells.map((column) => (
+                          <TableCell align={column.align}>
+                            {row[column.key]}
+                          </TableCell>
+                        ))}
                         <TableCell align="right">
                           <RowMenu
                             onDelete={onDelete}
@@ -204,4 +205,4 @@ const ItemTable = (props: IItemTable) => {
   );
 };
 
-export default ItemTable;
+export default CustomTable;

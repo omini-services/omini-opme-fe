@@ -7,10 +7,11 @@ import React from 'react';
 interface IEnhancedTableToolbarProps {
   numSelected: number;
   onDelete: Function;
+  title: string;
 }
 
 const EnhancedTableToolbar = (props: IEnhancedTableToolbarProps) => {
-  const { numSelected, onDelete } = props;
+  const { numSelected, onDelete, title } = props;
 
   return (
     <Toolbar
@@ -42,7 +43,7 @@ const EnhancedTableToolbar = (props: IEnhancedTableToolbarProps) => {
           id="tableTitle"
           component="div"
         >
-          Items
+          {title}
         </Typography>
       )}
       {numSelected > 0 ? (

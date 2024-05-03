@@ -40,11 +40,9 @@ export const getComparator = <Key extends keyof any>(
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 
-export const searchItems = (items, searchText) =>
-  items.filter((item) => {
-    // Realize a busca em cada propriedade do item
+export const searchRows = (rows, searchText) =>
+  rows.filter((item) => {
     for (const key in item) {
-      // Se a propriedade do item for uma string e incluir o texto de pesquisa, retorne true
       if (
         typeof item[key] === 'string' &&
         item[key].toLowerCase().includes(searchText.toLowerCase())
@@ -52,5 +50,5 @@ export const searchItems = (items, searchText) =>
         return true;
       }
     }
-    return false; // Caso contrário, retorne false
+    return false;
   });

@@ -22,7 +22,7 @@ import { withTheme } from '@mui/styles';
 import { visuallyHidden } from '@mui/utils';
 import React, { ChangeEvent, useState, useMemo } from 'react';
 
-interface IData {
+interface ICreateData {
   id: number;
   calories: number;
   carbs: number;
@@ -38,7 +38,7 @@ function createData(
   fat: number,
   carbs: number,
   protein: number,
-): IData {
+): ICreateData {
   return {
     id,
     name,
@@ -110,7 +110,7 @@ function stableSort<T>(
 
 interface IHeadCell {
   disablePadding: boolean;
-  id: keyof IData;
+  id: keyof ICreateData;
   label: string;
   numeric: boolean;
 }
@@ -150,7 +150,7 @@ const headCells: readonly IHeadCell[] = [
 
 interface IEnhancedTableProps {
   numSelected: number;
-  onRequestSort: (event: any, property: keyof IData) => void;
+  onRequestSort: (event: any, property: keyof ICreateData) => void;
   onSelectAllClick: (event: ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
@@ -166,7 +166,7 @@ function EnhancedTableHead(props: IEnhancedTableProps) {
     rowCount,
     onRequestSort,
   } = props;
-  const createSortHandler = (property: keyof IData) => (event: any) => {
+  const createSortHandler = (property: keyof ICreateData) => (event: any) => {
     onRequestSort(event, property);
   };
 
@@ -268,13 +268,13 @@ function EnhancedTableToolbar(props: IEnhancedTableToolbarProps) {
 }
 const EnhancedTable = () => {
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof IData>('calories');
+  const [orderBy, setOrderBy] = useState<keyof ICreateData>('calories');
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleRequestSort = (_event: any, property: keyof IData) => {
+  const handleRequestSort = (_event: any, property: keyof ICreateData) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
