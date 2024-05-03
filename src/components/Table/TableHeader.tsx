@@ -7,81 +7,42 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import React from 'react';
 
-import { Order, IData } from '@/types/Item';
+import { Order } from '@/types/Item';
+
+import { ITableData } from './types';
 
 interface IEnhancedTableProps {
   numSelected: number;
-  onRequestSort: (event: any, property: keyof IData) => void;
+  onRequestSort: (event: any, property: any) => void;
   onSelectAllClick: (event: any) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
+  headCells: Array<Object>;
+  sortingInterface: string;
 }
 
-interface IHeadCell {
-  id: keyof IData;
-  disablePadding: boolean;
-  label: string;
-  numeric: boolean;
-}
-
-const headCells: readonly IHeadCell[] = [
-  { id: 'code', numeric: false, disablePadding: true, label: 'Code' },
-  { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
-  {
-    id: 'salesName',
-    numeric: false,
-    disablePadding: true,
-    label: 'Sales Name',
-  },
-  {
-    id: 'description',
-    numeric: false,
-    disablePadding: true,
-    label: 'Description',
-  },
-  { id: 'uom', numeric: false, disablePadding: true, label: 'UOM' },
-  {
-    id: 'anvisaCode',
-    numeric: false,
-    disablePadding: true,
-    label: 'ANVISA Code',
-  },
-  {
-    id: 'anvisaDueDate',
-    numeric: false,
-    disablePadding: true,
-    label: 'ANVISA Due Date',
-  },
-  {
-    id: 'supplierCode',
-    numeric: false,
-    disablePadding: true,
-    label: 'Supplier Code',
-  },
-  { id: 'cst', numeric: false, disablePadding: true, label: 'CST' },
-  { id: 'susCode', numeric: false, disablePadding: true, label: 'SUS Code' },
-  { id: 'ncmCode', numeric: false, disablePadding: true, label: 'NCM Code' },
-  {
-    id: 'menu',
-    numeric: false,
-    disablePadding: true,
-    label: '',
-  },
-];
-
-const EnhancedTableHead = (props: IEnhancedTableProps) => {
+const TableHeader = (props: IEnhancedTableProps) => {
   const {
     onSelectAllClick,
+    onRequestSort,
     order,
     orderBy,
     numSelected,
     rowCount,
-    onRequestSort,
+    headCells,
+    sortingInterface,
   } = props;
-  const createSortHandler = (property: keyof IData) => (event: any) => {
-    onRequestSort(event, property);
-  };
+
+  const createSortHandler =
+    (property: keyof ITableData[sortingInterface]) => (event: any) => {
+      console.log('TableHeader => ', {
+        order,
+        orderBy,
+        property,
+      });
+      onRequestSort(event, property);
+    };
 
   return (
     <TableHead>
@@ -118,9 +79,15 @@ const EnhancedTableHead = (props: IEnhancedTableProps) => {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell
+          key="menu"
+          align="left"
+          padding="normal"
+          sortDirection={false}
+        />
       </TableRow>
     </TableHead>
   );
 };
 
-export default EnhancedTableHead;
+export default TableHeader;

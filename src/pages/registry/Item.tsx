@@ -1,17 +1,118 @@
 import { useMsal } from '@azure/msal-react';
-import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/joy';
 import Button from '@mui/joy/Button';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/item';
+import ItemForm, { initialState } from '@/components/Forms/Item';
+import Filter from '@/components/Table/Filter';
+import TableSkeleton from '@/components/Table/Skeleton';
+import { IItem } from '@/types/Item';
 import { dialogState, DIALOG_INITIAL_STATE } from '@atoms/dialog';
-import { tableSelectedItemsState, formOpenAtom } from '@atoms/item';
+import {
+  tableSelectedItemsState,
+  formOpenAtom,
+  filterState,
+} from '@atoms/item';
 import { notificationState } from '@atoms/notification';
-import Filter from '@components/Item/Filter';
-import Form, { initialState } from '@components/Item/Form';
-import Table from '@components/Item/Table';
+import Table from '@components/Table';
+import TableHeader from '@components/Table/TableHeader';
+
+interface ITableHeadCell {
+  id: keyof IItem;
+  disablePadding: boolean;
+  label: string;
+  numeric: boolean;
+}
+
+const headCells: readonly ITableHeadCell[] = [
+  {
+    id: 'code',
+    numeric: false,
+    disablePadding: true,
+    label: 'Code',
+  },
+  {
+    id: 'name',
+    numeric: false,
+    disablePadding: true,
+    label: 'Name',
+  },
+  {
+    id: 'salesName',
+    numeric: false,
+    disablePadding: true,
+    label: 'Sales Name',
+  },
+  {
+    id: 'description',
+    numeric: false,
+    disablePadding: true,
+    label: 'Description',
+  },
+  {
+    id: 'uom',
+    numeric: false,
+    disablePadding: true,
+    label: 'UOM',
+  },
+  {
+    id: 'anvisaCode',
+    numeric: false,
+    disablePadding: true,
+    label: 'ANVISA Code',
+  },
+  {
+    id: 'anvisaDueDate',
+    numeric: false,
+    disablePadding: true,
+    label: 'ANVISA Due Date',
+  },
+  {
+    id: 'supplierCode',
+    numeric: false,
+    disablePadding: true,
+    label: 'Supplier Code',
+  },
+  {
+    id: 'cst',
+    numeric: false,
+    disablePadding: true,
+    label: 'CST',
+  },
+  {
+    id: 'susCode',
+    numeric: false,
+    disablePadding: true,
+    label: 'SUS Code',
+  },
+  {
+    id: 'ncmCode',
+    numeric: false,
+    disablePadding: true,
+    label: 'NCM Code',
+  },
+];
+
+interface ITableCell {
+  key: keyof IItem;
+  align: string;
+}
+
+const tableCells: readonly ITableCell[] = [
+  { key: 'code', align: 'right' },
+  { key: 'name', align: 'right' },
+  { key: 'salesName', align: 'right' },
+  { key: 'description', align: 'right' },
+  { key: 'uom', align: 'right' },
+  { key: 'anvisaCode', align: 'right' },
+  { key: 'anvisaDueDate', align: 'right' },
+  { key: 'supplierCode', align: 'right' },
+  { key: 'cst', align: 'right' },
+  { key: 'susCode', align: 'right' },
+  { key: 'ncmCode', align: 'right' },
+];
 
 const Item = () => {
   const { instance, accounts } = useMsal();
@@ -173,7 +274,6 @@ const Item = () => {
       >
         <Button
           variant="outlined"
-          startIcon={<AddIcon />}
           onClick={handleOpen}
           sx={{
             cursor: 'pointer',
@@ -181,7 +281,7 @@ const Item = () => {
         >
           Novo Item
         </Button>
-        <Filter loading={loading} />
+        <Filter loading={loading} atom={filterState} />
       </Box>
       <Table
         rows={rows}
@@ -189,8 +289,15 @@ const Item = () => {
         tableAtom={tableSelectedItemsState}
         onUpdate={(id) => handleOpenUpdateForm(id)}
         onDelete={(id) => handleOnDelete(id)}
+        skeleton={TableSkeleton}
+        title="Items"
+        tableHeader={TableHeader}
+        tableHeaderProps={{ headCells, sortingInterface: 'item' }}
+        tableCells={tableCells}
+        filterAtom={filterState}
+        tableSkeletonProps={{ rows: 13, columns: 9 }}
       />
-      <Form
+      <ItemForm
         open={formOpen}
         handleClose={handleClose}
         initialData={updateData}
