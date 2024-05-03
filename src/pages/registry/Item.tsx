@@ -6,12 +6,67 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/item';
+import { IItem } from '@/types/Item';
 import { dialogState, DIALOG_INITIAL_STATE } from '@atoms/dialog';
 import { tableSelectedItemsState, formOpenAtom } from '@atoms/item';
 import { notificationState } from '@atoms/notification';
 import Filter from '@components/Item/Filter';
 import Form, { initialState } from '@components/Item/Form';
-import Table from '@components/Item/Table';
+import TableSkeleton from '@components/Item/Skeleton';
+import Table from '@components/Table';
+import TableHeader from '@components/Table/TableHeader';
+
+interface IHeadCell {
+  id: keyof IItem;
+  disablePadding: boolean;
+  label: string;
+  numeric: boolean;
+}
+
+const headCells: readonly IHeadCell[] = [
+  { id: 'code', numeric: false, disablePadding: true, label: 'Code' },
+  { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
+  {
+    id: 'salesName',
+    numeric: false,
+    disablePadding: true,
+    label: 'Sales Name',
+  },
+  {
+    id: 'description',
+    numeric: false,
+    disablePadding: true,
+    label: 'Description',
+  },
+  { id: 'uom', numeric: false, disablePadding: true, label: 'UOM' },
+  {
+    id: 'anvisaCode',
+    numeric: false,
+    disablePadding: true,
+    label: 'ANVISA Code',
+  },
+  {
+    id: 'anvisaDueDate',
+    numeric: false,
+    disablePadding: true,
+    label: 'ANVISA Due Date',
+  },
+  {
+    id: 'supplierCode',
+    numeric: false,
+    disablePadding: true,
+    label: 'Supplier Code',
+  },
+  { id: 'cst', numeric: false, disablePadding: true, label: 'CST' },
+  { id: 'susCode', numeric: false, disablePadding: true, label: 'SUS Code' },
+  { id: 'ncmCode', numeric: false, disablePadding: true, label: 'NCM Code' },
+  {
+    id: 'menu',
+    numeric: false,
+    disablePadding: true,
+    label: '',
+  },
+];
 
 const Item = () => {
   const { instance, accounts } = useMsal();
@@ -173,7 +228,6 @@ const Item = () => {
       >
         <Button
           variant="outlined"
-          startIcon={<AddIcon />}
           onClick={handleOpen}
           sx={{
             cursor: 'pointer',
@@ -189,6 +243,10 @@ const Item = () => {
         tableAtom={tableSelectedItemsState}
         onUpdate={(id) => handleOpenUpdateForm(id)}
         onDelete={(id) => handleOnDelete(id)}
+        skeleton={TableSkeleton}
+        title="Items"
+        tableHeader={TableHeader}
+        tableHeaderProps={{ headCells, sortingInterface: 'item' }}
       />
       <Form
         open={formOpen}
