@@ -27,4 +27,5 @@ export interface ITable {
   tableHeader?: React.ComponentType<any>;
   tableHeaderProps: Array<Object>;
   sortingInterface: string;
+  tableCells: Array<Object>;
 }

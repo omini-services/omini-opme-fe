@@ -29,22 +29,24 @@ const CustomTable = (props: ITable) => {
     title,
     tableHeader: TableHeader,
     tableHeaderProps,
+    tableCells,
   } = props;
   const { sortingInterface } = tableHeaderProps;
 
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] =
-    useState<keyof ITableData[sortingInterface]>('id');
+  const [orderBy, setOrderBy] = useState<ITableData[sortingInterface]>('id');
   const [selected, setSelected] = useRecoilState<any>(tableAtom);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const filter = useRecoilValue(filterState);
 
-  const handleRequestSort = (
-    _event: any,
-    property: keyof ITableData[sortingInterface],
-  ) => {
+  const handleRequestSort = (_event: any, property: any) => {
     const isAsc = orderBy === property && order === 'asc';
+    console.log('handleRequestSort => ', {
+      order,
+      orderBy,
+      property,
+    });
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
@@ -100,12 +102,6 @@ const CustomTable = (props: ITable) => {
 
     const comparator = getComparator(order, orderBy);
 
-    console.log('visibleRows ==> ', {
-      rows,
-      filtered,
-      comparator,
-    });
-
     return stableSort(filtered, comparator).slice(
       page * rowsPerPage,
       page * rowsPerPage + rowsPerPage,
@@ -135,6 +131,10 @@ const CustomTable = (props: ITable) => {
                   {...tableHeaderProps}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
+                  order={order}
+                  orderBy={orderBy}
+                  numSelected={selected.length}
+                  rowCount={rows.length}
                 />
                 <TableBody>
                   {visibleRows.map((row, index) => {
@@ -151,7 +151,7 @@ const CustomTable = (props: ITable) => {
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                       >
-                        <TableCell padding="checkbox">
+                        <TableCell padding="checkbox" id={labelId} scope="row">
                           <Checkbox
                             onClick={(event) => handleClick(event, row.id)}
                             color="primary"
@@ -161,24 +161,12 @@ const CustomTable = (props: ITable) => {
                             }}
                           />
                         </TableCell>
-                        <TableCell align="right">{row.code}</TableCell>
-                        <TableCell
-                          component="th"
-                          id={labelId}
-                          scope="row"
-                          padding="none"
-                        >
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.salesName}</TableCell>
-                        <TableCell align="right">{row.description}</TableCell>
-                        <TableCell align="right">{row.uom}</TableCell>
-                        <TableCell align="right">{row.anvisaCode}</TableCell>
-                        <TableCell align="right">{row.anvisaDueDate}</TableCell>
-                        <TableCell align="right">{row.supplierCode}</TableCell>
-                        <TableCell align="right">{row.cst}</TableCell>
-                        <TableCell align="right">{row.susCode}</TableCell>
-                        <TableCell align="right">{row.ncmCode}</TableCell>
+                        {/* cells */}
+                        {tableCells.map((column) => (
+                          <TableCell align={column.align}>
+                            {row[column.key]}
+                          </TableCell>
+                        ))}
                         <TableCell align="right">
                           <RowMenu
                             onDelete={onDelete}

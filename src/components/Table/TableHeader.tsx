@@ -7,7 +7,8 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import React from 'react';
 
-import { Order, IItem } from '@/types/Item';
+import { Order } from '@/types/Item';
+
 import { ITableData } from './types';
 
 interface IEnhancedTableProps {
@@ -18,22 +19,28 @@ interface IEnhancedTableProps {
   orderBy: string;
   rowCount: number;
   headCells: Array<Object>;
+  sortingInterface: string;
 }
 
 const TableHeader = (props: IEnhancedTableProps) => {
   const {
     onSelectAllClick,
+    onRequestSort,
     order,
     orderBy,
     numSelected,
     rowCount,
-    onRequestSort,
     headCells,
     sortingInterface,
   } = props;
 
   const createSortHandler =
     (property: keyof ITableData[sortingInterface]) => (event: any) => {
+      console.log('TableHeader => ', {
+        order,
+        orderBy,
+        property,
+      });
       onRequestSort(event, property);
     };
 
@@ -72,6 +79,12 @@ const TableHeader = (props: IEnhancedTableProps) => {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell
+          key="menu"
+          align="left"
+          padding="normal"
+          sortDirection={false}
+        />
       </TableRow>
     </TableHead>
   );

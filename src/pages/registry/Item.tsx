@@ -1,5 +1,4 @@
 import { useMsal } from '@azure/msal-react';
-import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/joy';
 import Button from '@mui/joy/Button';
 import React, { useEffect, useState } from 'react';
@@ -16,16 +15,26 @@ import TableSkeleton from '@components/Item/Skeleton';
 import Table from '@components/Table';
 import TableHeader from '@components/Table/TableHeader';
 
-interface IHeadCell {
+interface ITableHeadCell {
   id: keyof IItem;
   disablePadding: boolean;
   label: string;
   numeric: boolean;
 }
 
-const headCells: readonly IHeadCell[] = [
-  { id: 'code', numeric: false, disablePadding: true, label: 'Code' },
-  { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
+const headCells: readonly ITableHeadCell[] = [
+  {
+    id: 'code',
+    numeric: false,
+    disablePadding: true,
+    label: 'Code',
+  },
+  {
+    id: 'name',
+    numeric: false,
+    disablePadding: true,
+    label: 'Name',
+  },
   {
     id: 'salesName',
     numeric: false,
@@ -38,7 +47,12 @@ const headCells: readonly IHeadCell[] = [
     disablePadding: true,
     label: 'Description',
   },
-  { id: 'uom', numeric: false, disablePadding: true, label: 'UOM' },
+  {
+    id: 'uom',
+    numeric: false,
+    disablePadding: true,
+    label: 'UOM',
+  },
   {
     id: 'anvisaCode',
     numeric: false,
@@ -57,15 +71,43 @@ const headCells: readonly IHeadCell[] = [
     disablePadding: true,
     label: 'Supplier Code',
   },
-  { id: 'cst', numeric: false, disablePadding: true, label: 'CST' },
-  { id: 'susCode', numeric: false, disablePadding: true, label: 'SUS Code' },
-  { id: 'ncmCode', numeric: false, disablePadding: true, label: 'NCM Code' },
   {
-    id: 'menu',
+    id: 'cst',
     numeric: false,
     disablePadding: true,
-    label: '',
+    label: 'CST',
   },
+  {
+    id: 'susCode',
+    numeric: false,
+    disablePadding: true,
+    label: 'SUS Code',
+  },
+  {
+    id: 'ncmCode',
+    numeric: false,
+    disablePadding: true,
+    label: 'NCM Code',
+  },
+];
+
+interface ITableCell {
+  key: keyof IItem;
+  align: string;
+}
+
+const tableCells: readonly ITableCell[] = [
+  { key: 'code', align: 'right' },
+  { key: 'name', align: 'right' },
+  { key: 'salesName', align: 'right' },
+  { key: 'description', align: 'right' },
+  { key: 'uom', align: 'right' },
+  { key: 'anvisaCode', align: 'right' },
+  { key: 'anvisaDueDate', align: 'right' },
+  { key: 'supplierCode', align: 'right' },
+  { key: 'cst', align: 'right' },
+  { key: 'susCode', align: 'right' },
+  { key: 'ncmCode', align: 'right' },
 ];
 
 const Item = () => {
@@ -247,6 +289,7 @@ const Item = () => {
         title="Items"
         tableHeader={TableHeader}
         tableHeaderProps={{ headCells, sortingInterface: 'item' }}
+        tableCells={tableCells}
       />
       <Form
         open={formOpen}

@@ -12,7 +12,6 @@ export interface IItem {
   cst: string;
   susCode: string;
   ncmCode: string;
-  menu: any;
 }
 
 export interface IFormData {
