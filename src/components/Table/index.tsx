@@ -43,11 +43,6 @@ const CustomTable = (props: ITable) => {
 
   const handleRequestSort = (_event: any, property: any) => {
     const isAsc = orderBy === property && order === 'asc';
-    console.log('handleRequestSort => ', {
-      order,
-      orderBy,
-      property,
-    });
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };

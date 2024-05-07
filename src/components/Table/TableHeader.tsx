@@ -35,14 +35,8 @@ const TableHeader = (props: IEnhancedTableProps) => {
   } = props;
 
   const createSortHandler =
-    (property: keyof ITableData[sortingInterface]) => (event: any) => {
-      console.log('TableHeader => ', {
-        order,
-        orderBy,
-        property,
-      });
+    (property: keyof ITableData[sortingInterface]) => (event: any) =>
       onRequestSort(event, property);
-    };
 
   return (
     <TableHead>

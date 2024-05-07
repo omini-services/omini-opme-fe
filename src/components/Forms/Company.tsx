@@ -7,7 +7,6 @@ import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
 import Stack from '@mui/joy/Stack';
-import Textarea from '@mui/joy/Textarea';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -16,24 +15,18 @@ import { useSetRecoilState } from 'recoil';
 
 import { createApiRequest, updateApiRequest } from '@/api/api';
 import { IFormProps } from '@/components/Table/types';
-import { IFormData } from '@/types/Item';
+import { IFormData } from '@/types/Company';
 import { notificationState } from '@atoms/notification';
+import { INSURANCE_API_ROUTE } from '@/constants';
 
 export const initialState = {
-  code: '',
-  name: '',
-  description: '',
-  uom: '',
-  anvisaCode: '',
-  anvisaDueDate: null,
-  supplierCode: '',
-  cst: '',
-  susCode: '',
-  ncmCode: '',
-  salesName: '',
+  legalName: '',
+  tradeName: '',
+  cnpj: '',
+  comments: '',
 };
 
-export const ItemForm = ({
+export const CompanyForm = ({
   initialData,
   open,
   handleClose,
@@ -44,8 +37,6 @@ export const ItemForm = ({
     initialData || initialState,
   );
   const setNotification = useSetRecoilState(notificationState);
-
-  // useEffect(() => () => setFormData(initialState));
 
   useEffect(() => {
     setFormData({ ...formData, ...initialData });
@@ -74,34 +65,35 @@ export const ItemForm = ({
         ? updateApiRequest({
             instance,
             accounts,
-            model: 'items',
+            model: INSURANCE_API_ROUTE,
             body: formData,
             id: initialData?.id,
           })
         : createApiRequest({
             instance,
             accounts,
-            model: 'items',
+            model: INSURANCE_API_ROUTE,
             body: formData,
           }));
 
-      if (result.message === 'Item was updated successfully.') {
+      if (result.message === 'Empresa was updated successfully.') {
         handleClose();
         setNotification(
-          `Item: ${isUpdating && initialData.code} ${isUpdating ? 'atualizado' : 'criado'} com sucesso`,
+          `Empresa: ${isUpdating && initialData.code} ${isUpdating ? 'atualizado' : 'criada!'} com sucesso`,
         );
       } else {
         handleClose();
         setNotification(
-          `Item: '${result.code}' nao foi ${isUpdating ? 'atualizado!' : 'criado'}`,
+          `Empresa: '${result.code}' nao foi ${isUpdating ? 'atualizado!' : 'criada!'}`,
         );
       }
       callbackAfterSubmit(result, initialData, isUpdating);
       setFormData(initialState);
     } catch (error) {
-      console.error('Erro ao enviar o formulário:', error);
       handleClose();
-      setNotification(`Item nao foi ${isUpdating ? 'atualizado!' : 'criado'}`);
+      setNotification(
+        `Empresa nao foi ${isUpdating ? 'atualizado!' : 'criada!'}`,
+      );
     }
   };
 
@@ -109,18 +101,7 @@ export const ItemForm = ({
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          {[
-            'name',
-            'code',
-            'description',
-            'uom',
-            'anvisaCode',
-            'supplierCode',
-            'cst',
-            'susCode',
-            'ncmCode',
-            'salesName',
-          ].map((field) => (
+          {['legalName', 'tradeName', 'cnpj', 'comments'].map((field) => (
             <Input
               key={field}
               name={field}
@@ -162,11 +143,11 @@ export const ItemForm = ({
         variant="plain"
       >
         <ModalClose />
-        <DialogTitle>Criar Novo Item</DialogTitle>
+        <DialogTitle>Criar Nova Empresa</DialogTitle>
         <DialogContent sx={{ padding: '20px' }}>{renderForm()}</DialogContent>
       </ModalDialog>
     </Modal>
   );
 };
 
-export default ItemForm;
+export default CompanyForm;

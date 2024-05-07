@@ -1,7 +1,18 @@
+import { IPublicClientApplication } from '@azure/msal-browser';
+
 import { callApi } from '@/configs/api';
 import { API_CONFIG } from '@/configs/authConfig';
 
 import { IGET, IGETA, IDELETE, ICREATE, IUPDATE } from './types';
+
+const acquireToken = async (
+  instance: IPublicClientApplication,
+  accounts: any[],
+) =>
+  instance.acquireTokenSilent({
+    scopes: API_CONFIG.scopes,
+    account: accounts[0],
+  });
 
 /**
  * GET ALL API
@@ -12,18 +23,12 @@ export const getAllApiRequest = async ({
   accounts,
   model,
 }: IGETA) => {
-  const token = await instance.acquireTokenSilent({
-    scopes: API_CONFIG.scopes,
-    account: accounts[0],
-  });
+  const token = await acquireToken(instance, accounts);
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}`,
     accessToken: token.accessToken,
     method: 'GET',
-    // customHeaders: {
-    //   'Access-Control-Allow-Origin': '*',
-    // },
   }).then((result) => result);
 };
 
@@ -37,10 +42,7 @@ export const getApiRequest = async ({
   model,
   id,
 }: IGET) => {
-  const token = await instance.acquireTokenSilent({
-    scopes: API_CONFIG.scopes,
-    account: accounts[0],
-  });
+  const token = await acquireToken(instance, accounts);
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}/${id}`,
@@ -62,10 +64,7 @@ export const deleteApiRequest = async ({
   model,
   id,
 }: IDELETE) => {
-  const token = await instance.acquireTokenSilent({
-    scopes: API_CONFIG.scopes,
-    account: accounts[0],
-  });
+  const token = await acquireToken(instance, accounts);
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}/${id}`,
@@ -87,10 +86,7 @@ export const createApiRequest = async ({
   model,
   body,
 }: ICREATE) => {
-  const token = await instance.acquireTokenSilent({
-    scopes: API_CONFIG.scopes,
-    account: accounts[0],
-  });
+  const token = await acquireToken(instance, accounts);
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}`,
@@ -114,10 +110,7 @@ export const updateApiRequest = async ({
   body,
   id,
 }: IUPDATE) => {
-  const token = await instance.acquireTokenSilent({
-    scopes: API_CONFIG.scopes,
-    account: accounts[0],
-  });
+  const token = await acquireToken(instance, accounts);
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}/${id}`,

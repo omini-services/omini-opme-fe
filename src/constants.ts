@@ -53,3 +53,6 @@ export const ROUTES = {
 };
 
 export const INITIAL_USER_STATE = null;
+
+export const INSURANCE_API_ROUTE = 'insurancecompanies';
+export const ITEM_API_ROUTE = 'items';
