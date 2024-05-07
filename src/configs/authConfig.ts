@@ -66,10 +66,8 @@ export const GRAPH_CONFIG = {
 };
 
 export const API_CONFIG = {
-  // endpoint: 'https://app-eng-opmebe-prd-eastus.azurewebsites.net/api',
   // endpoint: 'http://localhost:6868/api',
   endpoint: 'https://omi-app-api-dev-useast-rg.azurewebsites.net/api',
-  // scopes: ['api://35133114-8f8f-4094-9c95-51a22540c178/Api.Full'],
   scopes: [
     'openid',
     'https://ominiopme.onmicrosoft.com/ominiopme-api/api.access',

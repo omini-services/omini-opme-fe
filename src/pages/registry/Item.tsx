@@ -4,7 +4,7 @@ import Button from '@mui/joy/Button';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/item';
+import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/api';
 import ItemForm, { initialState } from '@/components/Forms/Item';
 import Filter from '@/components/Table/Filter';
 import TableSkeleton from '@/components/Table/Skeleton';
@@ -18,6 +18,7 @@ import {
 import { notificationState } from '@atoms/notification';
 import Table from '@components/Table';
 import TableHeader from '@components/Table/TableHeader';
+import { ITEM_API_ROUTE } from '@/constants';
 
 interface ITableHeadCell {
   id: keyof IItem;
@@ -26,30 +27,30 @@ interface ITableHeadCell {
   numeric: boolean;
 }
 
-const headCells: readonly ITableHeadCell[] = [
+const headCells: ITableHeadCell[] = [
   {
     id: 'code',
     numeric: false,
     disablePadding: true,
-    label: 'Code',
+    label: 'Codigo',
   },
   {
     id: 'name',
     numeric: false,
     disablePadding: true,
-    label: 'Name',
+    label: 'Nome',
   },
   {
     id: 'salesName',
     numeric: false,
     disablePadding: true,
-    label: 'Sales Name',
+    label: 'Nome do Vendedor',
   },
   {
     id: 'description',
     numeric: false,
     disablePadding: true,
-    label: 'Description',
+    label: 'Descricao',
   },
   {
     id: 'uom',
@@ -61,19 +62,19 @@ const headCells: readonly ITableHeadCell[] = [
     id: 'anvisaCode',
     numeric: false,
     disablePadding: true,
-    label: 'ANVISA Code',
+    label: 'Codigo ANVISA',
   },
   {
     id: 'anvisaDueDate',
     numeric: false,
     disablePadding: true,
-    label: 'ANVISA Due Date',
+    label: 'Data de Vencimento ANVISA',
   },
   {
     id: 'supplierCode',
     numeric: false,
     disablePadding: true,
-    label: 'Supplier Code',
+    label: 'Codigo do Fornecedor',
   },
   {
     id: 'cst',
@@ -85,13 +86,13 @@ const headCells: readonly ITableHeadCell[] = [
     id: 'susCode',
     numeric: false,
     disablePadding: true,
-    label: 'SUS Code',
+    label: 'Codigo do SUS',
   },
   {
     id: 'ncmCode',
     numeric: false,
     disablePadding: true,
-    label: 'NCM Code',
+    label: 'Codigo NCM',
   },
 ];
 
@@ -150,9 +151,10 @@ const Item = () => {
         const data = await getAllApiRequest({
           instance,
           accounts,
-          model: 'items',
+          model: ITEM_API_ROUTE,
         });
-        setRows(data.data);
+        setRows(data.data); // TODO: usado na api original
+        // setRows(data); // TODO: usado na api local
         setLoading(false);
       } catch (error) {
         console.error('Erro ao retornar dados:', error);
@@ -167,14 +169,14 @@ const Item = () => {
       const { data } = await getApiRequest({
         instance,
         accounts,
-        model: 'items',
+        model: ITEM_API_ROUTE,
         id,
       });
 
       await setUpdateData(data);
       setFormOpen(true);
     } catch (error) {
-      console.error('Erro ao retornar dados:', error);
+      console.error(`Erro ao fazer update do item ${id}:`, error);
     }
   };
 
@@ -186,7 +188,7 @@ const Item = () => {
         const result = await deleteApiRequest({
           instance,
           accounts,
-          model: 'items',
+          model: ITEM_API_ROUTE,
           id: rowItemId,
         });
 
@@ -200,7 +202,7 @@ const Item = () => {
           deleteApiRequest({
             instance,
             accounts,
-            model: 'items',
+            model: ITEM_API_ROUTE,
             id: item,
           }),
         );
@@ -244,7 +246,7 @@ const Item = () => {
       const { data } = await getApiRequest({
         instance,
         accounts,
-        model: 'items',
+        model: ITEM_API_ROUTE,
         id: initialData?.id,
       });
 

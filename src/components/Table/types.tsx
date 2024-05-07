@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { ICompany } from '@/types/Company';
 import { IItem } from '@/types/Item';
 
 export interface IFormProps {
@@ -11,23 +12,24 @@ export interface IFormProps {
 
 export interface ITableData {
   item: IItem;
+  company: ICompany;
 }
 
 export interface ITable {
-  rows: Array<Object>;
-  loading: boolean;
-  tableAtom: Array<string>;
-  onDelete: Function;
-  onUpdate: Function;
-  /** O ? em TypeScript indica que a propriedade é opcional. 
-    Isso significa que essa propriedade pode ser fornecida ou não ao criar um objeto que implementa a interface.
-    Se você não fornecer essa propriedade, ela terá o valor undefined. * */
-  skeleton?: React.ComponentType<any>;
   title: string;
-  tableHeader?: React.ComponentType<any>;
-  tableHeaderProps: Array<Object>;
+  filterAtom: any;
+  loading: boolean;
+  onUpdate: Function;
+  onDelete: Function;
+  rows: Array<Object>;
+  tableAtom: Array<string>;
   sortingInterface: string;
   tableCells: Array<Object>;
-  filterAtom: any;
   tableSkeletonProps: Object;
+  tableHeaderProps: Array<Object>;
+  /** O ? em TypeScript indica que a propriedade é opcional. 
+   Isso significa que essa propriedade pode ser fornecida ou não ao criar um objeto que implementa a interface.
+   Se você não fornecer essa propriedade, ela terá o valor undefined. * */
+  skeleton?: React.ComponentType<any>;
+  tableHeader?: React.ComponentType<any>;
 }
