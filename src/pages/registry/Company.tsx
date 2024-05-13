@@ -4,12 +4,12 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/api';
 import CompanyForm, { initialState } from '@/components/Forms/Company';
+import { INSURANCE_API_ROUTE } from '@/constants';
 import { ICompany } from '@/types/Company';
 import { DIALOG_INITIAL_STATE } from '@atoms/dialog';
 import { tableSelectedItemsState, formOpenAtom } from '@atoms/item';
 import { notificationState } from '@atoms/notification';
 import BaseCRUDTable from '@pages/base/BaseCRUDTable';
-import { INSURANCE_API_ROUTE } from '@/constants';
 
 interface ITableHeadCell {
   id: keyof ICompany;

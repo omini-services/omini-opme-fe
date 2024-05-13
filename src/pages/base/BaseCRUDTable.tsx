@@ -83,6 +83,7 @@ const BaseCRUDTable = (props: IBaseCRUDTable) => {
           sx={{
             cursor: 'pointer',
           }}
+          disabled={loading}
         >
           Novo Item
         </Button>
