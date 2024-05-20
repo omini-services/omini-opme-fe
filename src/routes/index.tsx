@@ -6,11 +6,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { ROUTES } from '@/constants';
 import Dashboard from '@/pages/Dashboard';
+// registry
 import Company from '@/pages/registry/Company';
+import Hospital from '@/pages/registry/Hospital';
 import Item from '@/pages/registry/Item';
 import Order from '@/pages/registry/Order';
 import Procedure from '@/pages/registry/Procedure';
 import Specialty from '@/pages/registry/Specialty';
+// other
 import Home from '@pages/Home';
 import Orders from '@pages/Orders';
 import Registry from '@pages/registry';
@@ -33,6 +36,10 @@ export function Router() {
             <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
             <Route path={ROUTES.orders.to} element={<Orders />} />
             <Route path={ROUTES.registry.root.to} element={<Registry />}>
+              <Route
+                path={ROUTES.registry.hospital.to}
+                element={<Hospital />}
+              />
               <Route path={ROUTES.registry.company.to} element={<Company />} />
               <Route path={ROUTES.registry.order.to} element={<Order />} />
               <Route path={ROUTES.registry.item.to} element={<Item />} />

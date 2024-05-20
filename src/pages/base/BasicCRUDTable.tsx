@@ -3,17 +3,15 @@ import React, { useEffect } from 'react';
 import { useSetRecoilState, useRecoilState } from 'recoil';
 
 import { DIALOG_INITIAL_STATE, dialogState } from '@/atoms/dialog';
-import {
-  tableSelectedItemsState,
-  formOpenAtom,
-  filterState,
-} from '@/atoms/item';
+import { filterState, INITIAL_FILTER_STATE } from '@/atoms/filter';
+import { formOpenAtom } from '@/atoms/form';
+import { tableSelectedItemsState } from '@/atoms/table';
 import Filter from '@/components/Table/Filter';
 import TableSkeleton from '@/components/Table/Skeleton';
 import TableHeader from '@/components/Table/TableHeader';
 import Table from '@components/Table';
 
-interface IBaseCRUDTable {
+interface IBasicCRUDTable {
   loading: boolean;
   rows: Array<any>;
   updateData: Object;
@@ -28,7 +26,7 @@ interface IBaseCRUDTable {
   formComponent: React.ComponentType<any>;
 }
 
-const BaseCRUDTable = (props: IBaseCRUDTable) => {
+const BasicCRUDTable = (props: IBasicCRUDTable) => {
   const {
     rows,
     loading,
@@ -46,7 +44,7 @@ const BaseCRUDTable = (props: IBaseCRUDTable) => {
 
   const setDialog = useSetRecoilState(dialogState);
   const setSelectedItems = useSetRecoilState<any>(tableSelectedItemsState);
-
+  const setFilter = useSetRecoilState(filterState);
   const [formOpen, setFormOpen] = useRecoilState(formOpenAtom);
 
   const handleOpen = () => setFormOpen(true);
@@ -60,6 +58,7 @@ const BaseCRUDTable = (props: IBaseCRUDTable) => {
       setFormOpen(false);
       setDialog(DIALOG_INITIAL_STATE);
       setSelectedItems([]);
+      setFilter(INITIAL_FILTER_STATE);
     },
     [setFormOpen, setDialog, setSelectedItems],
   );
@@ -114,4 +113,4 @@ const BaseCRUDTable = (props: IBaseCRUDTable) => {
   );
 };
 
-export default BaseCRUDTable;
+export default BasicCRUDTable;

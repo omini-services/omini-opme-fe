@@ -1,24 +1,16 @@
 import { useMsal } from '@azure/msal-react';
-import { Box } from '@mui/joy';
-import Button from '@mui/joy/Button';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/api';
+import { formOpenAtom } from '@/atoms/form';
+import { tableSelectedItemsState } from '@/atoms/table';
 import ItemForm, { initialState } from '@/components/Forms/Item';
-import Filter from '@/components/Table/Filter';
-import TableSkeleton from '@/components/Table/Skeleton';
-import { IItem } from '@/types/Item';
-import { dialogState, DIALOG_INITIAL_STATE } from '@atoms/dialog';
-import {
-  tableSelectedItemsState,
-  formOpenAtom,
-  filterState,
-} from '@atoms/item';
-import { notificationState } from '@atoms/notification';
-import Table from '@components/Table';
-import TableHeader from '@components/Table/TableHeader';
 import { ITEM_API_ROUTE } from '@/constants';
+import { IItem } from '@/types/Item';
+import { DIALOG_INITIAL_STATE } from '@atoms/dialog';
+import { notificationState } from '@atoms/notification';
+import BasicCRUDTable from '@pages/base/BasicCRUDTable';
 
 interface ITableHeadCell {
   id: keyof IItem;
@@ -122,28 +114,12 @@ const Item = () => {
   const [rows, setRows] = useState([]);
   const [updateData, setUpdateData] = useState(initialState);
 
-  const setDialog = useSetRecoilState(dialogState);
   const setNotification = useSetRecoilState(notificationState);
   const [selectedItems, setSelectedItems] = useRecoilState<any>(
     tableSelectedItemsState,
   );
 
-  const [formOpen, setFormOpen] = useRecoilState(formOpenAtom);
-
-  const handleOpen = () => setFormOpen(true);
-  const handleClose = () => {
-    setFormOpen(false);
-    setUpdateData(initialState);
-  };
-
-  useEffect(
-    () => () => {
-      setFormOpen(false);
-      setDialog(DIALOG_INITIAL_STATE);
-      setSelectedItems([]);
-    },
-    [setFormOpen, setDialog, setSelectedItems],
-  );
+  const setFormOpen = useSetRecoilState(formOpenAtom);
 
   useEffect(() => {
     const callItems = async () => {
@@ -154,7 +130,7 @@ const Item = () => {
           model: ITEM_API_ROUTE,
         });
         setRows(data.data); // TODO: usado na api original
-        // setRows(data); // TODO: usado na api local
+        // setRows(data); // TODO: usado na api local para testes
         setLoading(false);
       } catch (error) {
         console.error('Erro ao retornar dados:', error);
@@ -164,7 +140,7 @@ const Item = () => {
     callItems();
   }, []);
 
-  const handleOpenUpdateForm = async (id) => {
+  const handleOpenUpdateForm = async (id: any) => {
     try {
       const { data } = await getApiRequest({
         instance,
@@ -180,7 +156,7 @@ const Item = () => {
     }
   };
 
-  const deleteItemsCallback = async (rowItemId = '') => {
+  const handleDeleteItemsCallback = async (rowItemId = '') => {
     try {
       let message;
 
@@ -195,10 +171,10 @@ const Item = () => {
         if (result.id) {
           message = `Item ${result.id} foi removido com sucesso!`;
           setNotification(message);
-          setRows(rows.filter((row) => row.id !== result.id));
+          setRows(rows.filter((row: any) => row.id !== result.id));
         }
       } else if (selectedItems.length > 0 && !rowItemId) {
-        const promises = selectedItems.map((item) =>
+        const promises = selectedItems.map((item: any) =>
           deleteApiRequest({
             instance,
             accounts,
@@ -218,7 +194,7 @@ const Item = () => {
         );
 
         const resolvedIds = new Set(resolvedItems.map((item) => item.id));
-        setRows(rows.filter((row) => !resolvedIds.has(row.id)));
+        setRows(rows.filter((row: any) => !resolvedIds.has(row.id)));
         setNotification(message);
         setSelectedItems([]);
       }
@@ -227,21 +203,21 @@ const Item = () => {
     }
   };
 
-  function createDialogOptions(id) {
-    return {
-      ...DIALOG_INITIAL_STATE,
-      show: true,
-      title: 'Confirmação',
-      body: 'Tem certeza de que deseja excluir este(s) item(s)?',
-      positive: 'Sim',
-      negative: 'Cancelar',
-      positiveCallback: () => deleteItemsCallback(id),
-    };
-  }
+  const createDialogOptions = (id: string) => ({
+    ...DIALOG_INITIAL_STATE,
+    show: true,
+    title: 'Confirmação',
+    body: 'Tem certeza de que deseja excluir este(s) item(s)?',
+    positive: 'Sim',
+    negative: 'Cancelar',
+    positiveCallback: () => handleDeleteItemsCallback(id),
+  });
 
-  const handleOnDelete = (id) => setDialog(createDialogOptions(id));
-
-  const handleCallbackAfterSubmit = async (result, initialData, isUpdating) => {
+  const handleCallbackAfterSubmit = async (
+    result: any,
+    initialData: any,
+    isUpdating: any,
+  ) => {
     if (isUpdating) {
       const { data } = await getApiRequest({
         instance,
@@ -251,7 +227,7 @@ const Item = () => {
       });
 
       setRows(
-        rows.map((row) => {
+        rows.map((row: any) => {
           if (row.id == initialData?.id) {
             return data;
           }
@@ -264,48 +240,20 @@ const Item = () => {
   };
 
   return (
-    <>
-      <Box
-        className="page-toolbar-wrapper"
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 1.5,
-          paddingTop: 2,
-        }}
-      >
-        <Button
-          variant="outlined"
-          onClick={handleOpen}
-          sx={{
-            cursor: 'pointer',
-          }}
-        >
-          Novo Item
-        </Button>
-        <Filter loading={loading} atom={filterState} />
-      </Box>
-      <Table
-        rows={rows}
-        loading={loading}
-        tableAtom={tableSelectedItemsState}
-        onUpdate={(id) => handleOpenUpdateForm(id)}
-        onDelete={(id) => handleOnDelete(id)}
-        skeleton={TableSkeleton}
-        title="Items"
-        tableHeader={TableHeader}
-        tableHeaderProps={{ headCells, sortingInterface: 'item' }}
-        tableCells={tableCells}
-        filterAtom={filterState}
-        tableSkeletonProps={{ rows: 13, columns: 9 }}
-      />
-      <ItemForm
-        open={formOpen}
-        handleClose={handleClose}
-        initialData={updateData}
-        callbackAfterSubmit={handleCallbackAfterSubmit}
-      />
-    </>
+    <BasicCRUDTable
+      rows={rows}
+      loading={loading}
+      headCells={headCells}
+      tableCells={tableCells}
+      updateData={updateData}
+      sortingInterface="item"
+      initialState={initialState}
+      formComponent={ItemForm}
+      onUpdateData={setUpdateData}
+      onOpenUpdateForm={handleOpenUpdateForm}
+      onCreateDialogOptions={createDialogOptions}
+      onCallbackAfterSubmit={handleCallbackAfterSubmit}
+    />
   );
 };
 
