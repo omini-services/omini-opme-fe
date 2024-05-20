@@ -5,60 +5,31 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/api';
 import { formOpenAtom } from '@/atoms/form';
 import { tableSelectedItemsState } from '@/atoms/table';
-import CompanyForm, { initialState } from '@/components/Forms/Company';
-import { INSURANCE_API_ROUTE } from '@/constants';
-import { ICompany } from '@/types/Company';
-import { DIALOG_INITIAL_STATE } from '@atoms/dialog';
+import { DELETE_SUCCESS, messages } from '@/constants';
 import { notificationState } from '@atoms/notification';
 import BasicCRUDTable from '@pages/base/BasicCRUDTable';
 
-interface ITableHeadCell {
-  id: keyof ICompany;
-  disablePadding: boolean;
-  label: string;
-  numeric: boolean;
+interface IBasicRegistryCRUD {
+  model: string;
+  headCells: Array<any>;
+  tableCells: Array<any>;
+  sortingInterface: string;
+  dialogOptions: Object;
+  formComponent: React.ComponentType<any>;
+  initialState: Object;
 }
 
-const headCells: ITableHeadCell[] = [
-  {
-    id: 'legalName',
-    numeric: false,
-    disablePadding: true,
-    label: 'Nome',
-  },
-  {
-    id: 'tradeName',
-    numeric: false,
-    disablePadding: true,
-    label: 'Nome de Fantasia',
-  },
-  {
-    id: 'cnpj',
-    numeric: false,
-    disablePadding: true,
-    label: 'CNPJ',
-  },
-  {
-    id: 'comments',
-    numeric: false,
-    disablePadding: true,
-    label: 'Comentario',
-  },
-];
+const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
+  const {
+    model,
+    headCells,
+    tableCells,
+    sortingInterface,
+    dialogOptions,
+    formComponent,
+    initialState,
+  } = props;
 
-interface ITableCell {
-  key: keyof ICompany;
-  align: string;
-}
-
-const tableCells: ITableCell[] = [
-  { key: 'legalName', align: 'right' },
-  { key: 'tradeName', align: 'right' },
-  { key: 'cnpj', align: 'right' },
-  { key: 'comments', align: 'right' },
-];
-
-const Company = () => {
   const { instance, accounts } = useMsal();
 
   const [loading, setLoading] = useState(true);
@@ -77,7 +48,7 @@ const Company = () => {
         const data = await getAllApiRequest({
           instance,
           accounts,
-          model: INSURANCE_API_ROUTE,
+          model,
         });
         setRows(data.data);
         setLoading(false);
@@ -94,18 +65,24 @@ const Company = () => {
       const { data } = await getApiRequest({
         instance,
         accounts,
-        model: INSURANCE_API_ROUTE,
+        model,
         id,
       });
 
       await setUpdateData(data);
       setFormOpen(true);
     } catch (error) {
-      console.error(`Erro ao fazer update da empresa ${id}:`, error);
+      console.error(`Erro ao fazer update ${id}:`, error);
     }
   };
 
   const handleDeleteItemsCallback = async (rowItemId = '') => {
+    console.log('handleDeleteItemsCallback => ', {
+      messages,
+      model,
+      DELETE_SUCCESS,
+    });
+
     try {
       let message;
 
@@ -113,12 +90,12 @@ const Company = () => {
         const result = await deleteApiRequest({
           instance,
           accounts,
-          model: INSURANCE_API_ROUTE,
+          model,
           id: rowItemId,
         });
 
         if (result.id) {
-          message = `Empresa ${result.id} foi removida com sucesso!`;
+          message = messages(result)[model][DELETE_SUCCESS];
           setNotification(message);
           setRows(rows.filter((row: any) => row.id !== result.id));
         }
@@ -127,7 +104,7 @@ const Company = () => {
           deleteApiRequest({
             instance,
             accounts,
-            model: INSURANCE_API_ROUTE,
+            model,
             id: item,
           }),
         );
@@ -152,13 +129,8 @@ const Company = () => {
     }
   };
 
-  const createDialogOptions = (id: string) => ({
-    ...DIALOG_INITIAL_STATE,
-    show: true,
-    title: 'Confirmação',
-    body: 'Tem certeza de que deseja excluir esta(s) empresa(s)?',
-    positive: 'Sim',
-    negative: 'Cancelar',
+  const handleCreateDialogOptions = (id: string) => ({
+    ...dialogOptions,
     positiveCallback: () => handleDeleteItemsCallback(id),
   });
 
@@ -167,7 +139,7 @@ const Company = () => {
       const { data } = await getApiRequest({
         instance,
         accounts,
-        model: INSURANCE_API_ROUTE,
+        model,
         id: initialData?.id,
       });
 
@@ -191,15 +163,15 @@ const Company = () => {
       headCells={headCells}
       tableCells={tableCells}
       updateData={updateData}
-      sortingInterface="company"
+      sortingInterface={sortingInterface}
       initialState={initialState}
-      formComponent={CompanyForm}
+      formComponent={formComponent}
       onUpdateData={setUpdateData}
       onOpenUpdateForm={handleOpenUpdateForm}
-      onCreateDialogOptions={createDialogOptions}
+      onCreateDialogOptions={handleCreateDialogOptions}
       onCallbackAfterSubmit={handleCallbackAfterSubmit}
     />
   );
 };
 
-export default Company;
+export default BasicRegistryCRUD;

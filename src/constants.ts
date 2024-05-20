@@ -24,6 +24,11 @@ export const ROUTES = {
       label: 'Cadastros',
       to: '/registry',
     },
+    hospital: {
+      name: 'Hospital',
+      label: 'Cadastrar Hospital',
+      to: '/registry/hospital',
+    },
     company: {
       name: 'Empresa',
       label: 'Cadastrar Empresa',
@@ -55,4 +60,19 @@ export const ROUTES = {
 export const INITIAL_USER_STATE = null;
 
 export const INSURANCE_API_ROUTE = 'insurancecompanies';
+export const HOSPITAL_API_ROUTE = 'hospitals';
 export const ITEM_API_ROUTE = 'items';
+
+export const DELETE_SUCCESS = 'DELETE_SUCCESS';
+
+export const messages = (data: any) => ({
+  [INSURANCE_API_ROUTE]: {
+    [DELETE_SUCCESS]: `Empresa ${data.id} foi removida com sucesso!`,
+  },
+  [HOSPITAL_API_ROUTE]: {
+    [DELETE_SUCCESS]: `Hospital ${data.id} foi removido com sucesso!`,
+  },
+  [ITEM_API_ROUTE]: {
+    [DELETE_SUCCESS]: `Item ${data.id} foi removido com sucesso!`,
+  },
+});

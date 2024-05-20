@@ -1,6 +1,12 @@
 import React from 'react';
 
+import {
+  INSURANCE_API_ROUTE,
+  HOSPITAL_API_ROUTE,
+  ITEM_API_ROUTE,
+} from '@/constants';
 import { ICompany } from '@/types/Company';
+import { IHospital } from '@/types/Hospital';
 import { IItem } from '@/types/Item';
 
 export interface IFormProps {
@@ -11,8 +17,9 @@ export interface IFormProps {
 }
 
 export interface ITableData {
-  item: IItem;
-  company: ICompany;
+  [ITEM_API_ROUTE]: IItem;
+  [INSURANCE_API_ROUTE]: ICompany;
+  [HOSPITAL_API_ROUTE]: IHospital;
 }
 
 export interface ITable {
