@@ -84,7 +84,7 @@ const BasicCRUDTable = (props: IBasicCRUDTable) => {
           }}
           disabled={loading}
         >
-          Novo Item
+          Novo
         </Button>
         <Filter loading={loading} atom={filterState} />
       </Box>
