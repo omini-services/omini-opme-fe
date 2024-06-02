@@ -1,20 +1,21 @@
 import React from 'react';
 
 import { IFormProps } from '@/components/Table/types';
-import { HOSPITAL_API_ROUTE } from '@/constants';
+import { PATIENT_API_ROUTE } from '@/constants';
 
 import BasicForm from './BasicForm';
 
 export const initialState = {
-  legalName: '',
-  tradeName: '',
-  cnpj: '',
+  firstName: '',
+  lastName: '',
+  middleName: '',
+  cpf: '',
   comments: '',
 };
 
-const payload = ['legalName', 'tradeName', 'cnpj', 'comments'];
+const payload = ['firstName', 'lastName', 'middleName', 'cpf', 'comments'];
 
-export const HospitalForm = ({
+export const PatientForm = ({
   initialData,
   open,
   handleClose,
@@ -26,9 +27,9 @@ export const HospitalForm = ({
     handleClose={handleClose}
     callbackAfterSubmit={callbackAfterSubmit}
     initialState={initialState}
-    model={HOSPITAL_API_ROUTE}
+    model={PATIENT_API_ROUTE}
     payload={payload}
   />
 );
 
-export default HospitalForm;
+export default PatientForm;

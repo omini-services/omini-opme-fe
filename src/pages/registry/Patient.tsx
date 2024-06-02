@@ -1,13 +1,13 @@
 import React from 'react';
 
-import HospitalForm, { initialState } from '@/components/Forms/Hospital';
-import { HOSPITAL_API_ROUTE } from '@/constants';
-import { IHospital } from '@/types/Hospital';
+import PatientForm, { initialState } from '@/components/Forms/Patient';
+import { PATIENT_API_ROUTE } from '@/constants';
+import { IPatient } from '@/types/Patient';
 
 import BasicRegistryCRUD from './BasicRegistryCRUD';
 
 interface ITableHeadCell {
-  id: keyof IHospital;
+  id: keyof IPatient;
   disablePadding: boolean;
   label: string;
   numeric: boolean;
@@ -15,22 +15,28 @@ interface ITableHeadCell {
 
 const headCells: ITableHeadCell[] = [
   {
-    id: 'legalName',
+    id: 'firstName',
     numeric: false,
     disablePadding: true,
     label: 'Nome',
   },
   {
-    id: 'tradeName',
+    id: 'middleName',
     numeric: false,
     disablePadding: true,
-    label: 'Nome de Fantasia',
+    label: 'Nome do meio',
   },
   {
-    id: 'cnpj',
+    id: 'lastName',
     numeric: false,
     disablePadding: true,
-    label: 'CNPJ',
+    label: 'Sobrenome',
+  },
+  {
+    id: 'cpf',
+    numeric: false,
+    disablePadding: true,
+    label: 'CPF',
   },
   {
     id: 'comments',
@@ -41,26 +47,27 @@ const headCells: ITableHeadCell[] = [
 ];
 
 interface ITableCell {
-  key: keyof IHospital;
+  key: keyof IPatient;
   align: string;
 }
 
 const tableCells: ITableCell[] = [
-  { key: 'legalName', align: 'right' },
-  { key: 'tradeName', align: 'right' },
-  { key: 'cnpj', align: 'right' },
+  { key: 'firstName', align: 'right' },
+  { key: 'middleName', align: 'right' },
+  { key: 'lastName', align: 'right' },
+  { key: 'cpf', align: 'right' },
   { key: 'comments', align: 'right' },
 ];
 
-const Hospital = () => (
+const Patient = () => (
   <BasicRegistryCRUD
-    sortingInterface={HOSPITAL_API_ROUTE}
-    model={HOSPITAL_API_ROUTE}
+    sortingInterface={PATIENT_API_ROUTE}
+    model={PATIENT_API_ROUTE}
     headCells={headCells}
     tableCells={tableCells}
-    formComponent={HospitalForm}
+    formComponent={PatientForm}
     initialState={initialState}
   />
 );
 
-export default Hospital;
+export default Patient;

@@ -1,5 +1,3 @@
-export type Order = 'asc' | 'desc';
-
 export interface ICompany {
   legalName: string;
   tradeName: string;

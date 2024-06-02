@@ -1,4 +1,4 @@
-import { Order } from '@/types/Item';
+import { Order } from '@/components/Table/types';
 
 // Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
 // stableSort() brings sort stability to non-modern browsers (notably IE11). If you
