@@ -11,8 +11,7 @@ import React, { useState, useMemo } from 'react';
 import { useRecoilValue, useRecoilState } from 'recoil';
 
 import EnhancedTableToolbar from '@/components/Table/EnhancedTableToolbar';
-import { ITable, ITableData } from '@/components/Table/types';
-import { Order } from '@/types/Item';
+import { ITable, ITableData, Order } from '@/components/Table/types';
 import { stableSort, getComparator, searchRows } from '@utils/tables';
 
 import RowMenu from './RowMenu';

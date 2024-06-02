@@ -6,6 +6,7 @@ import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/api';
 import { formOpenAtom } from '@/atoms/form';
 import { tableSelectedItemsState } from '@/atoms/table';
 import { DELETE_SUCCESS, messages } from '@/constants';
+import { DIALOG_INITIAL_STATE } from '@atoms/dialog';
 import { notificationState } from '@atoms/notification';
 import BasicCRUDTable from '@pages/base/BasicCRUDTable';
 
@@ -14,7 +15,6 @@ interface IBasicRegistryCRUD {
   headCells: Array<any>;
   tableCells: Array<any>;
   sortingInterface: string;
-  dialogOptions: Object;
   formComponent: React.ComponentType<any>;
   initialState: Object;
 }
@@ -25,7 +25,6 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
     headCells,
     tableCells,
     sortingInterface,
-    dialogOptions,
     formComponent,
     initialState,
   } = props;
@@ -77,12 +76,6 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
   };
 
   const handleDeleteItemsCallback = async (rowItemId = '') => {
-    console.log('handleDeleteItemsCallback => ', {
-      messages,
-      model,
-      DELETE_SUCCESS,
-    });
-
     try {
       let message;
 
@@ -127,6 +120,15 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const dialogOptions = {
+    ...DIALOG_INITIAL_STATE,
+    show: true,
+    title: 'Confirmação',
+    body: `Tem certeza de que deseja excluir?`,
+    positive: 'Sim',
+    negative: 'Cancelar',
   };
 
   const handleCreateDialogOptions = (id: string) => ({

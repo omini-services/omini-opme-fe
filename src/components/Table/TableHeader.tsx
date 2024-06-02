@@ -7,9 +7,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import React from 'react';
 
-import { Order } from '@/types/Item';
-
-import { ITableData } from './types';
+import { ITableData, Order } from './types';
 
 interface IEnhancedTableProps {
   numSelected: number;

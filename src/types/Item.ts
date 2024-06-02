@@ -1,5 +1,3 @@
-export type Order = 'asc' | 'desc';
-
 export interface IItem {
   code: string;
   name: string;

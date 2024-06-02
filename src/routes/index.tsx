@@ -11,11 +11,13 @@ import Company from '@/pages/registry/Company';
 import Hospital from '@/pages/registry/Hospital';
 import Item from '@/pages/registry/Item';
 import Order from '@/pages/registry/Order';
-import Procedure from '@/pages/registry/Procedure';
-import Specialty from '@/pages/registry/Specialty';
+import Patient from '@/pages/registry/Patient';
+import Physician from '@/pages/registry/Physician';
+// import Procedure from '@/pages/registry/Procedure';
+// import Specialty from '@/pages/registry/Specialty';
 // other
 import Home from '@pages/Home';
-import Orders from '@pages/Orders';
+// import Orders from '@pages/Orders';
 import Registry from '@pages/registry';
 import Signin from '@pages/Signin';
 
@@ -34,23 +36,28 @@ export function Router() {
           <Route element={<PrivateRoute component={Layout} />}>
             <Route path={ROUTES.root.to} element={<Home />} />
             <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
-            <Route path={ROUTES.orders.to} element={<Orders />} />
+            {/* <Route path={ROUTES.orders.to} element={<Orders />} /> */}
             <Route path={ROUTES.registry.root.to} element={<Registry />}>
+              <Route path={ROUTES.registry.order.to} element={<Order />} />
               <Route
                 path={ROUTES.registry.hospital.to}
                 element={<Hospital />}
               />
-              <Route path={ROUTES.registry.company.to} element={<Company />} />
-              <Route path={ROUTES.registry.order.to} element={<Order />} />
               <Route path={ROUTES.registry.item.to} element={<Item />} />
+              <Route path={ROUTES.registry.patient.to} element={<Patient />} />
               <Route
+                path={ROUTES.registry.physician.to}
+                element={<Physician />}
+              />
+              <Route path={ROUTES.registry.company.to} element={<Company />} />
+              {/* <Route
                 path={ROUTES.registry.specialty.to}
                 element={<Specialty />}
               />
               <Route
                 path={ROUTES.registry.procedure.to}
                 element={<Procedure />}
-              />
+              /> */}
             </Route>
           </Route>
         </Routes>
