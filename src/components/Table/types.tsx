@@ -23,6 +23,8 @@ export interface IFormProps {
   initialState: any;
   model: string;
   payload: Array<string>;
+  customForm?: any;
+  loading: boolean;
 }
 
 export interface ITableData {

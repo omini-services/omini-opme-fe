@@ -29,7 +29,7 @@ export const getAllApiRequest = async ({
     url: `${API_CONFIG.endpoint}/${model}`,
     accessToken: token.accessToken,
     method: 'GET',
-  }).then((result) => result);
+  }).then((result) => ({ ...result }));
 };
 
 /**

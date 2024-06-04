@@ -29,8 +29,8 @@ import { closeSidebar } from '@utils/sidebar';
 const renderListItems = () =>
   [
     { title: 'Home', to: '/', icon: HomeRoundedIcon },
-    { title: 'Dashboard', to: '/dashboard', icon: DashboardRoundedIcon },
-    { title: 'Orders', to: '/orders', icon: ShoppingCartRoundedIcon },
+    // { title: 'Dashboard', to: '/dashboard', icon: DashboardRoundedIcon },
+    // { title: 'Orders', to: '/orders', icon: ShoppingCartRoundedIcon },
     { title: 'Cadastros', to: '/registry', icon: AssignmentRoundedIcon },
   ].map((item) => (
     <ListItemLink key={item.title} title={item.title} to={item.to}>

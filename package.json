@@ -37,6 +37,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "axios": "1.6.5",
     "crypto": "^1.0.1",
+    "date-fns": "2.30.0",
     "dayjs": "^1.11.10",
     "lodash": "^4.17.21",
     "memoize-one": "^6.0.0",
