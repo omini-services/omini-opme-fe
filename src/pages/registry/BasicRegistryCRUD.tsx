@@ -44,12 +44,13 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
   useEffect(() => {
     const callItems = async () => {
       try {
-        const data = await getAllApiRequest({
-          instance,
-          accounts,
-          model,
-        });
-        setRows(data.data);
+        // const data = await getAllApiRequest({
+        //   instance,
+        //   accounts,
+        //   model,
+        // });
+        // setRows(data);
+        setRows([]);
         setLoading(false);
       } catch (error) {
         console.error('Erro ao retornar dados:', error);

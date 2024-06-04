@@ -14,7 +14,6 @@ import { useSetRecoilState } from 'recoil';
 
 import { createApiRequest, updateApiRequest } from '@/api/api';
 import { IFormProps } from '@/components/Table/types';
-import { IFormData } from '@/types/Item';
 import { notificationState } from '@atoms/notification';
 
 export const BasicForm = ({
@@ -25,13 +24,13 @@ export const BasicForm = ({
   initialState,
   model,
   payload,
+  customForm,
+  loading,
 }: IFormProps) => {
   const { instance, accounts } = useMsal();
-  const [formData, setFormData] = useState<IFormData>(
-    initialData || initialState,
-  );
+  const [formData, setFormData] = useState(initialData || initialState);
   const setNotification = useSetRecoilState(notificationState);
-  const [fetching, setFetching] = useState(false);
+  const [fetching, setFetching] = useState(loading || false);
 
   useEffect(() => {
     setFormData({ ...formData, ...initialData });
@@ -94,31 +93,36 @@ export const BasicForm = ({
     }
   };
 
-  const renderForm = () => (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={3}>
-          {payload.map((field) => (
-            <Input
-              key={field}
-              name={field}
-              value={formData[field]}
-              onChange={handleChange}
-              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-              color="primary"
-              size="md"
-              variant="soft"
-              fullWidth
-              disabled={fetching}
-            />
-          ))}
-          <Button type="submit" disabled={fetching}>
-            Enviar
-          </Button>
-        </Stack>
-      </form>
-    </LocalizationProvider>
-  );
+  const CustomFormComponent = (props) => customForm;
+
+  const handleRenderForm = () =>
+    customForm ? (
+      <CustomFormComponent />
+    ) : (
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={3}>
+            {payload.map((field) => (
+              <Input
+                key={field}
+                name={field}
+                value={formData[field]}
+                onChange={handleChange}
+                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                color="primary"
+                size="md"
+                variant="soft"
+                fullWidth
+                disabled={fetching}
+              />
+            ))}
+            <Button type="submit" disabled={fetching}>
+              Enviar
+            </Button>
+          </Stack>
+        </form>
+      </LocalizationProvider>
+    );
 
   return (
     <Modal
@@ -134,7 +138,9 @@ export const BasicForm = ({
       <ModalDialog sx={{ width: '500px' }} color="primary" variant="plain">
         <ModalClose />
         <DialogTitle>Criar Registro</DialogTitle>
-        <DialogContent sx={{ padding: '20px' }}>{renderForm()}</DialogContent>
+        <DialogContent sx={{ padding: '20px' }}>
+          {handleRenderForm()}
+        </DialogContent>
       </ModalDialog>
     </Modal>
   );
