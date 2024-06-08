@@ -1,8 +1,3 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License.
- */
-
 import { LogLevel } from '@azure/msal-browser';
 
 /**
@@ -21,7 +16,8 @@ export const msalConfig = {
       'openid',
       'https://ominiopme.onmicrosoft.com/ominiopme-api/api.access',
     ],
-    redirectUri: 'http://localhost:5173/',
+    // redirectUri: 'http://localhost:5173/',
+    redirectUri: 'https://9000-idx-omini-opme-fe-1717780507351.cluster-kc2r6y3mtba5mswcmol45orivs.cloudworkstations.dev/'
   },
   cache: {
     cacheLocation: 'sessionStorage', // This configures where your cache will be stored

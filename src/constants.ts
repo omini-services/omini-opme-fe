@@ -1,8 +1,6 @@
 export const breadcrumbNameMap: { [key: string]: string } = {
   '/': 'Home',
-  '/orders': 'Ordens',
   '/dashboard': 'Dashboard',
-  '/test': 'Test',
   '/registry': 'Cadastros',
   '/registry/company': 'Empresa',
   '/registry/order': 'Orçamento',
@@ -11,6 +9,11 @@ export const breadcrumbNameMap: { [key: string]: string } = {
   '/registry/item': 'Item',
   '/registry/patient': 'Paciente',
   '/registry/physician': 'Medico',
+  '/registry/order/manage': 'Editar Orçamento',
+  '/registry/hospital': 'Hospital',
+  '/signin': 'Login',
+  '/signout': 'Logout',
+  '/signup': 'Registrar',
 };
 
 export const ROUTES = {
@@ -19,7 +22,6 @@ export const ROUTES = {
   signin: { name: 'signin', label: 'Sign In', to: '/signin' },
   signout: { name: 'signout', label: 'Sign Out', to: '/signout' },
   dashboard: { name: 'dashboard', label: 'Dashboard', to: '/dashboard' },
-  // orders: { name: 'orders', label: 'Orders', to: '/orders' },
   registry: {
     root: {
       name: 'registry',
@@ -30,6 +32,12 @@ export const ROUTES = {
       name: 'Orçamento',
       label: 'Orçamento',
       to: '/registry/order',
+
+      detail: {
+        name: 'Orçamento Detalhado',
+        label: 'Orçamento Detalhado',
+        to: '/registry/order/detail',
+      }
     },
     item: {
       name: 'Item',

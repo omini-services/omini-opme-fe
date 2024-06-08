@@ -24,6 +24,7 @@ import Signin from '@pages/Signin';
 import { msalConfig } from '../configs/authConfig';
 
 import PrivateRoute from './PrivateRoute';
+import OrderDetail from '@/pages/OrderDetail';
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -38,7 +39,9 @@ export function Router() {
             <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
             {/* <Route path={ROUTES.orders.to} element={<Orders />} /> */}
             <Route path={ROUTES.registry.root.to} element={<Registry />}>
-              <Route path={ROUTES.registry.order.to} element={<Order />} />
+              <Route path={ROUTES.registry.order.to} element={<Order />}>
+                <Route path={ROUTES.registry.order.detail.to} element={<OrderDetail />} />
+              </Route>
               <Route
                 path={ROUTES.registry.hospital.to}
                 element={<Hospital />}
