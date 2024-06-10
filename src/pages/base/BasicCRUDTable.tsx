@@ -88,6 +88,7 @@ const BasicCRUDTable = (props: IBasicCRUDTable) => {
         </Button>
         <Filter loading={loading} atom={filterState} />
       </Box>
+
       <Table
         rows={rows}
         loading={loading}

@@ -11,7 +11,7 @@ export default defineConfig({
   },
   server: {
     open: true,
-    port: 9002
+    port: 5173,
   },
   resolve: {
     alias: {

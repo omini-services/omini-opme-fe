@@ -16,8 +16,8 @@ export const msalConfig = {
       'openid',
       'https://ominiopme.onmicrosoft.com/ominiopme-api/api.access',
     ],
-    // redirectUri: 'http://localhost:5173/',
-    redirectUri: 'https://9000-idx-omini-opme-fe-1717780507351.cluster-kc2r6y3mtba5mswcmol45orivs.cloudworkstations.dev/'
+    redirectUri: 'http://localhost:5173/',
+    // redirectUri: 'https://9000-idx-omini-opme-fe-1717780507351.cluster-kc2r6y3mtba5mswcmol45orivs.cloudworkstations.dev/'
   },
   cache: {
     cacheLocation: 'sessionStorage', // This configures where your cache will be stored
@@ -42,6 +42,7 @@ export const msalConfig = {
           case LogLevel.Warning:
             console.warn(message);
 
+          // eslint-disable-next-line no-fallthrough
           default:
         }
       },

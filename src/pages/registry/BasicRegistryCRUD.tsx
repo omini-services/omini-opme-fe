@@ -1,5 +1,5 @@
 import { useMsal } from '@azure/msal-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useActionState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/api';
@@ -30,9 +30,8 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
   } = props;
 
   const { instance, accounts } = useMsal();
-
-  const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
+
   const [updateData, setUpdateData] = useState(initialState);
 
   const setNotification = useSetRecoilState(notificationState);
@@ -41,23 +40,20 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
   );
   const setFormOpen = useSetRecoilState(formOpenAtom);
 
-  useEffect(() => {
-    const callItems = async () => {
-      try {
-        const data = await getAllApiRequest({
-          instance,
-          accounts,
-          model,
-        });
-        setRows(data);
-        // setRows([]);
-        setLoading(false);
-      } catch (error) {
-        console.error('Erro ao retornar dados:', error);
-      }
-    };
+  const [loadRows, { loading, error }] = useActionState(async () => {
+    const response = await getAllApiRequest({
+      instance,
+      accounts,
+      model,
+    });
+    const { data } = response;
+    setRows(data);
+  });
 
-    callItems();
+  useEffect(() => {
+    loadRows().catch((error) =>
+      console.error('Erro ao retornar dados:', error),
+    );
   }, []);
 
   const handleOpenUpdateForm = async (id: any) => {
