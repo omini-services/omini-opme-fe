@@ -1,9 +1,9 @@
-import { PublicClientApplication } from '@azure/msal-browser';
-import { MsalProvider } from '@azure/msal-react';
+import { Auth0Provider } from '@auth0/auth0-react';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Layout from '@/components/Layout';
+import { auth0Config } from '@/configs/auth0Config';
 import { ROUTES } from '@/constants';
 import Dashboard from '@/pages/Dashboard';
 // registry
@@ -21,16 +21,20 @@ import Home from '@pages/Home';
 import Registry from '@pages/registry';
 import Signin from '@pages/Signin';
 
-import { msalConfig } from '../configs/authConfig';
-
 import PrivateRoute from './PrivateRoute';
-
-const msalInstance = new PublicClientApplication(msalConfig);
 
 export function Router() {
   return (
     <BrowserRouter>
-      <MsalProvider instance={msalInstance}>
+      <Auth0Provider
+        domain={auth0Config.domain}
+        clientId={auth0Config.clientId}
+        authorizationParams={{
+          redirect_uri: auth0Config.redirectUri,
+          scope: auth0Config.scopes,
+          audience: auth0Config.audience,
+        }}
+      >
         <Routes>
           <Route path={ROUTES.signin.to} element={<Signin />} />
           <Route element={<PrivateRoute component={Layout} />}>
@@ -61,7 +65,7 @@ export function Router() {
             </Route>
           </Route>
         </Routes>
-      </MsalProvider>
+      </Auth0Provider>
     </BrowserRouter>
   );
 }

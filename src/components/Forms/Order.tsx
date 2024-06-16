@@ -1,18 +1,17 @@
-import { useMsal } from '@azure/msal-react';
+import { useAuth0 } from '@auth0/auth0-react';
 import DialogContent from '@mui/joy/DialogContent';
 import DialogTitle from '@mui/joy/DialogTitle';
 import Modal from '@mui/joy/Modal';
 import ModalClose from '@mui/joy/ModalClose';
 import ModalDialog from '@mui/joy/ModalDialog';
 import {
-  TextField,
-  Autocomplete,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  FormControl,
-  FormLabel,
   Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TextField,
 } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -74,7 +73,7 @@ const Form = ({
   handleClose,
   callbackAfterSubmit,
 }: IFormProps) => {
-  const { instance, accounts } = useMsal();
+  const instance = useAuth0();
   const [formState, setFormState] = useState(initialData || initialState);
   const setNotification = useSetRecoilState(notificationState);
 
@@ -114,7 +113,6 @@ const Form = ({
       if (isUpdating) {
         result = await updateApiRequest({
           instance,
-          accounts,
           model: ORDER_API_ROUTE,
           body: newData,
           id: initialData?.id,
@@ -122,7 +120,6 @@ const Form = ({
       } else {
         result = await createApiRequest({
           instance,
-          accounts,
           model: ORDER_API_ROUTE,
           body: newData,
         });
@@ -249,14 +246,12 @@ const Form = ({
       </FormControl>
 
       {formState.payingSourceType === 'convenio' && (
-        <>
-          <TextField
-            label="Insurance Company Name"
-            name="insuranceCompanyName"
-            value={formState.insuranceCompanyName}
-            onChange={handleChange}
-          />
-        </>
+        <TextField
+          label="Insurance Company Name"
+          name="insuranceCompanyName"
+          value={formState.insuranceCompanyName}
+          onChange={handleChange}
+        />
       )}
 
       <Button type="submit" disabled={loading}>

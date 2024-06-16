@@ -1,33 +1,28 @@
-import { IPublicClientApplication } from '@azure/msal-browser';
+import { Auth0ContextInterface } from '@auth0/auth0-react';
 
 import { callApi } from '@/configs/api';
-import { API_CONFIG } from '@/configs/authConfig';
+import { API_CONFIG, auth0Config } from '@/configs/auth0Config';
 
-import { IGET, IGETA, IDELETE, ICREATE, IUPDATE } from './types';
+import { ICREATE, IDELETE, IGET, IGETA, IUPDATE } from './types';
 
-const acquireToken = async (
-  instance: IPublicClientApplication,
-  accounts: any[],
-) =>
-  instance.acquireTokenSilent({
-    scopes: API_CONFIG.scopes,
-    account: accounts[0],
+const acquireToken = async (instance: Auth0ContextInterface) =>
+  instance.getAccessTokenSilently({
+    authorizationParams: {
+      audience: auth0Config.audience,
+      scope: auth0Config.scopes,
+    },
   });
 
 /**
  * GET ALL API
  */
 
-export const getAllApiRequest = async ({
-  instance,
-  accounts,
-  model,
-}: IGETA) => {
-  const token = await acquireToken(instance, accounts);
+export const getAllApiRequest = async ({ instance, model }: IGETA) => {
+  const accessToken = await acquireToken(instance);
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}`,
-    accessToken: token.accessToken,
+    accessToken,
     method: 'GET',
   }).then((result) => ({ ...result }));
 };
@@ -36,17 +31,12 @@ export const getAllApiRequest = async ({
  * GET API
  */
 
-export const getApiRequest = async ({
-  instance,
-  accounts,
-  model,
-  id,
-}: IGET) => {
-  const token = await acquireToken(instance, accounts);
+export const getApiRequest = async ({ instance, model, id }: IGET) => {
+  const accessToken = await acquireToken(instance);
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}/${id}`,
-    accessToken: token.accessToken,
+    accessToken,
     method: 'GET',
     customHeaders: {
       'Access-Control-Allow-Origin': '*',
@@ -58,17 +48,12 @@ export const getApiRequest = async ({
  * DELETE API
  */
 
-export const deleteApiRequest = async ({
-  instance,
-  accounts,
-  model,
-  id,
-}: IDELETE) => {
-  const token = await acquireToken(instance, accounts);
+export const deleteApiRequest = async ({ instance, model, id }: IDELETE) => {
+  const accessToken = await acquireToken(instance);
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}/${id}`,
-    accessToken: token.accessToken,
+    accessToken,
     method: 'DELETE',
     customHeaders: {
       'Access-Control-Allow-Origin': '*',
@@ -80,17 +65,12 @@ export const deleteApiRequest = async ({
  * CREATE API
  */
 
-export const createApiRequest = async ({
-  instance,
-  accounts,
-  model,
-  body,
-}: ICREATE) => {
-  const token = await acquireToken(instance, accounts);
+export const createApiRequest = async ({ instance, model, body }: ICREATE) => {
+  const accessToken = await acquireToken(instance);
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}`,
-    accessToken: token.accessToken,
+    accessToken,
     method: 'POST',
     customHeaders: {
       'Access-Control-Allow-Origin': '*',
@@ -105,16 +85,15 @@ export const createApiRequest = async ({
 
 export const updateApiRequest = async ({
   instance,
-  accounts,
   model,
   body,
   id,
 }: IUPDATE) => {
-  const token = await acquireToken(instance, accounts);
+  const accessToken = await acquireToken(instance);
 
   return callApi({
     url: `${API_CONFIG.endpoint}/${model}/${id}`,
-    accessToken: token.accessToken,
+    accessToken,
     method: 'PUT',
     customHeaders: {
       'Access-Control-Allow-Origin': '*',

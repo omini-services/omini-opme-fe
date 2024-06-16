@@ -1,26 +1,19 @@
-import {
-  AuthenticatedTemplate,
-  UnauthenticatedTemplate,
-} from '@azure/msal-react';
+import { useAuth0 } from '@auth0/auth0-react';
 import React, { JSXElementConstructor } from 'react';
 
-import ProtectedInformation from '@/components/Profile/ProtectedInformation';
 import Signin from '@/pages/Signin';
 
 interface IPrivateRoute {
   component: JSXElementConstructor<any>;
 }
 
-const PrivateRoute = ({ component: Component }: IPrivateRoute) => (
-  <div>
-    <AuthenticatedTemplate>
-      <ProtectedInformation />
-      <Component />
-    </AuthenticatedTemplate>
+const PrivateRoute = ({ component: Component }: IPrivateRoute) => {
+  const { isAuthenticated, isLoading, error, logout } = useAuth0();
+  console.log({ isAuthenticated, isLoading, error });
 
-    <UnauthenticatedTemplate>
-      <Signin />
-    </UnauthenticatedTemplate>
-  </div>
-);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  return <div>{isAuthenticated ? <Component /> : <Signin />}</div>;
+};
 export default PrivateRoute;

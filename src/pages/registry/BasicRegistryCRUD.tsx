@@ -1,8 +1,8 @@
-import { useMsal } from '@azure/msal-react';
+import { useAuth0 } from '@auth0/auth0-react';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { getAllApiRequest, getApiRequest, deleteApiRequest } from '@/api/api';
+import { deleteApiRequest, getAllApiRequest, getApiRequest } from '@/api/api';
 import { formOpenAtom } from '@/atoms/form';
 import { tableSelectedItemsState } from '@/atoms/table';
 import { DELETE_SUCCESS, messages } from '@/constants';
@@ -29,7 +29,7 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
     initialState,
   } = props;
 
-  const { instance, accounts } = useMsal();
+  const instance = useAuth0();
 
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
@@ -44,13 +44,11 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
   useEffect(() => {
     const callItems = async () => {
       try {
-        // const data = await getAllApiRequest({
-        //   instance,
-        //   accounts,
-        //   model,
-        // });
-        // setRows(data);
-        setRows([]);
+        const data = await getAllApiRequest({
+          instance,
+          model,
+        });
+        setRows(data);
         setLoading(false);
       } catch (error) {
         console.error('Erro ao retornar dados:', error);
@@ -64,7 +62,6 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
     try {
       const { data } = await getApiRequest({
         instance,
-        accounts,
         model,
         id,
       });
@@ -83,7 +80,6 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
       if (selectedItems.length === 0 && rowItemId) {
         const result = await deleteApiRequest({
           instance,
-          accounts,
           model,
           id: rowItemId,
         });
@@ -97,7 +93,6 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
         const promises = selectedItems.map((item: any) =>
           deleteApiRequest({
             instance,
-            accounts,
             model,
             id: item,
           }),
@@ -141,7 +136,6 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
     if (isUpdating) {
       const { data } = await getApiRequest({
         instance,
-        accounts,
         model,
         id: initialData?.id,
       });

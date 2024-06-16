@@ -1,36 +1,31 @@
-import { IPublicClientApplication, AccountInfo } from '@azure/msal-browser';
+import { Auth0ContextInterface } from '@auth0/auth0-react';
 
 export type IGET = {
-  instance: IPublicClientApplication;
-  accounts: AccountInfo[];
+  instance: Auth0ContextInterface;
   model: string;
   id: string;
 };
 
 export type IGETA = {
-  instance: IPublicClientApplication;
-  accounts: AccountInfo[];
+  instance: Auth0ContextInterface;
   model: string;
 };
 
 export type IDELETE = {
-  instance: IPublicClientApplication;
-  accounts: AccountInfo[];
+  instance: Auth0ContextInterface;
   model: string;
   id: string;
 };
 
 export type ICREATE = {
-  instance: IPublicClientApplication;
-  accounts: AccountInfo[];
+  instance: Auth0ContextInterface;
   model: string;
   body?: object | undefined;
   customHeaders?: object | undefined;
 };
 
 export type IUPDATE = {
-  instance: IPublicClientApplication;
-  accounts: AccountInfo[];
+  instance: Auth0ContextInterface;
   model: string;
   body?: object | undefined;
   customHeaders?: object | undefined;

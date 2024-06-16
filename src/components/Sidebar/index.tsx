@@ -1,11 +1,9 @@
-import { useMsal } from '@azure/msal-react';
+import { useAuth0 } from '@auth0/auth0-react';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
-import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 // import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
 import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import Divider from '@mui/joy/Divider';
@@ -40,11 +38,13 @@ const renderListItems = () =>
   ));
 
 export default function Sidebar() {
-  const { instance } = useMsal();
+  const { logout } = useAuth0();
 
   const handlSignOut = () => {
-    instance.logoutRedirect({
-      postLogoutRedirectUri: `${window.location.origin}/signin`,
+    logout({
+      openUrl(url) {
+        window.location.replace(url);
+      },
     });
   };
 

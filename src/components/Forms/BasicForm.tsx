@@ -1,4 +1,4 @@
-import { useMsal } from '@azure/msal-react';
+import { useAuth0 } from '@auth0/auth0-react';
 import Button from '@mui/joy/Button';
 import DialogContent from '@mui/joy/DialogContent';
 import DialogTitle from '@mui/joy/DialogTitle';
@@ -9,7 +9,7 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import Stack from '@mui/joy/Stack';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 import { createApiRequest, updateApiRequest } from '@/api/api';
@@ -27,7 +27,7 @@ export const BasicForm = ({
   customForm,
   loading,
 }: IFormProps) => {
-  const { instance, accounts } = useMsal();
+  const instance = useAuth0();
   const [formData, setFormData] = useState(initialData || initialState);
   const setNotification = useSetRecoilState(notificationState);
   const [fetching, setFetching] = useState(loading || false);
@@ -59,7 +59,7 @@ export const BasicForm = ({
       if (isUpdating) {
         result = await updateApiRequest({
           instance,
-          accounts,
+
           model,
           body: formData,
           id: initialData?.id,
@@ -67,7 +67,6 @@ export const BasicForm = ({
       } else {
         result = await createApiRequest({
           instance,
-          accounts,
           model,
           body: formData,
         });

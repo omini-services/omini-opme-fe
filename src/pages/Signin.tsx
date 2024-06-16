@@ -1,4 +1,4 @@
-import { useIsAuthenticated } from '@azure/msal-react';
+import { useAuth0 } from '@auth0/auth0-react';
 import Box from '@mui/joy/Box';
 import CssBaseline from '@mui/joy/CssBaseline';
 import { formLabelClasses } from '@mui/joy/FormLabel';
@@ -14,7 +14,7 @@ import ColorSchemeToggle from '@components/ColorSchemeToggle';
 import FraterLogo from '@components/FraterLogo/FraterLogo';
 
 export default function Signin() {
-  const isAuthenticated = useIsAuthenticated();
+  const { isAuthenticated } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
