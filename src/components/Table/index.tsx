@@ -96,7 +96,6 @@ const CustomTable = (props: ITable) => {
     }
 
     const comparator = getComparator(order, orderBy);
-
     return stableSort(filtered, comparator).slice(
       page * rowsPerPage,
       page * rowsPerPage + rowsPerPage,

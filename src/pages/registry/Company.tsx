@@ -54,6 +54,7 @@ const tableCells: ITableCell[] = [
 
 const Company = () => (
   <BasicRegistryCRUD
+    title='Empresas'
     sortingInterface={INSURANCE_API_ROUTE}
     model={INSURANCE_API_ROUTE}
     headCells={headCells}

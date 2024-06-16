@@ -66,8 +66,9 @@ const tableCells: ITableCell[] = [
   { key: 'comments', align: 'left' },
 ];
 
-const Patient = () => (
+const Physician = () => (
   <BasicRegistryCRUD
+    title='Medicos'
     sortingInterface={PHYSICIAN_API_ROUTE}
     model={PHYSICIAN_API_ROUTE}
     headCells={headCells}
@@ -77,4 +78,4 @@ const Patient = () => (
   />
 );
 
-export default Patient;
+export default Physician;

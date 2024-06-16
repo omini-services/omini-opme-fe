@@ -11,6 +11,7 @@ import { notificationState } from '@atoms/notification';
 import BasicCRUDTable from '@pages/base/BasicCRUDTable';
 
 interface IBasicRegistryCRUD {
+  title: string;
   model: string;
   headCells: Array<any>;
   tableCells: Array<any>;
@@ -21,6 +22,7 @@ interface IBasicRegistryCRUD {
 
 const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
   const {
+    title,
     model,
     headCells,
     tableCells,
@@ -44,7 +46,7 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
   useEffect(() => {
     const callItems = async () => {
       try {
-        const data = await getAllApiRequest({
+        const {data} = await getAllApiRequest({
           instance,
           model,
         });
@@ -155,6 +157,7 @@ const BasicRegistryCRUD = (props: IBasicRegistryCRUD) => {
 
   return (
     <BasicCRUDTable
+      title={title}
       rows={rows}
       loading={loading}
       headCells={headCells}

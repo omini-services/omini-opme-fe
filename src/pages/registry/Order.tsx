@@ -96,6 +96,7 @@ const tableCells: ITableCell[] = [
 
 const Order = () => (
   <BasicRegistryCRUD
+  title='Orcamentos'
     sortingInterface={ORDER_API_ROUTE}
     model={ORDER_API_ROUTE}
     headCells={headCells}

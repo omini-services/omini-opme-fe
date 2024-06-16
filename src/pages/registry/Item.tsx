@@ -103,6 +103,7 @@ const tableCells: ITableCell[] = [
 
 const Item = () => (
   <BasicRegistryCRUD
+  title='Itens'
     sortingInterface={ITEM_API_ROUTE}
     model={ITEM_API_ROUTE}
     headCells={headCells}

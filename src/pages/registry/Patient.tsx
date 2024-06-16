@@ -61,6 +61,7 @@ const tableCells: ITableCell[] = [
 
 const Patient = () => (
   <BasicRegistryCRUD
+  title='Pacientes'
     sortingInterface={PATIENT_API_ROUTE}
     model={PATIENT_API_ROUTE}
     headCells={headCells}

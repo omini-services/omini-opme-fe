@@ -14,6 +14,7 @@ import Table from '@components/Table';
 interface IBasicCRUDTable {
   loading: boolean;
   rows: Array<any>;
+  title: string;
   updateData: Object;
   initialState: Object;
   headCells: Array<any>;
@@ -29,6 +30,7 @@ interface IBasicCRUDTable {
 const BasicCRUDTable = (props: IBasicCRUDTable) => {
   const {
     rows,
+    title,
     loading,
     headCells,
     updateData,
