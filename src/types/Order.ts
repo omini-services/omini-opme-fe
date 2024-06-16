@@ -1,14 +1,4 @@
-interface IItem {
-  lineId: number;
-  lineOrder: number;
-  itemCode: string;
-  itemName: string;
-  anvisaCode: string;
-  anvisaDueDate: string;
-  unitPrice: number;
-  lineTotal: number;
-  quantity: number;
-}
+import { IItem } from './Item';
 
 export interface IOrder {
   number: string;

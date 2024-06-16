@@ -4,6 +4,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Layout from '@/components/Layout';
+import OrderDetail from '@/components/OrderDetail';
 import { ROUTES } from '@/constants';
 import Dashboard from '@/pages/Dashboard';
 // registry
@@ -18,7 +19,7 @@ import Physician from '@/pages/registry/Physician';
 // other
 import Home from '@pages/Home';
 // import Orders from '@pages/Orders';
-import Registry from '@pages/registry';
+// import Registry from '@pages/registry';
 import Signin from '@pages/Signin';
 
 import { msalConfig } from '../configs/authConfig';
@@ -36,29 +37,23 @@ export function Router() {
           <Route element={<PrivateRoute component={Layout} />}>
             <Route path={ROUTES.root.to} element={<Home />} />
             <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
-            {/* <Route path={ROUTES.orders.to} element={<Orders />} /> */}
-            <Route path={ROUTES.registry.root.to} element={<Registry />}>
-              <Route path={ROUTES.registry.order.to} element={<Order />} />
-              <Route
-                path={ROUTES.registry.hospital.to}
-                element={<Hospital />}
-              />
-              <Route path={ROUTES.registry.item.to} element={<Item />} />
-              <Route path={ROUTES.registry.patient.to} element={<Patient />} />
-              <Route
-                path={ROUTES.registry.physician.to}
-                element={<Physician />}
-              />
-              <Route path={ROUTES.registry.company.to} element={<Company />} />
-              {/* <Route
-                path={ROUTES.registry.specialty.to}
-                element={<Specialty />}
-              />
-              <Route
-                path={ROUTES.registry.procedure.to}
-                element={<Procedure />}
-              /> */}
-            </Route>
+            <Route path={ROUTES.registry.order.to} element={<Order />} />
+            <Route
+              path={`${ROUTES.registry.order.to}/:id`}
+              element={<OrderDetail />}
+            />
+            <Route path={ROUTES.registry.hospital.to} element={<Hospital />} />
+            <Route path={ROUTES.registry.item.to} element={<Item />} />
+            <Route path={ROUTES.registry.patient.to} element={<Patient />} />
+            <Route
+              path={ROUTES.registry.physician.to}
+              element={<Physician />}
+            />
+            <Route path={ROUTES.registry.company.to} element={<Company />} />
+            {/* <Route
+              path={ROUTES.registry.root.to}
+              element={<Registry />}
+            ></Route> */}
           </Route>
         </Routes>
       </MsalProvider>

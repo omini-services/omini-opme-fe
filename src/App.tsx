@@ -5,12 +5,13 @@ import {
   Experimental_CssVarsProvider as MaterialCssVarsProvider,
   THEME_ID as MATERIAL_THEME_ID,
 } from '@mui/material/styles';
+import { theme } from '@themes/theme';
 import React from 'react';
 import { RecoilRoot } from 'recoil';
 
 import { Router } from '@/routes';
 
-const materialTheme = materialExtendTheme();
+const materialTheme = materialExtendTheme(theme);
 
 export function App() {
   return (

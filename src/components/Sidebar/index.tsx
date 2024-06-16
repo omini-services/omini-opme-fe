@@ -1,8 +1,6 @@
 import { useMsal } from '@azure/msal-react';
-import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
-import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+// import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-// import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
@@ -14,24 +12,25 @@ import IconButton from '@mui/joy/IconButton';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListItemButton, { listItemButtonClasses } from '@mui/joy/ListItemButton';
-// import ListItemContent from '@mui/joy/ListItemContent';
 import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
 import React from 'react';
 
-// import { ROUTES } from '@/constants';
+import { toggleRegistrySidebar } from '@/atoms/sidebar';
+import { ROUTES } from '@/constants';
 import FraterLogo from '@components/FraterLogo/FraterLogo';
 import ListItemLink from '@components/Sidebar/ListItemLink';
 import ThemeModeToggle from '@components/ThemeModeToggle';
-// import Toggler from '@components/Toggler';
 import { closeSidebar } from '@utils/sidebar';
+
+import SidebarToggler from '../SidebarToggler';
 
 const renderListItems = () =>
   [
     { title: 'Home', to: '/', icon: HomeRoundedIcon },
     // { title: 'Dashboard', to: '/dashboard', icon: DashboardRoundedIcon },
     // { title: 'Orders', to: '/orders', icon: ShoppingCartRoundedIcon },
-    { title: 'Cadastros', to: '/registry', icon: AssignmentRoundedIcon },
+    // { title: 'Cadastros', to: '/registry', icon: AssignmentRoundedIcon },
   ].map((item) => (
     <ListItemLink key={item.title} title={item.title} to={item.to}>
       {/* @ts-ignore */}
@@ -133,45 +132,12 @@ export default function Sidebar() {
         >
           {renderListItems()}
 
-          {/* <ListItem nested>
-            <Toggler
-              renderToggle={({ open, setOpen }) => (
-                <ListItemButton onClick={() => setOpen(!open)}>
-                  <AssignmentRoundedIcon />
-                  <ListItemContent>
-                    <Typography level="title-sm">Cadastros</Typography>
-                  </ListItemContent>
-                  <KeyboardArrowDownIcon
-                    sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
-                  />
-                </ListItemButton>
-              )}
-            >
+          <ListItem nested>
+            <SidebarToggler atom={toggleRegistrySidebar}>
               <List sx={{ gap: 0.5 }}>
-                <ListItemLink
-                  title={ROUTES.registry.company.name}
-                  to={ROUTES.registry.company.to}
-                >
-                  <ShoppingCartRoundedIcon />
-                </ListItemLink>
-
                 <ListItemLink
                   title={ROUTES.registry.order.name}
                   to={ROUTES.registry.order.to}
-                >
-                  <ShoppingCartRoundedIcon />
-                </ListItemLink>
-
-                <ListItemLink
-                  title={ROUTES.registry.specialty.name}
-                  to={ROUTES.registry.specialty.to}
-                >
-                  <ShoppingCartRoundedIcon />
-                </ListItemLink>
-
-                <ListItemLink
-                  title={ROUTES.registry.procedure.name}
-                  to={ROUTES.registry.procedure.to}
                 >
                   <ShoppingCartRoundedIcon />
                 </ListItemLink>
@@ -182,9 +148,37 @@ export default function Sidebar() {
                 >
                   <ShoppingCartRoundedIcon />
                 </ListItemLink>
+
+                <ListItemLink
+                  title={ROUTES.registry.hospital.name}
+                  to={ROUTES.registry.hospital.to}
+                >
+                  <ShoppingCartRoundedIcon />
+                </ListItemLink>
+
+                <ListItemLink
+                  title={ROUTES.registry.company.name}
+                  to={ROUTES.registry.company.to}
+                >
+                  <ShoppingCartRoundedIcon />
+                </ListItemLink>
+
+                <ListItemLink
+                  title={ROUTES.registry.patient.name}
+                  to={ROUTES.registry.patient.to}
+                >
+                  <ShoppingCartRoundedIcon />
+                </ListItemLink>
+
+                <ListItemLink
+                  title={ROUTES.registry.physician.name}
+                  to={ROUTES.registry.physician.to}
+                >
+                  <ShoppingCartRoundedIcon />
+                </ListItemLink>
               </List>
-            </Toggler>
-          </ListItem> */}
+            </SidebarToggler>
+          </ListItem>
         </List>
 
         <List

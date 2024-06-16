@@ -1,0 +1,15 @@
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.content.open {
+  max-height: 1000px; /* Arbitrary high value to allow expansion */
+  transition: max-height 0.5s ease-in;
+}
+
+.content.closed {
+  max-height: 0;
+  transition: max-height 0.3s ease-out;
+}
