@@ -1,17 +1,22 @@
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-} from '@mui/material';
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 
-import { dialogState } from '@atoms/dialog';
+import { dialogState } from '@/atoms/dialog';
 
 const DialogCenter = () => {
-  const [dialog, setDialog] = useRecoilState(dialogState);
+  const [dialog, setDialog] = useAtom(dialogState);
 
   const handleClose = () => {
     setDialog({ ...dialog, show: false });
@@ -28,20 +33,25 @@ const DialogCenter = () => {
   };
 
   return (
-    <Dialog open={dialog.show} onClose={handleClose}>
-      <DialogTitle>{dialog.title}</DialogTitle>
-      <DialogContent>
-        <p>{dialog.body}</p>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handlePositive} color="primary">
-          {dialog.positive}
-        </Button>
-        <Button onClick={handleNegative} color="primary">
-          {dialog.negative}
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <AlertDialog open={dialog.show} onOpenChange={handleClose}>
+      {/* <AlertDialogTrigger asChild>
+        <Button variant="outline">Show Dialog</Button>
+      </AlertDialogTrigger> */}
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{dialog.title}</AlertDialogTitle>
+          <AlertDialogDescription>{dialog.body}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={handleNegative}>
+            {dialog.negative}
+          </AlertDialogCancel>
+          <AlertDialogAction onClick={handlePositive}>
+            {dialog.positive}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

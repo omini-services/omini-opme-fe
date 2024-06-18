@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom } from 'jotai';
 
 export const DIALOG_INITIAL_STATE = {
   show: false,
@@ -10,7 +10,4 @@ export const DIALOG_INITIAL_STATE = {
   negativeCallback: () => {},
 };
 
-export const dialogState = atom({
-  key: 'dialogState',
-  default: DIALOG_INITIAL_STATE,
-});
+export const dialogState = atom(DIALOG_INITIAL_STATE);
