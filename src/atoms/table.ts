@@ -1,6 +1,2 @@
-import { atom } from 'recoil';
-
-export const tableSelectedItemsState = atom({
-  key: 'tableSelectedItemsState',
-  default: [],
-});
+import { atom } from 'jotai';
+export const tableSelectedItemsState = atom([]);

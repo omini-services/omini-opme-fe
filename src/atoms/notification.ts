@@ -1,6 +1,3 @@
-import { atom } from 'recoil';
+import { atom } from 'jotai';
 
-export const notificationState = atom({
-  key: 'notificationState',
-  default: '',
-});
+export const notificationState = atom('');

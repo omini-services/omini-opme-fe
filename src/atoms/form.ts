@@ -1,6 +1,3 @@
-import { atom } from 'recoil';
+import { atom } from 'jotai';
 
-export const formOpenAtom = atom({
-  key: 'formOpenAtom',
-  default: false,
-});
+export const formOpenAtom = atom(false);

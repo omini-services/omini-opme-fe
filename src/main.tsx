@@ -4,4 +4,11 @@ import App from './App';
 
 import './globals.css';
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(<App />);
+} else {
+  console.error('Root element not found');
+}
