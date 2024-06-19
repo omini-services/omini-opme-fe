@@ -3,16 +3,16 @@ name: Release
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version name'
-        required: true
-        default: 'minor'
-        type: choice
-        options:
-          - major
-          - minor
-          - patch
+    # inputs:
+    #   version:
+    #     description: 'Version name'
+    #     required: true
+    #     default: 'minor'
+    #     type: choice
+    #     options:
+    #       - major
+    #       - minor
+    #       - patch
 permissions:
   contents: write
   pull-requests: write
