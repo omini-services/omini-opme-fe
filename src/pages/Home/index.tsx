@@ -1,28 +1,25 @@
-import React from 'react';
+import { useAtom } from 'jotai';
 
-import { Button } from '@/components/ui/button';
-import DialogCenter from '@/components/DialogCenter';
-import { DIALOG_INITIAL_STATE, dialogState } from '@/atoms/dialog';
-import { useSetAtom } from 'jotai';
+import { Mail } from '@/components/mail';
+import { accounts, mails } from './mock';
 
-const Home = () => {
-  const dialogOptions = {
-    ...DIALOG_INITIAL_STATE,
-    show: true,
-    title: 'Confirmação',
-    body: `Tem certeza de que deseja excluir?`,
-    positive: 'Sim',
-    negative: 'Cancelar',
-  };
+import { layoutState, collapsedState } from '@/atoms/pages/Home/resizable';
 
-  const setDialog = useSetAtom(dialogState);
+export default function MailPage() {
+  const [layout, setLayout] = useAtom(layoutState);
+  const [collapsed, setIsCollapsed] = useAtom(collapsedState);
 
   return (
     <>
-      <Button onClick={() => setDialog(dialogOptions)}>Click me</Button>
-      <DialogCenter />
+      <Mail
+        accounts={accounts}
+        mails={mails}
+        layout={layout}
+        collapsed={collapsed}
+        navCollapsedSize={4}
+        setIsCollapsed={setIsCollapsed}
+        setLayout={setLayout}
+      />
     </>
   );
-};
-
-export default Home;
+}

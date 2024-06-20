@@ -1,8 +1,7 @@
-import React from 'react';
 import { Provider } from 'jotai';
 import { Router } from '@/routes';
 
-import './App.css';
+import './globals.css';
 
 function App() {
   return (
