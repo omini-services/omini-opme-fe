@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // import Layout from '@/components/Layout';
 import { auth0Config } from '@/configs/auth0Config';
 import { ROUTES } from '@/constants';
-// import Dashboard from '@/pages/Dashboard';
 // registry
 // import Company from '@/pages/registry/Company';
 // import Hospital from '@/pages/registry/Hospital';
@@ -16,7 +15,8 @@ import { ROUTES } from '@/constants';
 // import Procedure from '@/pages/registry/Procedure';
 // import Specialty from '@/pages/registry/Specialty';
 // other
-import Home from '@/pages/Home';
+import MailPage from '@/pages/Mail';
+import Dashboard from '@/pages/Dashboard';
 // import Orders from '@pages/Orders';
 // import Registry from '@pages/registry';
 // import Signin from '@pages/Signin';
@@ -38,8 +38,8 @@ export function Router() {
         <Routes>
           {/* <Route path={ROUTES.signin.to} element={<Signin />} /> */}
           {/* <Route element={<PrivateRoute component={Layout} />}> */}
-          <Route path={ROUTES.root.to} element={<Home />} />
-          {/* <Route path={ROUTES.dashboard.to} element={<Dashboard />} /> */}
+          <Route path={ROUTES.root.to} element={<MailPage />} />
+          <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
           {/* <Route path={ROUTES.registry.root.to} element={<Registry />}>
               <Route path={ROUTES.registry.order.to} element={<Order />} />
               <Route
