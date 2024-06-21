@@ -2,7 +2,6 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-// import Layout from '@/components/Layout';
 import { auth0Config } from '@/configs/auth0Config';
 import { ROUTES } from '@/constants';
 // registry
@@ -17,11 +16,12 @@ import { ROUTES } from '@/constants';
 // other
 import MailPage from '@/pages/Mail';
 import Dashboard from '@/pages/Dashboard';
+import Layout from '@/pages/Layout';
 // import Orders from '@pages/Orders';
 // import Registry from '@pages/registry';
 // import Signin from '@pages/Signin';
 
-// import PrivateRoute from './PrivateRoute';
+import PrivateRoute from './PrivateRoute';
 
 export function Router() {
   return (
@@ -37,9 +37,10 @@ export function Router() {
       >
         <Routes>
           {/* <Route path={ROUTES.signin.to} element={<Signin />} /> */}
-          {/* <Route element={<PrivateRoute component={Layout} />}> */}
+          <Route element={<PrivateRoute component={Layout} />}>
+            <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
+          </Route>
           <Route path={ROUTES.root.to} element={<MailPage />} />
-          <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
           {/* <Route path={ROUTES.registry.root.to} element={<Registry />}>
               <Route path={ROUTES.registry.order.to} element={<Order />} />
               <Route
@@ -54,7 +55,6 @@ export function Router() {
               />
               <Route path={ROUTES.registry.company.to} element={<Company />} />
             </Route> */}
-          {/* </Route> */}
         </Routes>
       </Auth0Provider>
     </BrowserRouter>
