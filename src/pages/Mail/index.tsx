@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 
-import { Mail } from '@/components/mail';
+import { Mail } from '@/components/shadcn-mail';
 import { accounts, mails } from './mock';
 
 import { layoutState, collapsedState } from '@/atoms/pages/Home/resizable';

@@ -7,10 +7,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
-import React from 'react';
+} from '@/components/shadcn/new-york/alert-dialog';
 import { useAtom } from 'jotai';
 
 import { dialogState } from '@/atoms/dialog';
@@ -34,9 +31,6 @@ const DialogCenter = () => {
 
   return (
     <AlertDialog open={dialog.show} onOpenChange={handleClose}>
-      {/* <AlertDialogTrigger asChild>
-        <Button variant="outline">Show Dialog</Button>
-      </AlertDialogTrigger> */}
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{dialog.title}</AlertDialogTitle>

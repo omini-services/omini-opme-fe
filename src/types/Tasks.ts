@@ -1,4 +1,4 @@
-import { mails, contacts, accounts } from '@/pages/Home/mock';
+import { mails, contacts, accounts } from '@/pages/Mail/mock';
 
 export type Mail = (typeof mails)[number];
 

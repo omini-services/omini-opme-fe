@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai';
 
-import { mails } from '../../../pages/Home/mock';
+import { mails } from '../../../pages/Mail/mock';
 
 import { Mail } from '@/types/Tasks';
 
