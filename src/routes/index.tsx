@@ -38,9 +38,9 @@ export function Router() {
         <Routes>
           {/* <Route path={ROUTES.signin.to} element={<Signin />} /> */}
           <Route element={<PrivateRoute component={Layout} />}>
+            <Route path={ROUTES.root.to} element={<MailPage />} />
             <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
           </Route>
-          <Route path={ROUTES.root.to} element={<MailPage />} />
           {/* <Route path={ROUTES.registry.root.to} element={<Registry />}>
               <Route path={ROUTES.registry.order.to} element={<Order />} />
               <Route
