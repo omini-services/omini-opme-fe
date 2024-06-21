@@ -8,12 +8,14 @@ interface IPrivateRoute {
 }
 
 const PrivateRoute = ({ component: Component }: IPrivateRoute) => {
-  const { isAuthenticated, isLoading, error, logout } = useAuth0();
-  console.log({ isAuthenticated, isLoading, error });
+  // const { isAuthenticated, isLoading, error, logout } = useAuth0();
+  // console.log({ isAuthenticated, isLoading, error });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  return <div>{isAuthenticated ? <Component /> : <Signin />}</div>;
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // return <div>{isAuthenticated ? <Component /> : <Signin />}</div>;
+  return <Component />;
 };
 export default PrivateRoute;
