@@ -14,7 +14,7 @@ export const breadcrumbNameMap: { [key: string]: string } = {
 };
 
 export const ROUTES = {
-  root: { name: 'root', label: 'Home', to: '/home' },
+  root: { name: 'root', label: 'Home', to: '/' },
   signup: { name: 'signup', label: 'Sign Up', to: '/signup' },
   signin: { name: 'signin', label: 'Sign In', to: '/signin' },
   signout: { name: 'signout', label: 'Sign Out', to: '/signout' },
