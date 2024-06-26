@@ -17,6 +17,7 @@ import { ROUTES } from '@/constants';
 import MailPage from '@/pages/Mail';
 import Dashboard from '@/pages/Dashboard';
 import Tasks from '@/pages/Tasks';
+import Music from '@/pages/Music';
 import Layout from '@/pages/Layout';
 // import Orders from '@pages/Orders';
 // import Registry from '@pages/registry';
@@ -42,6 +43,7 @@ export function Router() {
             <Route path={ROUTES.root.to} element={<MailPage />} />
             <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
             <Route path={ROUTES.tasks.to} element={<Tasks />} />
+            <Route path={ROUTES.music.to} element={<Music />} />
           </Route>
           {/* <Route path={ROUTES.registry.root.to} element={<Registry />}>
               <Route path={ROUTES.registry.order.to} element={<Order />} />
