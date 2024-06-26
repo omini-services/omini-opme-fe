@@ -19,6 +19,7 @@ export const ROUTES = {
   signin: { name: 'signin', label: 'Sign In', to: '/signin' },
   signout: { name: 'signout', label: 'Sign Out', to: '/signout' },
   dashboard: { name: 'dashboard', label: 'Dashboard', to: '/dashboard' },
+  tasks: { name: 'tasks', label: 'Tasks', to: '/tasks' },
   // orders: { name: 'orders', label: 'Orders', to: '/orders' },
   registry: {
     root: {

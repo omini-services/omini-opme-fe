@@ -21,6 +21,12 @@ export function MainNav({
       >
         Cadastros
       </a>
+      <a
+        href="/tasks"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+        Tasks
+      </a>
     </nav>
   );
 }
