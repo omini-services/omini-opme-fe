@@ -13,12 +13,8 @@ import {
   TabsTrigger,
 } from '@/components/shadcn/new-york/tabs';
 import { CalendarDateRangePicker } from '@/components/shadcn-dashboard/date-range-picker';
-import { MainNav } from '@/components/shadcn-dashboard/main-nav';
 import { Overview } from '@/components/shadcn-dashboard/overview';
 import { RecentSales } from '@/components/shadcn-dashboard/recent-sales';
-import { Search } from '@/components/shadcn-dashboard/search';
-import TeamSwitcher from '@/components/shadcn-dashboard/team-switcher';
-import { UserNav } from '@/components/shadcn-dashboard/user-nav';
 
 export const metadata = {
   title: 'Dashboard',
