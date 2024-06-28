@@ -1,5 +1,3 @@
-import { buttonVariants } from '@/components/shadcn/new-york/button'
-import { cn } from "@/lib/utils"
 import { Brand } from './components/brand'
 import { UserAuthForm } from "./components/user-auth-form"
 
@@ -7,7 +5,7 @@ export default function AuthenticationPage() {
   return (
     <>
       <div className="container relative h-full max flex-col items-center justify-center grid md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <a
+        {/* <a
           href="/examples/authentication"
           className={cn(
             buttonVariants({ variant: "ghost" }),
@@ -15,7 +13,7 @@ export default function AuthenticationPage() {
           )}
         >
           Login
-        </a>
+        </a> */}
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="relative z-20 h-full flex items-center justify-center text-lg font-medium">
@@ -26,14 +24,14 @@ export default function AuthenticationPage() {
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Entrar na conta
+                Bem vindo
               </h1>
               <p className="text-sm text-muted-foreground">
-                Enter your email below to create your account
+                Clique no botão para se conectar
               </p>
             </div>
             <UserAuthForm />
-            <p className="px-8 text-center text-sm text-muted-foreground">
+            {/* <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <a
                 href="/terms"
@@ -49,7 +47,7 @@ export default function AuthenticationPage() {
                 Privacy Policy
               </a>
               .
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

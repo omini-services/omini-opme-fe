@@ -1,29 +1,36 @@
 import { Icons } from "@/components/shadcn/default/icons";
 import { Button } from '@/components/shadcn/new-york/button';
-import { Input } from "@/components/shadcn/new-york/input";
-import { Label } from "@/components/shadcn/new-york/label";
 import { cn } from "@/lib/utils";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { loginWithRedirect } = useAuth0();
+
+  const handleLogin = () => {
+    loginWithRedirect().catch((e) => {
+      console.log(e);
+    });
+  };
 
   async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault()
-    setIsLoading(true)
+    handleLogin();
+    // event.preventDefault()
+    // setIsLoading(true)
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+    // setTimeout(() => {
+    //   setIsLoading(false)
+    // }, 3000)
   }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
-          <div className="grid gap-1">
+          {/* <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
               Email
             </Label>
@@ -36,12 +43,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               disabled={isLoading}
             />
-          </div>
+          </div> */}
           <Button disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In with Email
+            Entrar
           </Button>
         </div>
       </form>

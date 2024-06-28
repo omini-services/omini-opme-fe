@@ -5,8 +5,8 @@ interface BrandProps {
 
 export function Brand({ className }: BrandProps) {
   return (
-    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-      width="100%" viewBox="0 0 1068 184" enable-background="new 0 0 1068 184" xml:space="preserve" className={className}>
+    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+      width="100%" viewBox="0 0 1068 184" enable-background="new 0 0 1068 184" className={className}>
 
       <path fill="#FFFFFF" opacity="1.000000" stroke="none"
         d="
