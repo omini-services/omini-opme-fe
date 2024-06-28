@@ -4,6 +4,9 @@
 name: Build and deploy React to Azure Static Web App - appswa-omini-opme-eastus
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
