@@ -33,7 +33,7 @@ import { MailDisplay } from './mail-display';
 import { MailList } from './mail-list';
 import { Nav } from './nav';
 import { type Mail } from '@/types/Tasks';
-import { useMail } from '@/atoms/pages/Home/use-mail';
+import { useMail } from '@/atoms/pages/Orders/use-mail';
 
 interface MailProps {
   accounts: {
