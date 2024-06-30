@@ -60,8 +60,11 @@ export const OrderForm = () => {
 
   return (
     <Form {...form}>
-      <div className="flex flex-col p-4 h-full">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <div className="flex flex-col p-4 h-full mb-auto">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col space-y-4 h-full"
+        >
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="number">Número:</Label>
@@ -151,7 +154,6 @@ export const OrderForm = () => {
             )}
           />
 
-          <Separator className="mb-3 mt-auto" />
           <Button type="submit" size="sm">
             Salvar
           </Button>
