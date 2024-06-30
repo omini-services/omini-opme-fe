@@ -1,8 +1,6 @@
-import { ComponentProps } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/shadcn/new-york/badge';
 import { ScrollArea } from '@/components/shadcn/new-york/scroll-area';
 import { IOrder } from '@/types/Order';
 import { useOrders } from '@/atoms/pages/Orders/use-orders';
@@ -95,41 +93,15 @@ export function OrderList({ items }: OrderListProps) {
                   <div className="flex items-center gap-2">
                     <div className="font-semibold">Total:</div>
                     <div className="line-clamp-2 text-xs">
-                      {/* <CurrencyFormatter value={item.total} /> */}
+                      <CurrencyFormatter value={item.total} />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            {/* <div className="line-clamp-2 text-xs text-muted-foreground">
-              {item.text.substring(0, 300)}
-            </div> */}
-            {/* {item.labels.length ? (
-              <div className="flex items-center gap-2">
-                {item.labels.map((label) => (
-                  <Badge key={label} variant={getBadgeVariantFromLabel(label)}>
-                    {label}
-                  </Badge>
-                ))}
-              </div>
-            ) : null} */}
           </button>
         ))}
       </div>
     </ScrollArea>
   );
-}
-
-function getBadgeVariantFromLabel(
-  label: string
-): ComponentProps<typeof Badge>['variant'] {
-  if (['work'].includes(label.toLowerCase())) {
-    return 'default';
-  }
-
-  if (['personal'].includes(label.toLowerCase())) {
-    return 'outline';
-  }
-
-  return 'secondary';
 }

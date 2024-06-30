@@ -1,5 +1,5 @@
 import React from 'react';
-// import { FormattedNumber } from 'react-intl';
+import { FormattedNumber } from 'react-intl';
 
 interface CurrencyFormatterProps {
   value: number;
@@ -12,8 +12,7 @@ const CurrencyFormatter: React.FC<CurrencyFormatterProps> = ({
   locale = 'pt-BR',
   currency = 'BRL',
 }) => {
-  // return <FormattedNumber value={value} style="currency" currency={currency} />;
-  return <span>test</span>;
+  return <FormattedNumber value={value} style="currency" currency={currency} />;
 };
 
 export default CurrencyFormatter;
