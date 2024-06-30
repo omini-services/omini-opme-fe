@@ -1,17 +1,9 @@
-export const breadcrumbNameMap: { [key: string]: string } = {
-  '/': 'Home',
-  '/orders': 'Ordens',
-  '/dashboard': 'Dashboard',
-  '/test': 'Test',
-  '/registry': 'Cadastros',
-  '/registry/company': 'Empresa',
-  '/registry/order': 'Orçamento',
-  '/registry/specialty': 'Especialidade',
-  '/registry/procedure': 'Procedimento',
-  '/registry/item': 'Item',
-  '/registry/patient': 'Paciente',
-  '/registry/physician': 'Medico',
-};
+export const INSURANCE = 'Empresa';
+export const HOSPITAL = 'Hospital';
+export const ITEM = 'Item';
+export const PATIENT = 'Paciente';
+export const PHYSICIAN = 'Médico';
+export const ORDER = 'Orçamento';
 
 export const ROUTES = {
   root: { name: 'root', label: 'Home', to: '/' },
@@ -21,7 +13,7 @@ export const ROUTES = {
   dashboard: { name: 'dashboard', label: 'Dashboard', to: '/dashboard' },
   tasks: { name: 'tasks', label: 'Tasks', to: '/tasks' },
   music: { name: 'music', label: 'Music', to: '/music' },
-  orders: { name: 'orders', label: 'Orçamentos', to: '/orders' },
+  orders: { name: 'orders', label: `${ORDER}s`, to: '/orders' },
   registry: {
     root: {
       name: 'registry',
@@ -29,33 +21,33 @@ export const ROUTES = {
       to: '/registry',
     },
     order: {
-      name: 'Orçamento',
-      label: 'Orçamento',
+      name: ORDER,
+      label: ORDER,
       to: '/registry/order',
     },
     item: {
-      name: 'Item',
-      label: 'Item',
+      name: ITEM,
+      label: ITEM,
       to: '/registry/item',
     },
     hospital: {
-      name: 'Hospital',
-      label: 'Hospital',
+      name: HOSPITAL,
+      label: HOSPITAL,
       to: '/registry/hospital',
     },
     company: {
-      name: 'Empresa',
-      label: 'Empresa',
+      name: INSURANCE,
+      label: INSURANCE,
       to: '/registry/company',
     },
     patient: {
-      name: 'Paciente',
-      label: 'Paciente',
+      name: PATIENT,
+      label: PATIENT,
       to: '/registry/patient',
     },
     physician: {
-      name: 'Medico',
-      label: 'Medico',
+      name: PHYSICIAN,
+      label: PHYSICIAN,
       to: '/registry/physician',
     },
     // specialty: {
@@ -84,21 +76,25 @@ export const DELETE_SUCCESS = 'DELETE_SUCCESS';
 
 export const messages = (data: any) => ({
   [INSURANCE_API_ROUTE]: {
-    [DELETE_SUCCESS]: `Empresa ${data.id} foi removida!`,
+    [DELETE_SUCCESS]: `${INSURANCE} ${data.id} foi removida!`,
   },
   [HOSPITAL_API_ROUTE]: {
-    [DELETE_SUCCESS]: `Hospital ${data.id} foi removido!`,
+    [DELETE_SUCCESS]: `${HOSPITAL} ${data.id} foi removido!`,
   },
   [ITEM_API_ROUTE]: {
-    [DELETE_SUCCESS]: `Item ${data.id} foi removido!`,
+    [DELETE_SUCCESS]: `${ITEM} ${data.id} foi removido!`,
   },
   [PATIENT_API_ROUTE]: {
-    [DELETE_SUCCESS]: `Paciente ${data.id} foi removido!`,
+    [DELETE_SUCCESS]: `${PATIENT} ${data.id} foi removido!`,
   },
   [PHYSICIAN_API_ROUTE]: {
-    [DELETE_SUCCESS]: `Medico ${data.id} foi removido!`,
+    [DELETE_SUCCESS]: `${PHYSICIAN} ${data.id} foi removido!`,
   },
   [ORDER_API_ROUTE]: {
-    [DELETE_SUCCESS]: `Orcamento ${data.id} foi removido!`,
+    [DELETE_SUCCESS]: `${ORDER} ${data.id} foi removido!`,
   },
 });
+
+export const messagesInPtBr = {
+  hello_time: 'Ola, {ts, date, ::yyyyMMdd}',
+};

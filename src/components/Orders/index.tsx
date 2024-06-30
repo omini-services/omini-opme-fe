@@ -13,19 +13,20 @@ import {
   TabsTrigger,
 } from '@/components/shadcn/new-york/tabs';
 import { TooltipProvider } from '@/components/shadcn/new-york/tooltip';
-import { MailDisplay } from '../shadcn-mail//mail-display';
-import { MailList } from '../shadcn-mail//mail-list';
-import { type Mail } from '@/types/Tasks';
-import { useMail } from '@/atoms/pages/Orders/use-mail';
+import { OrderDisplay } from './OrderDisplay';
+import { OrderList } from './OrderList';
+import { type IOrder } from '@/types/Order';
+import { useOrders } from '@/atoms/pages/Orders/use-orders';
+import { ORDER } from '@/constants';
 
 interface IOrders {
-  mails: Mail[];
+  orders: IOrder[];
   layout: number[] | undefined;
   setLayout: Function;
 }
 
-export function Orders({ mails, layout = [40, 32], setLayout }: IOrders) {
-  const [mail] = useMail();
+export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
+  const [mail] = useOrders();
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -37,7 +38,7 @@ export function Orders({ mails, layout = [40, 32], setLayout }: IOrders) {
         <ResizablePanel defaultSize={layout[0]} minSize={30} maxSize={50}>
           <Tabs defaultValue="open">
             <div className="flex items-center px-4 py-2">
-              <h1 className="text-xl font-bold">Orçamentos</h1>
+              <h1 className="text-xl font-bold">{ORDER}s</h1>
               <TabsList className="ml-auto">
                 <TabsTrigger
                   value="open"
@@ -63,17 +64,17 @@ export function Orders({ mails, layout = [40, 32], setLayout }: IOrders) {
               </form>
             </div>
             <TabsContent value="open" className="m-0">
-              <MailList items={mails} />
+              <OrderList items={orders} />
             </TabsContent>
             <TabsContent value="all" className="m-0">
-              <MailList items={mails.filter((item) => !item.read)} />
+              <OrderList items={orders.filter((item) => !item.read)} />
             </TabsContent>
           </Tabs>
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={layout[1]}>
-          <MailDisplay
-            mail={mails.find((item) => item.id === mail.selected) || null}
+          <OrderDisplay
+            order={orders.find((item) => item.id === mail.selected) || null}
           />
         </ResizablePanel>
       </ResizablePanelGroup>

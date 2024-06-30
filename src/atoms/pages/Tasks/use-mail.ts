@@ -2,7 +2,7 @@ import { atom, useAtom } from 'jotai';
 
 import { mails } from '../../../pages/Mail/mock';
 
-import { Mail } from '@/types/Tasks';
+import { Mail } from '@/types/Mail';
 
 type Config = {
   selected: Mail['id'] | null;

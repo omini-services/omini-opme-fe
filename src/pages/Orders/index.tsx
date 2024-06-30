@@ -1,16 +1,16 @@
 import { useAtom } from 'jotai';
 
 import { Orders } from '@/components/Orders';
-import { mails } from './mock';
+import { orders } from './mock';
 
 import { layoutState } from '@/atoms/pages/Orders/resizable';
 
-export default function MailPage() {
+export default function OrdersPage() {
   const [layout, setLayout] = useAtom(layoutState);
 
   return (
     <>
-      <Orders mails={mails} layout={layout} setLayout={setLayout} />
+      <Orders orders={orders} layout={layout} setLayout={setLayout} />
     </>
   );
 }

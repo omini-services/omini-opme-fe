@@ -32,8 +32,8 @@ import { AccountSwitcher } from './account-switcher';
 import { MailDisplay } from './mail-display';
 import { MailList } from './mail-list';
 import { Nav } from './nav';
-import { type Mail } from '@/types/Tasks';
-import { useMail } from '@/atoms/pages/Orders/use-mail';
+import { type Mail } from '@/types/Mail';
+import { useMail } from '@/atoms/pages/Mail/use-mail';
 
 interface MailProps {
   accounts: {

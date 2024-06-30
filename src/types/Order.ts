@@ -11,7 +11,9 @@ interface IItem {
 }
 
 export interface IOrder {
-  number: string;
+  id: string;
+  number: number;
+  read: boolean;
   patientId: string;
   patientName: string;
   physicianId: string;

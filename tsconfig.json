@@ -1,29 +1,5 @@
 {
   "compilerOptions": {
-    // "allowJs": false,
-    // "esModuleInterop": false,
-    // "forceConsistentCasingInFileNames": true,
-    // "target": "es6",
-    // "module": "esnext",
-    // "useDefineForClassFields": true,
-    // "lib": ["es2015", "dom", "dom.iterable", "esnext"],
-    // "skipLibCheck": true,
-    // "allowSyntheticDefaultImports": true,
-
-    // /* Bundler mode */
-    // "moduleResolution": "bundler",
-    // "allowImportingTsExtensions": true,
-    // "resolveJsonModule": true,
-    // "isolatedModules": true,
-    // "noEmit": true,
-    // "jsx": "react",
-
-    // /* Linting */
-    // "strict": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-
     "target": "esnext",
     "useDefineForClassFields": true,
     "lib": ["dom", "dom.iterable", "esnext"],
