@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/shadcn/new-york/badge';
 import { ScrollArea } from '@/components/shadcn/new-york/scroll-area';
 import { Separator } from '@/components/shadcn/new-york/separator';
-import { Mail } from '@/types/Tasks';
-import { useMail } from '@/atoms/pages/Home/use-mail';
+import { Mail } from '@/types/Mail';
+import { useMail } from '@/atoms/pages/Tasks/use-mail';
 
 interface MailListProps {
   items: Mail[];

@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { Mail } from '@/components/shadcn-mail';
 import { accounts, mails } from './mock';
 
-import { layoutState, collapsedState } from '@/atoms/pages/Home/resizable';
+import { layoutState, collapsedState } from '@/atoms/pages/Mail/resizable';
 
 export default function MailPage() {
   const [layout, setLayout] = useAtom(layoutState);

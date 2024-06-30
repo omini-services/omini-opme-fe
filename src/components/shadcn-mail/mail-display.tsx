@@ -42,7 +42,7 @@ import {
 } from '@/components/shadcn/new-york/tooltip';
 
 // TODO: change this data
-import { Mail } from '@/types/Tasks';
+import { Mail } from '@/types/Mail';
 
 interface MailDisplayProps {
   mail: Mail | null;

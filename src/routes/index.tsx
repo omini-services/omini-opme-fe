@@ -18,9 +18,9 @@ import Layout from '@/pages/Layout';
 import MailPage from '@/pages/Mail';
 import Music from '@/pages/Music';
 import Tasks from '@/pages/Tasks';
-// import Orders from '@pages/Orders';
-// import Registry from '@pages/registry';
-// import Signin from '@pages/Signin';
+import Orders from '@/pages/Orders';
+// import Registry from '@/pages/registry';
+// import Signin from '@/pages/Signin';
 
 import Signin from '@/pages/Signin';
 import PrivateRoute from './PrivateRoute';
@@ -44,6 +44,7 @@ export function Router() {
             <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
             <Route path={ROUTES.tasks.to} element={<Tasks />} />
             <Route path={ROUTES.music.to} element={<Music />} />
+            <Route path={ROUTES.orders.to} element={<Orders />} />
           </Route>
           {/* <Route path={ROUTES.registry.root.to} element={<Registry />}>
               <Route path={ROUTES.registry.order.to} element={<Order />} />
