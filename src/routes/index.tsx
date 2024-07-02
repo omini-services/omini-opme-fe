@@ -20,7 +20,6 @@ import Music from '@/pages/Music';
 import Tasks from '@/pages/Tasks';
 import Orders from '@/pages/Orders';
 // import Registry from '@/pages/registry';
-// import Signin from '@/pages/Signin';
 
 import Signin from '@/pages/Signin';
 import PrivateRoute from './PrivateRoute';
