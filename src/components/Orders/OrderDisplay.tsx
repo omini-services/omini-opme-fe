@@ -29,7 +29,6 @@ const TAB_INFORMATION = 'information';
 const TAB_ITEMS = 'items';
 
 export function OrderDisplay({ order }: OrderDisplayProps) {
-  console.log(order);
   return (
     <div className="flex flex-col h-full">
       <Tabs defaultValue={TAB_INFORMATION} className="flex flex-col h-full">
