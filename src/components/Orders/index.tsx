@@ -28,6 +28,8 @@ interface IOrders {
 export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
   const [mail] = useOrders();
 
+  console.log('orders => ', orders);
+
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup

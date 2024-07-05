@@ -7,5 +7,5 @@ export const auth0Config = {
 };
 
 export const API_CONFIG = {
-  endpoint: 'https://appsvc-omni-opme-eastus.azurewebsites.net/api',
+  endpoint: 'https://appsvc-omni-opme-eastus.azurewebsites.net/api/v1',
 };
