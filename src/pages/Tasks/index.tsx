@@ -1,4 +1,4 @@
-import { columns } from '@/components/shadcn-tasks/columns';
+import { columns } from './columns';
 import { DataTable } from '@/components/shadcn-tasks/data-table';
 
 import { tasks } from './data/tasks';
