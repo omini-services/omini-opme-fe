@@ -1,12 +1,22 @@
 import { useAtom } from 'jotai';
-
 import { Orders } from '@/components/Orders';
-import { orders } from './mock';
-
+import Loading from '@/components/Signin/Loading';
 import { layoutState } from '@/atoms/pages/Orders/resizable';
+import { useQuotations } from '@/api/hooks';
 
 export default function OrdersPage() {
+  const { quotations, isLoading, error } = useQuotations();
   const [layout, setLayout] = useAtom(layoutState);
 
-  return <Orders orders={orders} layout={layout} setLayout={setLayout} />;
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  return (
+    <Orders orders={quotations.data} layout={layout} setLayout={setLayout} />
+  );
 }
