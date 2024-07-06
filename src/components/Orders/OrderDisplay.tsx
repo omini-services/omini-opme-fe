@@ -145,13 +145,19 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
           )}
         </TabsContent>
         <TabsContent value={TAB_ITEMS} className="m-0">
-          {order ? (
-            <DataTable data={order?.items} columns={columns} filter={Filter} />
-          ) : (
-            <div className="p-8 text-center text-muted-foreground">
-              {ORDER} nao selecionado.
-            </div>
-          )}
+          <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
+            {order ? (
+              <DataTable
+                data={order?.items}
+                columns={columns}
+                filter={Filter}
+              />
+            ) : (
+              <div className="p-8 text-center text-muted-foreground">
+                {ORDER} nao selecionado.
+              </div>
+            )}
+          </div>
         </TabsContent>
       </Tabs>
     </div>
