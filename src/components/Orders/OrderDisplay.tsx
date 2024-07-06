@@ -20,6 +20,9 @@ import {
 } from '../shadcn/new-york/tabs';
 import { ORDER } from '@/constants';
 import { OrderForm } from './Form';
+import { DataTable } from '../Table/data-table';
+import { Filter } from './TableFilter';
+import { columns } from './columns';
 
 interface OrderDisplayProps {
   order: IOrder | null;
@@ -29,7 +32,6 @@ const TAB_INFORMATION = 'information';
 const TAB_ITEMS = 'items';
 
 export function OrderDisplay({ order }: OrderDisplayProps) {
-  console.log(order);
   return (
     <div className="flex flex-col h-full">
       <Tabs defaultValue={TAB_INFORMATION} className="flex flex-col h-full">
@@ -104,9 +106,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
 
               <Separator />
 
-              {/* TODO: add form here */}
               <OrderForm />
-              {/* <ToastDemo /> */}
 
               <Separator />
 
@@ -145,8 +145,13 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
           )}
         </TabsContent>
         <TabsContent value={TAB_ITEMS} className="m-0">
-          {/* TODO: items list here */}
-          test
+          {order ? (
+            <DataTable data={order?.items} columns={columns} filter={Filter} />
+          ) : (
+            <div className="p-8 text-center text-muted-foreground">
+              {ORDER} nao selecionado.
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>

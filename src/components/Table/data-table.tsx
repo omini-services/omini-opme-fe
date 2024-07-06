@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Table as ITable,
   ColumnDef,
   ColumnFiltersState,
   SortingState,
@@ -29,11 +30,13 @@ import { DataTableToolbar } from './data-table-toolbar';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  filter: React.ComponentType<{ table: ITable<TData> }>;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filter,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -67,7 +70,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar table={table} filter={filter} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

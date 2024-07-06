@@ -5,8 +5,8 @@ import { Checkbox } from '@/components/shadcn/new-york/checkbox';
 
 import { labels, priorities, statuses } from '@/pages/Tasks/data/data';
 import { Task } from '@/pages/Tasks/data/schema';
-import { DataTableColumnHeader } from './data-table-column-header';
-import { DataTableRowActions } from './data-table-row-actions';
+import { DataTableColumnHeader } from '../../components/Table/data-table-column-header';
+import { DataTableRowActions } from '../../components/Table/data-table-row-actions';
 
 export const columns: ColumnDef<Task>[] = [
   {
