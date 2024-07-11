@@ -26,9 +26,7 @@ interface IOrders {
 }
 
 export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
-  const [mail] = useOrders();
-
-  console.log('orders => ', orders);
+  const { selectedOrderId } = useOrders();
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -76,7 +74,7 @@ export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={layout[1]}>
           <OrderDisplay
-            order={orders.find((item) => item.id === mail.selected) || null}
+            order={orders.find((item) => item.id === selectedOrderId) || null}
           />
         </ResizablePanel>
       </ResizablePanelGroup>

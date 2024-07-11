@@ -12,7 +12,7 @@ interface OrderListProps {
 }
 
 export function OrderList({ items }: OrderListProps) {
-  const [order, setOrder] = useOrders();
+  const { selectedOrderId, selectOrder } = useOrders();
 
   return (
     <ScrollArea className="h-screen">
@@ -22,14 +22,9 @@ export function OrderList({ items }: OrderListProps) {
             key={item.id}
             className={cn(
               'flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent',
-              order.selected === item.id && 'bg-muted'
+              selectedOrderId === item.id && 'bg-muted'
             )}
-            onClick={() =>
-              setOrder({
-                ...order,
-                selected: item.id,
-              })
-            }
+            onClick={() => selectOrder(item.id)}
           >
             <div className="flex w-full flex-col gap-1">
               <div className="flex items-center mb-3">
@@ -45,7 +40,7 @@ export function OrderList({ items }: OrderListProps) {
                 <div
                   className={cn(
                     'ml-auto text-xs',
-                    order.selected === item.id
+                    selectedOrderId === item.id
                       ? 'text-foreground'
                       : 'text-muted-foreground'
                   )}

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { getAllApiRequest } from '@/api/api';
 
 type ApiError = {
   message: string;
@@ -20,9 +19,14 @@ const items = Array.from({ length: 10 }, (_, index) => ({
   priority: 'high',
 }));
 
-export const useQuotations = () => {
+export const useFetch = (
+  apiFunction: Function,
+  model: string,
+  id?: any,
+  body?: any
+) => {
   const instance = useAuth0();
-  const [quotations, setQuotations] = useState<any>(null);
+  const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<ApiError | null>(null);
 
@@ -30,16 +34,13 @@ export const useQuotations = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const data = await getAllApiRequest({ instance, model: 'quotations' });
+        const data = await apiFunction({ instance, model, id, body });
 
-        // TODO: remove this hack
-        data.data = data.data.map((e) => ({ ...e, items }));
-
-        setQuotations(data);
+        setData(data);
         setError(null);
       } catch (error) {
         setError(error as ApiError);
-        setQuotations(null);
+        setData(null);
       } finally {
         setIsLoading(false);
       }
@@ -48,5 +49,5 @@ export const useQuotations = () => {
     fetchData();
   }, [instance]);
 
-  return { quotations, isLoading, error };
+  return { data, isLoading, error };
 };
