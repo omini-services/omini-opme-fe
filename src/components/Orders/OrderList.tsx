@@ -2,22 +2,19 @@ import { formatDistanceToNow } from 'date-fns';
 
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/shadcn/new-york/scroll-area';
-import { IOrder } from '@/types/Order';
-import { useOrders } from '@/atoms/pages/Orders/use-orders';
+import { IOrderList } from '@/types/Order';
 import { HOSPITAL, INSURANCE, ITEM, PATIENT, PHYSICIAN } from '@/constants';
 import CurrencyFormatter from '@/components/CurrencyFormatter';
 
-interface OrderListProps {
-  items: IOrder[];
-}
-
-export function OrderList({ items }: OrderListProps) {
-  const { selectedOrderId, selectOrder } = useOrders();
-
+export function OrderList({
+  orders,
+  selectedOrderId,
+  selectOrder,
+}: IOrderList) {
   return (
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2 p-4 pt-0">
-        {items.map((item) => (
+        {orders.map((item) => (
           <button
             key={item.id}
             className={cn(

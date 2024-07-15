@@ -51,3 +51,9 @@ export interface IFormData {
   items: Array<IItem>;
   total: number;
 }
+
+export interface IOrderList {
+  orders: IOrder[];
+  selectedOrderId: IOrder['id'] | null;
+  selectOrder: Function;
+}

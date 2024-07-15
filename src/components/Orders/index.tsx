@@ -16,7 +16,7 @@ import { TooltipProvider } from '@/components/shadcn/new-york/tooltip';
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
 import { type IOrder } from '@/types/Order';
-import { useOrders } from '@/atoms/pages/Orders/use-orders';
+import { useOrders } from '@/atoms/pages/Orders/useOrders';
 import { ORDER } from '@/constants';
 
 interface IOrders {
@@ -26,7 +26,7 @@ interface IOrders {
 }
 
 export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
-  const { selectedOrderId } = useOrders();
+  const { selectedOrderId, selectOrder } = useOrders(orders);
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -64,10 +64,18 @@ export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
               </form>
             </div>
             <TabsContent value="open" className="m-0">
-              <OrderList items={orders} />
+              <OrderList
+                orders={orders}
+                selectedOrderId={selectedOrderId}
+                selectOrder={selectOrder}
+              />
             </TabsContent>
             <TabsContent value="all" className="m-0">
-              <OrderList items={orders.filter((item) => !item.read)} />
+              <OrderList
+                orders={orders.filter((item) => !item.read)}
+                selectedOrderId={selectedOrderId}
+                selectOrder={selectOrder}
+              />
             </TabsContent>
           </Tabs>
         </ResizablePanel>

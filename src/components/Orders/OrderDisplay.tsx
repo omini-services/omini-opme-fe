@@ -23,6 +23,10 @@ import { OrderForm } from './Form';
 import { DataTable } from '../Table/data-table';
 import { Filter } from './TableFilter';
 import { columns } from './columns';
+import { Suspense, useEffect, useMemo, useState } from 'react';
+import { getApiRequest } from '@/api/api';
+import { useAuth0 } from '@auth0/auth0-react';
+import Loading from '../Signin/Loading';
 
 interface OrderDisplayProps {
   order: IOrder | null;
@@ -32,6 +36,39 @@ const TAB_INFORMATION = 'information';
 const TAB_ITEMS = 'items';
 
 export function OrderDisplay({ order }: OrderDisplayProps) {
+  const instance = useAuth0();
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!order) return;
+
+    const fetch = async () => {
+      setLoading(true);
+      try {
+        const { data } = await getApiRequest({
+          instance,
+          url: `quotations/${order?.id}/items`,
+          method: 'POST',
+          body: {
+            quotationId: order?.id,
+            lineOrder: 0,
+            itemCode: `${order?.number}`,
+            unitPrice: 0,
+            quantity: 0,
+          },
+        });
+        setTableData(data?.items || []);
+      } catch (error) {
+        console.error('Failed to fetch order items', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetch();
+  }, [order]);
+
   return (
     <div className="flex flex-col h-full">
       <Tabs defaultValue={TAB_INFORMATION} className="flex flex-col h-full">
@@ -144,14 +181,19 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
             </div>
           )}
         </TabsContent>
+
+        {/* Items Tab */}
         <TabsContent value={TAB_ITEMS} className="m-0">
           <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
             {order ? (
-              <DataTable
-                data={order?.items}
-                columns={columns}
-                filter={Filter}
-              />
+              <Suspense fallback={<Loading />}>
+                <DataTable
+                  data={tableData}
+                  columns={columns}
+                  filter={Filter}
+                  loading={loading}
+                />
+              </Suspense>
             ) : (
               <div className="p-8 text-center text-muted-foreground">
                 {ORDER} nao selecionado.

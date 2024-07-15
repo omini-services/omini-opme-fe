@@ -31,12 +31,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filter: React.ComponentType<{ table: ITable<TData> }>;
+  loading: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filter,
+  loading,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -108,6 +110,8 @@ export function DataTable<TData, TValue>({
                   ))}
                 </TableRow>
               ))
+            ) : loading ? (
+              'Loading...'
             ) : (
               <TableRow>
                 <TableCell
