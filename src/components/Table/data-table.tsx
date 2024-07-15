@@ -110,8 +110,6 @@ export function DataTable<TData, TValue>({
                   ))}
                 </TableRow>
               ))
-            ) : loading ? (
-              'Loading...'
             ) : (
               <TableRow>
                 <TableCell

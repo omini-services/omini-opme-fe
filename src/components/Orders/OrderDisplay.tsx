@@ -23,10 +23,9 @@ import { OrderForm } from './Form';
 import { DataTable } from '../Table/data-table';
 import { Filter } from './TableFilter';
 import { columns } from './columns';
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getApiRequest } from '@/api/api';
 import { useAuth0 } from '@auth0/auth0-react';
-import Loading from '../Signin/Loading';
 
 interface OrderDisplayProps {
   order: IOrder | null;
@@ -186,14 +185,12 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
         <TabsContent value={TAB_ITEMS} className="m-0">
           <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
             {order ? (
-              <Suspense fallback={<Loading />}>
-                <DataTable
-                  data={tableData}
-                  columns={columns}
-                  filter={Filter}
-                  loading={loading}
-                />
-              </Suspense>
+              <DataTable
+                data={tableData}
+                columns={columns}
+                filter={Filter}
+                loading={loading}
+              />
             ) : (
               <div className="p-8 text-center text-muted-foreground">
                 {ORDER} nao selecionado.
