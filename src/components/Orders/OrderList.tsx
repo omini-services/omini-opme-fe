@@ -2,34 +2,26 @@ import { formatDistanceToNow } from 'date-fns';
 
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/shadcn/new-york/scroll-area';
-import { IOrder } from '@/types/Order';
-import { useOrders } from '@/atoms/pages/Orders/use-orders';
+import { IOrderList } from '@/types/Order';
 import { HOSPITAL, INSURANCE, ITEM, PATIENT, PHYSICIAN } from '@/constants';
 import CurrencyFormatter from '@/components/CurrencyFormatter';
 
-interface OrderListProps {
-  items: IOrder[];
-}
-
-export function OrderList({ items }: OrderListProps) {
-  const [order, setOrder] = useOrders();
-
+export function OrderList({
+  orders,
+  selectedOrderId,
+  selectOrder,
+}: IOrderList) {
   return (
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2 p-4 pt-0">
-        {items.map((item) => (
+        {orders.map((item) => (
           <button
             key={item.id}
             className={cn(
               'flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent',
-              order.selected === item.id && 'bg-muted'
+              selectedOrderId === item.id && 'bg-muted'
             )}
-            onClick={() =>
-              setOrder({
-                ...order,
-                selected: item.id,
-              })
-            }
+            onClick={() => selectOrder(item.id)}
           >
             <div className="flex w-full flex-col gap-1">
               <div className="flex items-center mb-3">
@@ -45,7 +37,7 @@ export function OrderList({ items }: OrderListProps) {
                 <div
                   className={cn(
                     'ml-auto text-xs',
-                    order.selected === item.id
+                    selectedOrderId === item.id
                       ? 'text-foreground'
                       : 'text-muted-foreground'
                   )}

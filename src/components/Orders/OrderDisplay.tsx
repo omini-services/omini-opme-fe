@@ -23,6 +23,9 @@ import { OrderForm } from './Form';
 import { DataTable } from '../Table/data-table';
 import { Filter } from './TableFilter';
 import { columns } from './columns';
+import { useEffect, useState } from 'react';
+import { deleteApiRequest, getApiRequest } from '@/api/api';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface OrderDisplayProps {
   order: IOrder | null;
@@ -32,6 +35,56 @@ const TAB_INFORMATION = 'information';
 const TAB_ITEMS = 'items';
 
 export function OrderDisplay({ order }: OrderDisplayProps) {
+  const instance = useAuth0();
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!order) return;
+
+    const fetch = async () => {
+      setLoading(true);
+      try {
+        const { data } = await getApiRequest({
+          instance,
+          url: `quotations/${order?.id}`,
+          method: 'GET',
+        });
+
+        setTableData(data?.items || []);
+      } catch (error) {
+        console.error('Failed to fetch order items', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetch();
+  }, [order]);
+
+  const handleDelete = () => {
+    (async () => {
+      setLoading(true);
+      try {
+        const result = await deleteApiRequest({
+          instance,
+          id: order?.id,
+          model: 'quotations',
+        });
+
+        console.log('result => ', result);
+
+        // TODO: add reload list after deleting and updating
+
+        // setTableData(data?.items || []);
+      } catch (error) {
+        console.error('Failed to fetch order items', error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  };
+
   return (
     <div className="flex flex-col h-full">
       <Tabs defaultValue={TAB_INFORMATION} className="flex flex-col h-full">
@@ -39,26 +92,12 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
           <div className="flex items-center gap-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" disabled={!order}>
-                  <Archive className="h-4 w-4" />
-                  <span className="sr-only">Arquivar</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Arquivar</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" disabled={!order}>
-                  <Trash2 className="h-4 w-4" />
-                  <span className="sr-only">Excluir</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Excluir</TooltipContent>
-            </Tooltip>
-            <Separator orientation="vertical" className="mx-1 h-6" />
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" disabled={!order}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={!order}
+                  onClick={handleDelete}
+                >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">Excluir</span>
                 </Button>
@@ -144,13 +183,16 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
             </div>
           )}
         </TabsContent>
+
+        {/* Items Tab */}
         <TabsContent value={TAB_ITEMS} className="m-0">
           <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
             {order ? (
               <DataTable
-                data={order?.items}
+                data={tableData}
                 columns={columns}
                 filter={Filter}
+                loading={loading}
               />
             ) : (
               <div className="p-8 text-center text-muted-foreground">

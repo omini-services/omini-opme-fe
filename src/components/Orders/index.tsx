@@ -12,12 +12,12 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/shadcn/new-york/tabs';
-import { TooltipProvider } from '@/components/shadcn/new-york/tooltip';
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
 import { type IOrder } from '@/types/Order';
-import { useOrders } from '@/atoms/pages/Orders/use-orders';
+import { useSelectOrders } from '@/atoms/pages/Orders/hooks';
 import { ORDER } from '@/constants';
+import { useEffect } from 'react';
 
 interface IOrders {
   orders: IOrder[];
@@ -26,60 +26,70 @@ interface IOrders {
 }
 
 export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
-  const [mail] = useOrders();
+  const { selectedOrderId, selectOrder } = useSelectOrders();
 
-  console.log('orders => ', orders);
+  useEffect(() => {
+    if (orders && orders.length > 0 && selectedOrderId === null) {
+      selectOrder(orders[0].id);
+    }
+  }, [orders]);
 
   return (
-    <TooltipProvider delayDuration={0}>
-      <ResizablePanelGroup
-        direction="horizontal"
-        onLayout={(sizes: number[]) => setLayout(sizes)}
-        className="h-full items-stretch"
-      >
-        <ResizablePanel defaultSize={layout[0]} minSize={30} maxSize={50}>
-          <Tabs defaultValue="open">
-            <div className="flex items-center px-4 py-2">
-              <h1 className="text-xl font-bold">{ORDER}s</h1>
-              <TabsList className="ml-auto">
-                <TabsTrigger
-                  value="open"
-                  className="text-zinc-600 dark:text-zinc-200"
-                >
-                  Abertos
-                </TabsTrigger>
-                <TabsTrigger
-                  value="all"
-                  className="text-zinc-600 dark:text-zinc-200"
-                >
-                  Todos
-                </TabsTrigger>
-              </TabsList>
-            </div>
-            <Separator />
-            <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-              <form>
-                <div className="relative">
-                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search" className="pl-8" />
-                </div>
-              </form>
-            </div>
-            <TabsContent value="open" className="m-0">
-              <OrderList items={orders} />
-            </TabsContent>
-            <TabsContent value="all" className="m-0">
-              <OrderList items={orders.filter((item) => !item.read)} />
-            </TabsContent>
-          </Tabs>
-        </ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={layout[1]}>
-          <OrderDisplay
-            order={orders.find((item) => item.id === mail.selected) || null}
-          />
-        </ResizablePanel>
-      </ResizablePanelGroup>
-    </TooltipProvider>
+    <ResizablePanelGroup
+      direction="horizontal"
+      onLayout={(sizes: number[]) => setLayout(sizes)}
+      className="h-full items-stretch"
+    >
+      <ResizablePanel defaultSize={layout[0]} minSize={30} maxSize={50}>
+        <Tabs defaultValue="open">
+          <div className="flex items-center px-4 py-2">
+            <h1 className="text-xl font-bold">{ORDER}s</h1>
+            <TabsList className="ml-auto">
+              <TabsTrigger
+                value="open"
+                className="text-zinc-600 dark:text-zinc-200"
+              >
+                Abertos
+              </TabsTrigger>
+              <TabsTrigger
+                value="all"
+                className="text-zinc-600 dark:text-zinc-200"
+              >
+                Todos
+              </TabsTrigger>
+            </TabsList>
+          </div>
+          <Separator />
+          <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <form>
+              <div className="relative">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input placeholder="Search" className="pl-8" />
+              </div>
+            </form>
+          </div>
+          <TabsContent value="open" className="m-0">
+            <OrderList
+              orders={orders}
+              selectedOrderId={selectedOrderId}
+              selectOrder={selectOrder}
+            />
+          </TabsContent>
+          <TabsContent value="all" className="m-0">
+            <OrderList
+              orders={orders.filter((item) => !item.read)}
+              selectedOrderId={selectedOrderId}
+              selectOrder={selectOrder}
+            />
+          </TabsContent>
+        </Tabs>
+      </ResizablePanel>
+      <ResizableHandle withHandle />
+      <ResizablePanel defaultSize={layout[1]}>
+        <OrderDisplay
+          order={orders.find((item) => item.id === selectedOrderId) || null}
+        />
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 }

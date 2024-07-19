@@ -2,8 +2,9 @@ import { Auth0ContextInterface } from '@auth0/auth0-react';
 
 export type IGET = {
   instance: Auth0ContextInterface;
-  model: string;
-  id: string;
+  url: string;
+  method: string;
+  body?: object | undefined;
 };
 
 export type IGETA = {
@@ -14,7 +15,7 @@ export type IGETA = {
 export type IDELETE = {
   instance: Auth0ContextInterface;
   model: string;
-  id: string;
+  id: string | undefined;
 };
 
 export type ICREATE = {

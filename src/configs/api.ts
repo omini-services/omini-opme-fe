@@ -29,7 +29,6 @@ interface ICallApi {
   customHeaders?: object | undefined;
 }
 
-// eslint-disable-next-line consistent-return
 export const callApi = async ({
   url,
   accessToken,
@@ -38,26 +37,23 @@ export const callApi = async ({
   customHeaders = {},
 }: ICallApi) => {
   const headers = {
-    'Content-Type': 'application/json', // Garanta que este cabeçalho esteja definido se for utilizar JSON
+    'Content-Type': 'application/json',
     Authorization: `Bearer ${accessToken}`,
     ...customHeaders,
   };
 
-  // Configuração para axios, incluindo o corpo da requisição se necessário
   const config = {
     method,
     headers,
-    ...(Object.keys(body).length > 0 && { data: body }), // Inclui o corpo se não estiver vazio
+    ...(Object.keys(body).length > 0 && { data: body }),
     url,
   };
 
   try {
-    // Realiza a chamada de API utilizando axios diretamente com a configuração
     const response = await axios(config);
     return response.data;
   } catch (error) {
     console.error(error);
-    // Dependendo da necessidade, você pode querer tratar o erro de maneiras específicas aqui
     throw error;
   }
 };

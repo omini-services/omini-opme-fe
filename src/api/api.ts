@@ -31,17 +31,23 @@ export const getAllApiRequest = async ({ instance, model }: IGETA) => {
  * GET API
  */
 
-export const getApiRequest = async ({ instance, model, id }: IGET) => {
+export const getApiRequest = async ({
+  instance,
+  url,
+  method,
+  body = {},
+}: IGET) => {
   const accessToken = await acquireToken(instance);
 
   return callApi({
-    url: `${API_CONFIG.endpoint}/${model}/${id}`,
+    url: `${API_CONFIG.endpoint}/${url}`,
     accessToken,
-    method: 'GET',
+    method: method || 'GET',
     customHeaders: {
       'Access-Control-Allow-Origin': '*',
     },
-  }).then((result) => ({ ...result, id }));
+    body,
+  }).then((result) => ({ ...result }));
 };
 
 /**
