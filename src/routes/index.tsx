@@ -17,10 +17,11 @@ import Dashboard from '@/pages/Dashboard';
 import Layout from '@/pages/Layout';
 import MailPage from '@/pages/Mail';
 import Music from '@/pages/Music';
-import Tasks from '@/pages/Tasks';
 import Orders from '@/pages/Orders';
+import Tasks from '@/pages/Tasks';
 // import Registry from '@/pages/registry';
 
+import Items from '@/pages/Items';
 import Signin from '@/pages/Signin';
 import PrivateRoute from './PrivateRoute';
 
@@ -45,20 +46,20 @@ export function Router() {
             <Route path={ROUTES.music.to} element={<Music />} />
             <Route path={ROUTES.orders.to} element={<Orders />} />
           </Route>
-          {/* <Route path={ROUTES.registry.root.to} element={<Registry />}>
-              <Route path={ROUTES.registry.order.to} element={<Order />} />
+          <Route path={ROUTES.registry.root.to}>
+              {/* <Route path={ROUTES.registry.order.to} element={<Order />} />
               <Route
                 path={ROUTES.registry.hospital.to}
                 element={<Hospital />}
-              />
-              <Route path={ROUTES.registry.item.to} element={<Item />} />
-              <Route path={ROUTES.registry.patient.to} element={<Patient />} />
+              /> */}
+              <Route path={ROUTES.registry.item.to} element={<Items />} />
+              {/* <Route path={ROUTES.registry.patient.to} element={<Patient />} />
               <Route
                 path={ROUTES.registry.physician.to}
                 element={<Physician />}
               />
-              <Route path={ROUTES.registry.company.to} element={<Company />} />
-            </Route> */}
+              <Route path={ROUTES.registry.company.to} element={<Company />} /> */}
+            </Route>
         </Routes>
       </Auth0Provider>
     </BrowserRouter>

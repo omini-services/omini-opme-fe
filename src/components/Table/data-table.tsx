@@ -1,8 +1,7 @@
-import * as React from 'react';
 import {
-  Table as ITable,
   ColumnDef,
   ColumnFiltersState,
+  Table as ITable,
   SortingState,
   VisibilityState,
   flexRender,
@@ -14,6 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import * as React from 'react';
 
 import {
   Table,
@@ -72,19 +72,20 @@ export function DataTable<TData, TValue>({
     <div className="space-y-4">
       <DataTableToolbar table={table} filter={filter} />
       <div className="rounded-md border">
-        <Table>
+        <Table style={{ width: table.getCenterTotalSize() }}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
+                    //className={`${header.column.columnDef?.meta?.className}
+                    <TableHead key={header.id} colSpan={header.colSpan} style={{ width: header.getSize() }}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -99,7 +100,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} style={{ width: cell.column.getSize() }}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
