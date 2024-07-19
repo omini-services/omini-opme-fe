@@ -74,6 +74,8 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
 
         console.log('result => ', result);
 
+        // TODO: add reload list after deleting and updating
+
         // setTableData(data?.items || []);
       } catch (error) {
         console.error('Failed to fetch order items', error);

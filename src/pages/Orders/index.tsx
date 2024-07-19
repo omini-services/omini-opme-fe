@@ -11,7 +11,12 @@ export default function OrdersPage() {
   const [layout, setLayout] = useAtom(layoutState);
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return (
+      <div style={{ textAlign: 'center', padding: '20px' }}>
+        <p style={{ color: 'red', fontWeight: 'bold' }}>ERRO de rede</p>
+        <img src="https://via.placeholder.com/150" alt="Erro de rede" />
+      </div>
+    );
   }
 
   return (

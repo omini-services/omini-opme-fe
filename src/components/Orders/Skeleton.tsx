@@ -121,17 +121,73 @@ export const OrderDisplaySkeleton = () => {
         </TabsContent>
 
         <TabsContent value={TAB_ITEMS} className="m-0">
-          <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
-            <div className="space-y-4">
-              {Array(5)
-                .fill()
-                .map((_, index) => (
-                  <div key={index} className="h-10 bg-gray-300 rounded"></div>
-                ))}
-            </div>
-          </div>
+          <OrderTableItemsSkeleton />
         </TabsContent>
       </Tabs>
+    </div>
+  );
+};
+
+export const OrderTableItemsSkeleton = () => {
+  return (
+    <div className="hidden h-full flex-1 flex-col md:flex">
+      <div className="space-y-2">
+        {/* Filtro e Botões */}
+        <div className="flex items-center space-x-2 mb-4">
+          <div className="w-1/3 h-7 bg-gray-300"></div>
+          <div className="w-16 h-7 bg-gray-300"></div>
+          <div className="w-16 h-7 bg-gray-300"></div>
+          <div className="ml-auto w-10 h-7 bg-gray-300"></div>
+        </div>
+
+        {/* Cabeçalhos da Tabela */}
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                {Array(6)
+                  .fill()
+                  .map((_, index) => (
+                    <th key={index} className="px-4 py-3 bg-gray-100">
+                      <div className="h-4 bg-gray-300 rounded"></div>
+                    </th>
+                  ))}
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {Array(10)
+                .fill()
+                .map((_, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {Array(6)
+                      .fill()
+                      .map((_, colIndex) => (
+                        <td
+                          key={colIndex}
+                          className="px-4 py-3 whitespace-nowrap"
+                        >
+                          <div className="h-4 bg-gray-300 rounded"></div>
+                        </td>
+                      ))}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Paginação */}
+        <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center space-x-2">
+            <div className="w-20 h-7 bg-gray-300 rounded"></div>
+            <div className="h-7 w-10 bg-gray-300 rounded"></div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="h-7 w-10 bg-gray-300 rounded"></div>
+            <div className="h-7 w-10 bg-gray-300 rounded"></div>
+            <div className="h-7 w-10 bg-gray-300 rounded"></div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
