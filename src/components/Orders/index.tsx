@@ -15,8 +15,9 @@ import {
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
 import { type IOrder } from '@/types/Order';
-import { useOrders } from '@/atoms/pages/Orders/useOrders';
+import { useSelectOrders } from '@/atoms/pages/Orders/hooks';
 import { ORDER } from '@/constants';
+import { useEffect } from 'react';
 
 interface IOrders {
   orders: IOrder[];
@@ -25,7 +26,13 @@ interface IOrders {
 }
 
 export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
-  const { selectedOrderId, selectOrder } = useOrders(orders);
+  const { selectedOrderId, selectOrder } = useSelectOrders();
+
+  useEffect(() => {
+    if (orders && orders.length > 0 && selectedOrderId === null) {
+      selectOrder(orders[0].id);
+    }
+  }, [orders]);
 
   return (
     <ResizablePanelGroup

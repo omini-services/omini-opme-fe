@@ -24,7 +24,7 @@ import { DataTable } from '../Table/data-table';
 import { Filter } from './TableFilter';
 import { columns } from './columns';
 import { useEffect, useState } from 'react';
-import { getApiRequest } from '@/api/api';
+import { deleteApiRequest, getApiRequest } from '@/api/api';
 import { useAuth0 } from '@auth0/auth0-react';
 
 interface OrderDisplayProps {
@@ -47,16 +47,10 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
       try {
         const { data } = await getApiRequest({
           instance,
-          url: `quotations/${order?.id}/items`,
-          method: 'POST',
-          body: {
-            quotationId: order?.id,
-            lineOrder: 0,
-            itemCode: `${order?.number}`,
-            unitPrice: 0,
-            quantity: 0,
-          },
+          url: `quotations/${order?.id}`,
+          method: 'GET',
         });
+
         setTableData(data?.items || []);
       } catch (error) {
         console.error('Failed to fetch order items', error);
@@ -68,6 +62,27 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
     fetch();
   }, [order]);
 
+  const handleDelete = () => {
+    (async () => {
+      setLoading(true);
+      try {
+        const result = await deleteApiRequest({
+          instance,
+          id: order?.id,
+          model: 'quotations',
+        });
+
+        console.log('result => ', result);
+
+        // setTableData(data?.items || []);
+      } catch (error) {
+        console.error('Failed to fetch order items', error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  };
+
   return (
     <div className="flex flex-col h-full">
       <Tabs defaultValue={TAB_INFORMATION} className="flex flex-col h-full">
@@ -75,26 +90,12 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
           <div className="flex items-center gap-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" disabled={!order}>
-                  <Archive className="h-4 w-4" />
-                  <span className="sr-only">Arquivar</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Arquivar</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" disabled={!order}>
-                  <Trash2 className="h-4 w-4" />
-                  <span className="sr-only">Excluir</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Excluir</TooltipContent>
-            </Tooltip>
-            <Separator orientation="vertical" className="mx-1 h-6" />
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" disabled={!order}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={!order}
+                  onClick={handleDelete}
+                >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">Excluir</span>
                 </Button>

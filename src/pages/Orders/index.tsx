@@ -1,6 +1,5 @@
 import { useAtom } from 'jotai';
 import { Orders } from '@/components/Orders';
-import Loading from '@/components/Signin/Loading';
 import { layoutState } from '@/atoms/pages/Orders/resizable';
 import { useFetch } from '@/api/hooks';
 import { getAllApiRequest } from '@/api/api';
@@ -15,7 +14,6 @@ export default function OrdersPage() {
     return <div>Error: {error.message}</div>;
   }
 
-  // return <Orders orders={data.data} layout={layout} setLayout={setLayout} />;
   return (
     <TooltipProvider delayDuration={0}>
       {isLoading ? (

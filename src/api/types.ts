@@ -15,7 +15,7 @@ export type IGETA = {
 export type IDELETE = {
   instance: Auth0ContextInterface;
   model: string;
-  id: string;
+  id: string | undefined;
 };
 
 export type ICREATE = {
