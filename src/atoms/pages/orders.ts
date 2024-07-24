@@ -24,6 +24,9 @@ export function useSelectOrders() {
   };
 }
 
+export const layoutState = atom([50, 150]);
+export const collapsedState = atom(undefined);
+
 // export const useOrders = () => {
 //   const [orders, setOrders] = useAtom(ordersAtom);
 //   const [currentPage, setCurrentPage] = useState(1);

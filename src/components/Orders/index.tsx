@@ -15,7 +15,7 @@ import {
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
 import { type IOrder } from '@/types/Order';
-import { useSelectOrders } from '@/atoms/pages/Orders/hooks';
+import { useSelectOrders } from '@/atoms/pages/orders';
 import { ORDER } from '@/constants';
 import { useEffect } from 'react';
 
