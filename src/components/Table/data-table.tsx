@@ -94,25 +94,14 @@ export function DataTable<TData, TValue>({
   };
 
   const renderTableBody = () => {
-    // TODO: centralizar loading
-    if (loading)
-      return (
-        <div className="w-full text-center">
-          <ProgressBar />
-        </div>
-      );
-
     if (!table.getRowModel().rows?.length) return renderNoResults();
 
     return renderTable();
   };
 
-  // if (loading) return <OrderTableItemsSkeleton />;
-
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 h-full">
       <DataTableToolbar table={table} filter={filter} />
-      {/* <div className="rounded-md border"> */}
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -132,9 +121,22 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>{renderTableBody()}</TableBody>
+        <TableBody>
+          {loading ? (
+            <TableRow key="loading">
+              <TableCell colSpan={columns.length}>
+                <div className="flex items-center justify-center min-h-96">
+                  <div className="text-center">
+                    <ProgressBar />
+                  </div>
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : (
+            renderTableBody()
+          )}
+        </TableBody>
       </Table>
-      {/* </div> */}
       <DataTablePagination table={table} />
     </div>
   );

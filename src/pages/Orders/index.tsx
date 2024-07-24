@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { Orders } from '@/components/Orders';
-import { layoutState } from '@/atoms/pages/Orders/resizable';
+import { layoutState } from '@/atoms/pages/orders';
 import { useFetch } from '@/api/hooks';
 import { getAllApiRequest } from '@/api/api';
 import { OrdersPageSkeleton } from '@/components/Orders/Skeleton';

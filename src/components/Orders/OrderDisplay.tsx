@@ -185,7 +185,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
         </TabsContent>
 
         {/* Items Tab */}
-        <TabsContent value={TAB_ITEMS} className="m-0">
+        <TabsContent value={TAB_ITEMS} className="m-0 h-full">
           <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
             {order ? (
               <DataTable
