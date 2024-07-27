@@ -14,13 +14,13 @@ import {
 } from '@/components/shadcn/new-york/tabs';
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
-import { type IOrder } from '@/types/Order';
+import { IOrderItem } from '@/types/api';
 import { useSelectOrders } from '@/atoms/pages/orders';
 import { ORDER } from '@/constants';
 import { useEffect } from 'react';
 
 interface IOrders {
-  orders: IOrder[];
+  orders: IOrderItem[];
   layout: number[] | undefined;
   setLayout: Function;
 }

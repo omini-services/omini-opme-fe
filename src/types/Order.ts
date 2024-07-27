@@ -1,3 +1,5 @@
+import { IOrderItem } from './api';
+
 interface IItem {
   lineId: number;
   lineOrder: number;
@@ -53,7 +55,7 @@ export interface IFormData {
 }
 
 export interface IOrderList {
-  orders: IOrder[];
+  orders: IOrderItem[];
   selectedOrderId: IOrder['id'] | null;
   selectOrder: Function;
 }

@@ -1,6 +1,7 @@
 import { atom, useAtom } from 'jotai';
+import { NetworkResponse } from '@/types/api';
+import { useCallback } from 'react';
 import { IOrder } from '@/types/Order';
-import { useCallback, useEffect } from 'react';
 
 type TselectedOrder = IOrder['id'] | null;
 
@@ -26,6 +27,19 @@ export function useSelectOrders() {
 
 export const layoutState = atom([50, 150]);
 export const collapsedState = atom(undefined);
+
+export const fetchAtom = atom({
+  loading: false,
+  error: null,
+});
+
+export const ordersAtom = atom<NetworkResponse>({
+  data: [],
+  currentPage: 1,
+  pageCount: 1,
+  pageSize: 100,
+  rowCount: 11,
+});
 
 // export const useOrders = () => {
 //   const [orders, setOrders] = useAtom(ordersAtom);
