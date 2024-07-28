@@ -11,7 +11,6 @@ import {
   TooltipTrigger,
 } from '@/components/shadcn/new-york/tooltip';
 
-import { IOrder } from '@/types/Order';
 import {
   Tabs,
   TabsList,
@@ -26,28 +25,34 @@ import { columns } from './columns';
 import { useEffect, useState } from 'react';
 import { deleteApiRequest, getApiRequest } from '@/api/api';
 import { useAuth0 } from '@auth0/auth0-react';
+import { IOrderItem } from '@/types/Order';
+import { ordersAtom, useSelectOrders } from '@/atoms/pages/orders';
+import { useAtomValue } from 'jotai';
 
 interface OrderDisplayProps {
-  order: IOrder | null;
+  order: IOrderItem | null;
 }
 
 const TAB_INFORMATION = 'information';
 const TAB_ITEMS = 'items';
 
 export function OrderDisplay({ order }: OrderDisplayProps) {
+  const { selectedOrderId } = useSelectOrders();
+  // const ordersData = useAtomValue(ordersAtom);
+
   const instance = useAuth0();
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!order) return;
+    if (!selectedOrderId) return;
 
     const fetch = async () => {
       setLoading(true);
       try {
         const { data } = await getApiRequest({
           instance,
-          url: `quotations/${order?.id}`,
+          url: `quotations/${selectedOrderId}`,
           method: 'GET',
         });
 
@@ -60,7 +65,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
     };
 
     fetch();
-  }, [order]);
+  }, [selectedOrderId]);
 
   const handleDelete = () => {
     (async () => {

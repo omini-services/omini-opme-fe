@@ -14,7 +14,7 @@ import {
 } from '@/components/shadcn/new-york/tabs';
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
-import { IOrderItem } from '@/types/api';
+import { IOrderItem } from '@/types/Order';
 import { useSelectOrders } from '@/atoms/pages/orders';
 import { ORDER } from '@/constants';
 import { useEffect } from 'react';
@@ -77,7 +77,8 @@ export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
           </TabsContent>
           <TabsContent value="all" className="m-0">
             <OrderList
-              orders={orders.filter((item) => !item.read)}
+              // orders={orders.filter((item) => !item.read)}
+              orders={orders}
               selectedOrderId={selectedOrderId}
               selectOrder={selectOrder}
             />

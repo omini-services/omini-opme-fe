@@ -1,5 +1,3 @@
-import { IOrderItem } from './api';
-
 interface IItem {
   lineId: number;
   lineOrder: number;
@@ -10,28 +8,6 @@ interface IItem {
   unitPrice: number;
   lineTotal: number;
   quantity: number;
-}
-
-export interface IOrder {
-  id: string;
-  number: number;
-  read: boolean;
-  patientId: string;
-  patientName: string;
-  physicianId: string;
-  physicianName: string;
-  payingSourceType: string;
-  payingSourceId: string;
-  payingSourceName: string;
-  hospitalId: string;
-  hospitalName: string;
-  insuranceCompanyId: string;
-  insuranceCompanyName: string;
-  internalSpecialistId: string;
-  internalSpecialistName: string;
-  dueDate: string;
-  items: Array<IItem>;
-  total: number;
 }
 
 export interface IFormData {
@@ -56,6 +32,45 @@ export interface IFormData {
 
 export interface IOrderList {
   orders: IOrderItem[];
-  selectedOrderId: IOrder['id'] | null;
+  selectedOrderId: IOrderItem['id'] | null;
   selectOrder: Function;
+}
+
+export type TFetchError = {
+  message: string;
+} | null;
+
+export type TFetchResult = {
+  loading: boolean;
+  error: TFetchError;
+};
+
+export interface IOrderItem {
+  id: string;
+  number: number;
+  patientCode: string;
+  patientFirstName: string;
+  patientLastName: string;
+  physicianCode: string;
+  physicianFirstName: string;
+  physicianLastName: string;
+  payingSourceType: string;
+  payingSourceCode: string;
+  payingSourceName: string;
+  hospitalCode: string;
+  hospitalName: string;
+  insuranceCompanyCode: string;
+  insuranceCompanyName: string;
+  internalSpecialistCode: string;
+  dueDate: string;
+  items: any[];
+  total: number;
+}
+
+export interface NetworkResponse {
+  currentPage: number;
+  pageSize: number;
+  rowCount: number;
+  pageCount: number;
+  data: IOrderItem[];
 }

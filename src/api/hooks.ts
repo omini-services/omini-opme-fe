@@ -1,7 +1,6 @@
 import { useAtom, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { IOrder } from '@/types/Order';
 
 interface IUseFetchProps {
   apiFunction: Function;
