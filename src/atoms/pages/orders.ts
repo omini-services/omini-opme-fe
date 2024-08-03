@@ -1,22 +1,26 @@
 import { atom, useAtom } from 'jotai';
-import { NetworkResponse } from '@/types/api';
 import { useCallback } from 'react';
-import { IOrder } from '@/types/Order';
+import { OrdersNetworkResponse, IOrderItem } from '@/types/Order';
 
-type TselectedOrder = IOrder['id'] | null;
+type TSelectedOrder = IOrderItem['id'] | null;
 
-const selectedOrder = atom<TselectedOrder>(null);
+// Atom to manage the selected order
+const selectedOrder = atom<TSelectedOrder>(null);
 
+// Hook to use selected orders state
 export function useSelectOrders() {
   const [order, setOrder] = useAtom(selectedOrder);
 
-  const selectOrder = useCallback((orderId: IOrder['id']) => {
-    setOrder(orderId);
-  }, []);
+  const selectOrder = useCallback(
+    (orderId: IOrderItem['id']) => {
+      setOrder(orderId);
+    },
+    [setOrder]
+  );
 
   const clearSelectedOrder = useCallback(() => {
     setOrder(null);
-  }, []);
+  }, [setOrder]);
 
   return {
     selectedOrderId: order,
@@ -25,15 +29,18 @@ export function useSelectOrders() {
   };
 }
 
-export const layoutState = atom([50, 150]);
-export const collapsedState = atom(undefined);
+// Atoms to manage layout and collapsed state
+export const layoutState = atom<[number, number]>([50, 150]);
+export const collapsedState = atom<boolean | undefined>(undefined);
 
-export const fetchAtom = atom({
+// Atom to manage fetch state
+export const fetchOrderAtom = atom({
   loading: false,
   error: null,
 });
 
-export const ordersAtom = atom<NetworkResponse>({
+// Atom to manage orders state
+export const ordersAtom = atom<OrdersNetworkResponse>({
   data: [],
   currentPage: 1,
   pageCount: 1,
@@ -41,59 +48,15 @@ export const ordersAtom = atom<NetworkResponse>({
   rowCount: 11,
 });
 
-// export const useOrders = () => {
-//   const [orders, setOrders] = useAtom(ordersAtom);
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [ordersPerPage] = useState(10); // Defina o número de orders por página
+export const orderItemsAtom = atom<OrdersNetworkResponse>({
+  data: [],
+  currentPage: 1,
+  pageCount: 1,
+  pageSize: 100,
+  rowCount: 11,
+});
 
-//   // Função para adicionar uma order
-//   const addOrder = useCallback(
-//     (newOrder) => {
-//       setOrders((prevOrders) => [...prevOrders, newOrder]);
-//     },
-//     [setOrders]
-//   );
-
-//   // Função para remover uma order
-//   const removeOrder = useCallback(
-//     (orderId) => {
-//       setOrders((prevOrders) =>
-//         prevOrders.filter((order) => order.id !== orderId)
-//       );
-//     },
-//     [setOrders]
-//   );
-
-//   // Função para atualizar uma order
-//   const updateOrder = useCallback(
-//     (updatedOrder) => {
-//       setOrders((prevOrders) =>
-//         prevOrders.map((order) =>
-//           order.id === updatedOrder.id ? updatedOrder : order
-//         )
-//       );
-//     },
-//     [setOrders]
-//   );
-
-//   // Função para buscar orders de uma página específica
-//   const fetchOrders = useCallback(
-//     async (page) => {
-//       // Simulação de fetch, substitua com sua chamada de API
-//       const fetchedOrders = await fakeApiFetchOrders(page, ordersPerPage);
-//       setOrders(fetchedOrders);
-//       setCurrentPage(page);
-//     },
-//     [ordersPerPage, setOrders]
-//   );
-
-//   return {
-//     orders,
-//     addOrder,
-//     removeOrder,
-//     updateOrder,
-//     fetchOrders,
-//     currentPage,
-//     ordersPerPage,
-//   };
-// };
+export const fetchOrderItemAtom = atom({
+  loading: false,
+  error: null,
+});

@@ -5,12 +5,21 @@ import { ScrollArea } from '@/components/shadcn/new-york/scroll-area';
 import { IOrderList } from '@/types/Order';
 import { HOSPITAL, INSURANCE, ITEM, PATIENT, PHYSICIAN } from '@/constants';
 import CurrencyFormatter from '@/components/CurrencyFormatter';
+import { useEffect } from 'react';
+import { useAtomValue } from 'jotai';
+import { fetchOrderItemAtom } from '@/atoms/pages/orders';
 
 export function OrderList({
   orders,
   selectedOrderId,
   selectOrder,
 }: IOrderList) {
+  const { loading } = useAtomValue(fetchOrderItemAtom);
+
+  useEffect(() => {
+    console.log('OrderList => ', loading);
+  }, [loading]);
+
   return (
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2 p-4 pt-0">
@@ -29,9 +38,9 @@ export function OrderList({
                   <div className="flex items-center gap-2">
                     <div className="font-semibold">Codigo:</div>
                     <div className="line-clamp-2 text-xs">{item.number}</div>
-                    {!item.read && (
+                    {/* {!item.read && (
                       <span className="flex h-2 w-2 rounded-full bg-blue-600" />
-                    )}
+                    )} */}
                   </div>
                 </div>
                 <div
@@ -52,14 +61,13 @@ export function OrderList({
                   <div className="flex items-center gap-2">
                     <div className="font-semibold">{PATIENT}:</div>
                     <div className="line-clamp-2 text-xs">
-                      {' '}
-                      {item.patientName}
+                      {item.patientFirstName}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="font-semibold">{PHYSICIAN}:</div>
                     <div className="line-clamp-2 text-xs">
-                      {item.physicianName}
+                      {item.physicianFirstName}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">

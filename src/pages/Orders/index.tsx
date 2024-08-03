@@ -5,18 +5,20 @@ import { useFetch } from '@/api/hooks';
 import { getAllApiRequest } from '@/api/api';
 import { OrdersPageSkeleton } from '@/components/Orders/Skeleton';
 import { TooltipProvider } from '@/components/shadcn/new-york/tooltip';
-import { fetchAtom } from '@/atoms/pages/orders';
+import { fetchOrderAtom } from '@/atoms/pages/orders';
 import { useEffect } from 'react';
 
 export default function OrdersPage() {
   useFetch({
     apiFunction: getAllApiRequest,
-    model: 'quotations',
-    fetchAtom: fetchAtom,
+    apiFunctionProps: {
+      model: 'quotations',
+    },
+    fetchAtom: fetchOrderAtom,
     dataAtom: ordersAtom,
   });
   const [layout, setLayout] = useAtom(layoutState);
-  const fetchOrdersStatus = useAtomValue(fetchAtom);
+  const fetchOrdersStatus = useAtomValue(fetchOrderAtom);
   const data = useAtomValue(ordersAtom);
 
   if (fetchOrdersStatus.error) {
@@ -27,14 +29,6 @@ export default function OrdersPage() {
       </div>
     );
   }
-
-  useEffect(() => {
-    console.log('pages/orders ==> ', {
-      fetchOrdersStatus,
-      data,
-      len: !data?.data.length,
-    });
-  }, [data]);
 
   return (
     <TooltipProvider delayDuration={0}>
