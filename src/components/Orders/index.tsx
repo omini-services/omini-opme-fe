@@ -15,9 +15,11 @@ import {
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
 import { IOrderItem } from '@/types/Order';
-import { useSelectOrders } from '@/atoms/pages/orders';
+import { fetchOrderItemAtom, useSelectOrders } from '@/atoms/pages/orders';
 import { ORDER } from '@/constants';
 import { useEffect } from 'react';
+import { useAtomValue } from 'jotai';
+import { OrderListSkeleton } from './Skeleton';
 
 interface IOrders {
   orders: IOrderItem[];
@@ -27,6 +29,7 @@ interface IOrders {
 
 export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
   const { selectedOrderId, selectOrder } = useSelectOrders();
+  const { loading } = useAtomValue(fetchOrderItemAtom);
 
   useEffect(() => {
     if (orders && orders.length > 0 && selectedOrderId === null) {
@@ -69,19 +72,28 @@ export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
             </form>
           </div>
           <TabsContent value="open" className="m-0">
-            <OrderList
-              orders={orders}
-              selectedOrderId={selectedOrderId}
-              selectOrder={selectOrder}
-            />
+            <OrderListSkeleton />
+            {/* {loading ? (
+              <OrderListSkeleton />
+            ) : (
+              <OrderList
+                orders={orders}
+                selectedOrderId={selectedOrderId}
+                selectOrder={selectOrder}
+              />
+            )}
           </TabsContent>
           <TabsContent value="all" className="m-0">
-            <OrderList
-              // orders={orders.filter((item) => !item.read)}
-              orders={orders}
-              selectedOrderId={selectedOrderId}
-              selectOrder={selectOrder}
-            />
+            {loading ? (
+              <OrderListSkeleton />
+            ) : (
+              <OrderList
+                // orders={orders.filter((item) => !item.read)}
+                orders={orders}
+                selectedOrderId={selectedOrderId}
+                selectOrder={selectOrder}
+              />
+            )} */}
           </TabsContent>
         </Tabs>
       </ResizablePanel>

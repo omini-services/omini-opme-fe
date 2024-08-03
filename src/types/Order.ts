@@ -26,7 +26,7 @@ export interface IFormData {
   internalSpecialistId: string;
   internalSpecialistName: string;
   dueDate: string;
-  items: Array<IItem>;
+  items: IItem[];
   total: number;
 }
 
@@ -63,14 +63,18 @@ export interface IOrderItem {
   insuranceCompanyName: string;
   internalSpecialistCode: string;
   dueDate: string;
-  items: any[];
+  items: IItem[];
   total: number;
 }
 
-export interface NetworkResponse {
+export interface OrdersNetworkResponse {
   currentPage: number;
   pageSize: number;
   rowCount: number;
   pageCount: number;
   data: IOrderItem[];
+}
+
+export interface ItemsNetworkResponse {
+  data: IOrderItem;
 }

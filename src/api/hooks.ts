@@ -4,18 +4,14 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 interface IUseFetchProps {
   apiFunction: Function;
-  model: string;
-  id?: any;
-  body?: any;
+  apiFunctionProps: object;
   fetchAtom: any;
   dataAtom: any;
 }
 
 export const useFetch = ({
   apiFunction,
-  model,
-  id,
-  body,
+  apiFunctionProps,
   fetchAtom,
   dataAtom,
 }: IUseFetchProps) => {
@@ -27,7 +23,7 @@ export const useFetch = ({
     const fetchData = async () => {
       setFetchResult({ ...fetchResult, loading: true });
       try {
-        const data = await apiFunction({ instance, model, id, body });
+        const data = await apiFunction({ instance, ...apiFunctionProps });
         setData(data);
         setFetchResult({ ...fetchResult, error: null });
       } catch (error: any) {

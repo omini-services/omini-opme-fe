@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import { Archive, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/shadcn/new-york/button';
 import { Separator } from '@/components/shadcn/new-york/separator';
@@ -26,8 +26,8 @@ import { useEffect, useState } from 'react';
 import { deleteApiRequest, getApiRequest } from '@/api/api';
 import { useAuth0 } from '@auth0/auth0-react';
 import { IOrderItem } from '@/types/Order';
-import { ordersAtom, useSelectOrders } from '@/atoms/pages/orders';
-import { useAtomValue } from 'jotai';
+import { fetchOrderItemAtom, useSelectOrders } from '@/atoms/pages/orders';
+import { useAtom } from 'jotai';
 
 interface OrderDisplayProps {
   order: IOrderItem | null;
@@ -42,13 +42,23 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
 
   const instance = useAuth0();
   const [tableData, setTableData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [fetchOrderItemStatus, setFetchOrderItemStatus] =
+    useAtom(fetchOrderItemAtom);
 
   useEffect(() => {
     if (!selectedOrderId) return;
 
+    // useFetch({
+    //   apiFunction: getApiRequest,
+    //   apiFunctionProps: {
+    //     model: 'quotations',
+    //   },
+    //   fetchAtom: fetchAtom,
+    //   dataAtom: orderItemsAtom,
+    // });
+
     const fetch = async () => {
-      setLoading(true);
+      setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: true });
       try {
         const { data } = await getApiRequest({
           instance,
@@ -57,19 +67,24 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
         });
 
         setTableData(data?.items || []);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Failed to fetch order items', error);
+        setFetchOrderItemStatus({ ...fetchOrderItemStatus, error });
       } finally {
-        setLoading(false);
+        setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: false });
       }
     };
 
     fetch();
   }, [selectedOrderId]);
 
+  useEffect(() => {
+    console.log('OrderDisplay => ', fetchOrderItemStatus);
+  }, [fetchOrderItemStatus]);
+
   const handleDelete = () => {
     (async () => {
-      setLoading(true);
+      setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: true });
       try {
         const result = await deleteApiRequest({
           instance,
@@ -84,8 +99,9 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
         // setTableData(data?.items || []);
       } catch (error) {
         console.error('Failed to fetch order items', error);
+        setFetchOrderItemStatus({ ...fetchOrderItemStatus, error });
       } finally {
-        setLoading(false);
+        setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: false });
       }
     })();
   };
@@ -197,7 +213,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                 data={tableData}
                 columns={columns}
                 filter={Filter}
-                loading={loading}
+                loading={fetchOrderItemStatus.loading}
               />
             ) : (
               <div className="p-8 text-center text-muted-foreground">
