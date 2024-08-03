@@ -1,15 +1,13 @@
 export interface IItem {
-  code: string;
-  name: string;
-  salesName: string;
-  description: string;
-  uom: string;
+  lineId: number;
+  lineOrder: number;
+  itemCode: string;
+  itemName: string;
   anvisaCode: string;
   anvisaDueDate: string;
-  supplierCode: string;
-  cst: string;
-  susCode: string;
-  ncmCode: string;
+  unitPrice: number;
+  lineTotal: number;
+  quantity: number;
 }
 
 export interface IFormData {
