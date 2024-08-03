@@ -72,8 +72,7 @@ export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
             </form>
           </div>
           <TabsContent value="open" className="m-0">
-            <OrderListSkeleton />
-            {/* {loading ? (
+            {loading ? (
               <OrderListSkeleton />
             ) : (
               <OrderList
@@ -93,7 +92,7 @@ export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
                 selectedOrderId={selectedOrderId}
                 selectOrder={selectOrder}
               />
-            )} */}
+            )}
           </TabsContent>
         </Tabs>
       </ResizablePanel>

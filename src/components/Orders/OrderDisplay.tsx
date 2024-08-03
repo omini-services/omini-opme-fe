@@ -48,15 +48,6 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
   useEffect(() => {
     if (!selectedOrderId) return;
 
-    // useFetch({
-    //   apiFunction: getApiRequest,
-    //   apiFunctionProps: {
-    //     model: 'quotations',
-    //   },
-    //   fetchAtom: fetchAtom,
-    //   dataAtom: orderItemsAtom,
-    // });
-
     const fetch = async () => {
       setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: true });
       try {
