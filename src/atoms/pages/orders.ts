@@ -137,8 +137,8 @@ export const useOrders = () => {
   };
 };
 
-// Atoms to manage layout and collapsed state
-export const layoutState = atom<[number, number]>([50, 150]);
+export const INITIAL_LAYOUT_SIZES = [30, 70];
+export const layoutState = atom(INITIAL_LAYOUT_SIZES);
 export const collapsedState = atom<boolean | undefined>(undefined);
 
 export const orderItemsAtom = atom<IItem[]>([]);

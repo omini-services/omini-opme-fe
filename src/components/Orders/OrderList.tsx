@@ -49,38 +49,43 @@ export function OrderList({
             </div>
           </div>
           <div className="flex flex-row gap-2">
-            <div className="flex w-full flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
-                <div className="font-semibold">{PATIENT}:</div>
-                <div className="line-clamp-2 text-xs">
+                <div className="font-semibold w-[60px]">{PATIENT}:</div>
+                <div className="text-xs text-ellipsis overflow-hidden whitespace-nowrap w-[70px]">
                   {item.patientFirstName}
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <div className="font-semibold">{PHYSICIAN}:</div>
-                <div className="line-clamp-2 text-xs">
+                <div className="font-semibold w-[60px]">{PHYSICIAN}:</div>
+                <div className="text-xs text-ellipsis overflow-hidden whitespace-nowrap w-[70px]">
                   {item.physicianFirstName}
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <div className="font-semibold">{ITEM}s:</div>
-                <div className="line-clamp-2 text-xs">{item.items.length}</div>
+                <div className="font-semibold w-[60px]">{ITEM}s:</div>
+                <div className="text-xs text-ellipsis overflow-hidden whitespace-nowrap w-[70px]">
+                  {item.items.length}
+                </div>
               </div>
             </div>
+
             <div className="flex w-full flex-col gap-2">
               <div className="flex items-center gap-2">
                 <div className="font-semibold">{HOSPITAL}:</div>
-                <div className="line-clamp-2 text-xs">{item.hospitalName}</div>
+                <div className="text-xs text-ellipsis overflow-hidden">
+                  {item.hospitalName}
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <div className="font-semibold">{INSURANCE}:</div>
-                <div className="line-clamp-2 text-xs">
+                <div className="text-xs text-ellipsis overflow-hidden">
                   {item.insuranceCompanyName}
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <div className="font-semibold">Total:</div>
-                <div className="line-clamp-2 text-xs">
+                <div className="text-xs text-ellipsis overflow-hidden">
                   <CurrencyFormatter value={item.total} />
                 </div>
               </div>
@@ -91,14 +96,10 @@ export function OrderList({
     ));
   };
 
-  return (
-    // <ScrollArea className="h-screen">
-    //   <div className="flex flex-col gap-2 p-2 mb-3">{renderItems()}</div>
-    // </ScrollArea>
-    loading ? (
-      <OrderListSkeleton />
-    ) : (
-      <div className="flex flex-col gap-2 p-2 mb-3">{renderItems()}</div>
-    )
+  return loading ? (
+    <OrderListSkeleton />
+  ) : (
+    <div className="flex flex-col gap-2 p-2 mb-3">{renderItems()}</div>
   );
+  // <OrderListSkeleton />
 }

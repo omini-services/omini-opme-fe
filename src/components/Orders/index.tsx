@@ -15,7 +15,11 @@ import {
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
 import { IOrderItem } from '@/types/Order';
-import { fetchOrderItemAtom, useSelectOrders } from '@/atoms/pages/orders';
+import {
+  fetchOrderItemAtom,
+  INITIAL_LAYOUT_SIZES,
+  useSelectOrders,
+} from '@/atoms/pages/orders';
 import { ORDER } from '@/constants';
 import { useEffect } from 'react';
 import { useAtomValue } from 'jotai';
@@ -27,7 +31,11 @@ interface IOrders {
   setLayout: Function;
 }
 
-export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
+export function Orders({
+  orders,
+  layout = INITIAL_LAYOUT_SIZES,
+  setLayout,
+}: IOrders) {
   const { selectedOrderId, selectOrder } = useSelectOrders();
   const { loading } = useAtomValue(fetchOrderItemAtom);
 
@@ -73,9 +81,13 @@ export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
     return (
       <div className="bg-background/95 p-2 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <form>
-          <div className="relative">
+          <div className="relative w-full">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search" className="pl-8" disabled={loading} />
+            <Input
+              placeholder="Search"
+              className="pl-8 w-full"
+              disabled={loading}
+            />
           </div>
         </form>
       </div>
@@ -88,7 +100,7 @@ export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
       onLayout={(sizes) => setLayout(sizes)}
       className="h-full items-stretch"
     >
-      <ResizablePanel defaultSize={layout[0]} minSize={30} maxSize={50}>
+      <ResizablePanel defaultSize={layout[0]} minSize={25} maxSize={29}>
         <Tabs defaultValue="open" className="flex flex-1 flex-col h-full">
           {renderTabControl()}
 
@@ -131,7 +143,7 @@ export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
 
           <Separator />
 
-          <div className="flex justify-center items-center h-16 bg-gray-100 py-2">
+          <div className="flex justify-center items-center h-16 py-2 bg-slate-50">
             <button
               className="px-4 py-2 mx-2 bg-blue-500 text-white rounded"
               onClick={() => handlePreviousPage()}

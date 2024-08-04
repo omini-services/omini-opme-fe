@@ -192,39 +192,51 @@ export const OrderTableItemsSkeleton = () => {
   );
 };
 
+// <div className="animate-pulse flex space-x-4">
+//   <div className="rounded bg-gray-300 h-4 w-24"></div>
+//   <div className="ml-auto rounded bg-gray-300 h-4 w-20"></div>
+// </div>
+
 export const OrderSkeleton = (index) => {
   return (
     <div
       key={index}
-      className="flex-row p-4 mx-auto bg-white rounded-xl shadow-sm space-y-4"
+      className="flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent"
     >
-      <div className="flex w-full flex-col gap-2">
-        <div className="animate-pulse flex space-x-4">
-          <div className="rounded bg-gray-300 h-4 w-24"></div>
-          <div className="ml-auto rounded bg-gray-300 h-4 w-20"></div>
-        </div>
-        <div className="animate-pulse flex space-x-4">
-          <div className="rounded bg-gray-300 h-4 w-24"></div>
-          <div className="ml-auto rounded bg-gray-300 h-4 w-20"></div>
-        </div>
-        <div className="animate-pulse flex space-x-4">
-          <div className="rounded bg-gray-300 h-4 w-24"></div>
-          <div className="ml-auto rounded bg-gray-300 h-4 w-20"></div>
-        </div>
-      </div>
+      <div className="flex w-full flex-col gap-1">
+        <div className="flex items-center mb-3 w-full">
+          <div className="flex items-center gap-2 w-full">
+            <div className="animate-pulse flex space-x-4">
+              <div className="rounded bg-gray-300 h-4 w-36"></div>
+            </div>
 
-      <div className="flex w-full flex-col gap-2">
-        <div className="animate-pulse flex space-x-4">
-          <div className="rounded bg-gray-300 h-4 w-24"></div>
-          <div className="ml-auto rounded bg-gray-300 h-4 w-20"></div>
+            <div className="animate-pulse flex space-x-4 ml-auto">
+              <div className="rounded bg-gray-300 h-4 w-32"></div>
+            </div>
+          </div>
         </div>
-        <div className="animate-pulse flex space-x-4">
-          <div className="rounded bg-gray-300 h-4 w-24"></div>
-          <div className="ml-auto rounded bg-gray-300 h-4 w-20"></div>
-        </div>
-        <div className="animate-pulse flex space-x-4">
-          <div className="rounded bg-gray-300 h-4 w-24"></div>
-          <div className="ml-auto rounded bg-gray-300 h-4 w-20"></div>
+
+        <div className="flex flex-row gap-2 w-full">
+          <div className="flex flex-col gap-2 w-full">
+            <div className="flex items-center gap-2 w-full">
+              <div className="animate-pulse flex w-full">
+                <div className="rounded bg-gray-300 h-4 w-24"></div>
+                <div className="ml-auto rounded bg-gray-300 h-4 w-36"></div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 w-full">
+              <div className="animate-pulse flex w-full">
+                <div className="rounded bg-gray-300 h-4 w-36"></div>
+                <div className="ml-auto rounded bg-gray-300 h-4 w-64"></div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 w-full">
+              <div className="animate-pulse flex w-full">
+                <div className="rounded bg-gray-300 h-4 w-32"></div>
+                <div className="ml-auto rounded bg-gray-300 h-4 w-56"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -179,7 +179,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
 
               <Separator />
 
-              <OrderForm />
+              <OrderForm order={order} />
 
               <Separator />
 

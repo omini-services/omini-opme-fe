@@ -34,22 +34,32 @@ import { format } from 'date-fns';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { IOrderItem } from '@/types/Order';
+import { useEffect } from 'react'; // Import useEffect
 
 const FormSchema = z.object({
+  number: z.number().optional(), // Adicione campos do schema aqui
+  patientName: z.string().optional(),
+  payingSourceType: z.string().optional(),
+  hospitalName: z.string().optional(),
+  insuranceCompanyName: z.string().optional(),
   dueDate: z.date({
-    required_error: 'Uma data e necessaria.',
+    required_error: 'Uma data é necessária.',
   }),
 });
 
-export const OrderForm = () => {
+interface IOrderForm {
+  order: IOrderItem;
+}
+
+export const OrderForm = ({ order }: IOrderForm) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    console.log('he');
     toast({
-      title: 'formulario enviado:',
+      title: 'formulário enviado:',
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
@@ -57,6 +67,21 @@ export const OrderForm = () => {
       ),
     });
   };
+
+  // Usando useEffect para definir valores iniciais
+  useEffect(() => {
+    if (order) {
+      form.setValue('number', order.number);
+      form.setValue(
+        'patientName',
+        `${order.patientFirstName} ${order.patientLastName}`
+      );
+      form.setValue('payingSourceType', order.payingSourceType);
+      form.setValue('hospitalName', order.hospitalName);
+      form.setValue('insuranceCompanyName', order.insuranceCompanyName);
+      form.setValue('dueDate', new Date(order.dueDate));
+    }
+  }, [order, form]);
 
   return (
     <Form {...form}>
@@ -68,18 +93,18 @@ export const OrderForm = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="number">Número:</Label>
-              <Input id="number" />
+              <Input id="number" {...form.register('number')} />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="patientName">Nome do Paciente:</Label>
-              <Input id="patientName" />
+              <Input id="patientName" {...form.register('patientName')} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="payingSourceType">Tipo de pagamento:</Label>
-              <Select defaultValue="insurance">
+              <Select {...form.register('payingSourceType')}>
                 <SelectTrigger id="payingSourceType">
                   <SelectValue placeholder="Selecione..." />
                 </SelectTrigger>
@@ -91,13 +116,13 @@ export const OrderForm = () => {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="hospitalName">Nome do Hospital</Label>
-              <Input id="hospitalName" />
+              <Input id="hospitalName" {...form.register('hospitalName')} />
             </div>
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="insuranceCompanyName">Tipo de pagamento:</Label>
-            <Select defaultValue="amil">
+            <Label htmlFor="insuranceCompanyName">Nome da Seguradora:</Label>
+            <Select {...form.register('insuranceCompanyName')}>
               <SelectTrigger id="insuranceCompanyName">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
