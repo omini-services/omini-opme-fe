@@ -65,13 +65,13 @@ export function Orders({
           >
             Abertos
           </TabsTrigger>
-          <TabsTrigger
+          {/* <TabsTrigger
             value="all"
             className="text-zinc-600 dark:text-zinc-200"
             disabled={loading}
           >
             Todos
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
       </div>
     );
