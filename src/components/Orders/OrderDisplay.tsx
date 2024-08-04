@@ -22,12 +22,17 @@ import { OrderForm } from './Form';
 import { DataTable } from '../Table/data-table';
 import { Filter } from './TableFilter';
 import { columns } from './columns';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { deleteApiRequest, getApiRequest } from '@/api/api';
 import { useAuth0 } from '@auth0/auth0-react';
 import { IOrderItem } from '@/types/Order';
-import { fetchOrderItemAtom, useSelectOrders } from '@/atoms/pages/orders';
-import { useAtom } from 'jotai';
+import {
+  fetchOrderItemAtom,
+  orderItemsAtom,
+  useOrderItems,
+  useSelectOrders,
+} from '@/atoms/pages/orders';
+import { useAtom, useAtomValue } from 'jotai';
 
 interface OrderDisplayProps {
   order: IOrderItem | null;
@@ -37,13 +42,14 @@ const TAB_INFORMATION = 'information';
 const TAB_ITEMS = 'items';
 
 export function OrderDisplay({ order }: OrderDisplayProps) {
-  const { selectedOrderId } = useSelectOrders();
-  // const ordersData = useAtomValue(ordersAtom);
-
   const instance = useAuth0();
-  const [tableData, setTableData] = useState([]);
+  const { selectedOrderId } = useSelectOrders();
+  const orderItems = useAtomValue(orderItemsAtom);
   const [fetchOrderItemStatus, setFetchOrderItemStatus] =
     useAtom(fetchOrderItemAtom);
+  const [tab, setTab] = useState<string>(TAB_INFORMATION);
+
+  const { deleteById, replaceAll } = useOrderItems();
 
   useEffect(() => {
     if (!selectedOrderId) return;
@@ -57,7 +63,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
           method: 'GET',
         });
 
-        setTableData(data?.items || []);
+        replaceAll(data?.items || []);
       } catch (error: any) {
         console.error('Failed to fetch order items', error);
         setFetchOrderItemStatus({ ...fetchOrderItemStatus, error });
@@ -69,21 +75,23 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
     fetch();
   }, [selectedOrderId]);
 
-  useEffect(() => {
-    console.log('OrderDisplay => ', fetchOrderItemStatus);
-  }, [fetchOrderItemStatus]);
-
   const handleDelete = () => {
+    const deleteMapUrl = {
+      [TAB_INFORMATION]: `quotations/${order?.id}`,
+      [TAB_ITEMS]: `quotations/${order?.id}/items/${1}`,
+    };
+
+    if (!selectedOrderId) return;
+
     (async () => {
       setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: true });
       try {
         const result = await deleteApiRequest({
           instance,
-          id: order?.id,
-          model: 'quotations',
+          url: deleteMapUrl[tab],
         });
 
-        console.log('result => ', result);
+        console.log('result => ', { result, order });
 
         // TODO: add reload list after deleting and updating
 
@@ -97,9 +105,20 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
     })();
   };
 
+  const isDisabled = useMemo(
+    () => fetchOrderItemStatus.loading,
+    [fetchOrderItemStatus.loading]
+  );
+
+  const handleOnTabChange = (tab: string) => setTab(tab);
+
   return (
     <div className="flex flex-col h-full">
-      <Tabs defaultValue={TAB_INFORMATION} className="flex flex-col h-full">
+      <Tabs
+        defaultValue={tab}
+        className="flex flex-col h-full"
+        onValueChange={handleOnTabChange}
+      >
         <div className="flex items-center p-2">
           <div className="flex items-center gap-2">
             <Tooltip>
@@ -109,6 +128,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                   size="icon"
                   disabled={!order}
                   onClick={handleDelete}
+                  disabled={isDisabled}
                 >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">Excluir</span>
@@ -124,12 +144,14 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
               <TabsTrigger
                 value={TAB_INFORMATION}
                 className="text-zinc-600 dark:text-zinc-200"
+                disabled={isDisabled}
               >
                 Informações
               </TabsTrigger>
               <TabsTrigger
                 value={TAB_ITEMS}
                 className="text-zinc-600 dark:text-zinc-200"
+                disabled={isDisabled}
               >
                 Itens
               </TabsTrigger>
@@ -157,7 +179,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
 
               <Separator />
 
-              <OrderForm />
+              <OrderForm order={order} />
 
               <Separator />
 
@@ -201,7 +223,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
           <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
             {order ? (
               <DataTable
-                data={tableData}
+                data={orderItems}
                 columns={columns}
                 filter={Filter}
                 loading={fetchOrderItemStatus.loading}

@@ -1,14 +1,4 @@
-interface IItem {
-  lineId: number;
-  lineOrder: number;
-  itemCode: string;
-  itemName: string;
-  anvisaCode: string;
-  anvisaDueDate: string;
-  unitPrice: number;
-  lineTotal: number;
-  quantity: number;
-}
+import { IItem } from './Item';
 
 export interface IFormData {
   number: string;
@@ -34,6 +24,7 @@ export interface IOrderList {
   orders: IOrderItem[];
   selectedOrderId: IOrderItem['id'] | null;
   selectOrder: Function;
+  loading: boolean;
 }
 
 export type TFetchError = {

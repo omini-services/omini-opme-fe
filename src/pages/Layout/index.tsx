@@ -11,7 +11,7 @@ export const Layout = () => {
   return (
     <IntlProvider locale={intl.locale} messages={intl.messages}>
       <Toaster />
-      <div className="hidden flex-col md:flex h-full">
+      <div className="flex-col md:flex h-screen">
         <div className="border-b">
           <div className="flex h-16 items-center px-4">
             <Menu />

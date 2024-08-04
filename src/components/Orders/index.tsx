@@ -15,7 +15,11 @@ import {
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
 import { IOrderItem } from '@/types/Order';
-import { fetchOrderItemAtom, useSelectOrders } from '@/atoms/pages/orders';
+import {
+  fetchOrderItemAtom,
+  INITIAL_LAYOUT_SIZES,
+  useSelectOrders,
+} from '@/atoms/pages/orders';
 import { ORDER } from '@/constants';
 import { useEffect } from 'react';
 import { useAtomValue } from 'jotai';
@@ -27,7 +31,11 @@ interface IOrders {
   setLayout: Function;
 }
 
-export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
+export function Orders({
+  orders,
+  layout = INITIAL_LAYOUT_SIZES,
+  setLayout,
+}: IOrders) {
   const { selectedOrderId, selectOrder } = useSelectOrders();
   const { loading } = useAtomValue(fetchOrderItemAtom);
 
@@ -37,66 +45,125 @@ export function Orders({ orders, layout = [40, 32], setLayout }: IOrders) {
     }
   }, [orders]);
 
+  function handlePreviousPage(): void {
+    throw new Error('Function not implemented.');
+  }
+
+  function handleNextPage(): void {
+    throw new Error('Function not implemented.');
+  }
+
+  const renderTabControl = () => {
+    return (
+      <div className="flex items-center px-2 py-2">
+        <h1 className="text-xl font-bold">Orçamentos</h1>
+        <TabsList className="ml-auto">
+          <TabsTrigger
+            value="open"
+            className="text-zinc-600 dark:text-zinc-200"
+            disabled={loading}
+          >
+            Abertos
+          </TabsTrigger>
+          {/* <TabsTrigger
+            value="all"
+            className="text-zinc-600 dark:text-zinc-200"
+            disabled={loading}
+          >
+            Todos
+          </TabsTrigger> */}
+        </TabsList>
+      </div>
+    );
+  };
+
+  const renderSearch = () => {
+    return (
+      <div className="bg-background/95 p-2 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <form>
+          <div className="relative w-full">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search"
+              className="pl-8 w-full"
+              disabled={loading}
+            />
+          </div>
+        </form>
+      </div>
+    );
+  };
+
   return (
     <ResizablePanelGroup
       direction="horizontal"
-      onLayout={(sizes: number[]) => setLayout(sizes)}
+      onLayout={(sizes) => setLayout(sizes)}
       className="h-full items-stretch"
     >
-      <ResizablePanel defaultSize={layout[0]} minSize={30} maxSize={50}>
-        <Tabs defaultValue="open">
-          <div className="flex items-center px-4 py-2">
-            <h1 className="text-xl font-bold">{ORDER}s</h1>
-            <TabsList className="ml-auto">
-              <TabsTrigger
-                value="open"
-                className="text-zinc-600 dark:text-zinc-200"
-              >
-                Abertos
-              </TabsTrigger>
-              <TabsTrigger
-                value="all"
-                className="text-zinc-600 dark:text-zinc-200"
-              >
-                Todos
-              </TabsTrigger>
-            </TabsList>
-          </div>
+      <ResizablePanel defaultSize={layout[0]} minSize={25} maxSize={29}>
+        <Tabs defaultValue="open" className="flex flex-1 flex-col h-full">
+          {renderTabControl()}
+
           <Separator />
-          <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <form>
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search" className="pl-8" />
-              </div>
-            </form>
+
+          {renderSearch()}
+
+          <Separator />
+
+          {/* Conteúdo das Tabs */}
+          <div className="flex-grow overflow-y-scroll">
+            <TabsContent value="open" className="m-0">
+              <OrderList
+                orders={orders}
+                selectedOrderId={selectedOrderId}
+                selectOrder={selectOrder}
+                loading={loading}
+              />
+              {/* {Array(400)
+                .fill()
+                .map((_, index) => (
+                  <div>test</div>
+                ))} */}
+            </TabsContent>
+
+            <TabsContent value="all" className="m-0">
+              {/* <OrderList
+                  orders={orders}
+                  selectedOrderId={selectedOrderId}
+                  selectOrder={selectOrder}
+                  loading={loading}
+                /> */}
+              {Array(6)
+                .fill()
+                .map((_, index) => (
+                  <div>test</div>
+                ))}
+            </TabsContent>
           </div>
-          <TabsContent value="open" className="m-0">
-            {loading ? (
-              <OrderListSkeleton />
-            ) : (
-              <OrderList
-                orders={orders}
-                selectedOrderId={selectedOrderId}
-                selectOrder={selectOrder}
-              />
-            )}
-          </TabsContent>
-          <TabsContent value="all" className="m-0">
-            {loading ? (
-              <OrderListSkeleton />
-            ) : (
-              <OrderList
-                // orders={orders.filter((item) => !item.read)}
-                orders={orders}
-                selectedOrderId={selectedOrderId}
-                selectOrder={selectOrder}
-              />
-            )}
-          </TabsContent>
+
+          <Separator />
+
+          <div className="flex justify-center items-center h-16 py-2 bg-slate-50">
+            <button
+              className="px-4 py-2 mx-2 bg-blue-500 text-white rounded"
+              onClick={() => handlePreviousPage()}
+              // disabled={currentPage === 1}
+            >
+              test
+            </button>
+            <button
+              className="px-4 py-2 mx-2 bg-blue-500 text-white rounded"
+              onClick={() => handleNextPage()}
+              // disabled={currentPage === totalPages}
+            >
+              test
+            </button>
+          </div>
         </Tabs>
       </ResizablePanel>
+
       <ResizableHandle withHandle />
+
       <ResizablePanel defaultSize={layout[1]}>
         <OrderDisplay
           order={orders.find((item) => item.id === selectedOrderId) || null}
