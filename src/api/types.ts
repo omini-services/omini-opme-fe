@@ -2,9 +2,9 @@ import { Auth0ContextInterface } from '@auth0/auth0-react';
 
 export type IGET = {
   instance: Auth0ContextInterface;
-  url: string;
   method: string;
   body?: object | undefined;
+  url?: string;
 };
 
 export type IGETA = {
@@ -24,6 +24,7 @@ export type ICREATE = {
   model: string;
   body?: object | undefined;
   customHeaders?: object | undefined;
+  url?: string;
 };
 
 export type IUPDATE = {

@@ -78,11 +78,16 @@ export const deleteApiRequest = async ({
  * CREATE API
  */
 
-export const createApiRequest = async ({ instance, model, body }: ICREATE) => {
+export const createApiRequest = async ({
+  instance,
+  model,
+  body,
+  url,
+}: ICREATE) => {
   const accessToken = await acquireToken(instance);
 
   return callApi({
-    url: `${API_CONFIG.endpoint}/${model}`,
+    url: url || `${API_CONFIG.endpoint}/${model}`,
     accessToken,
     method: 'POST',
     customHeaders: {
