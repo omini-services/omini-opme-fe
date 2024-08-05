@@ -1,6 +1,7 @@
 import { atom } from 'jotai';
-import { OrdersNetworkResponse, TSelectedOrder } from '@/types/Order';
+import { IFormData, OrdersNetworkResponse } from '@/types/Order';
 import { IItem } from '@/types/Item';
+import { TSelectedOrder } from './pages/orders';
 
 export const ORDER_INITIAL_STATE: OrdersNetworkResponse = {
   data: [],
@@ -29,4 +30,4 @@ export const fetchOrderItemsAtom = atom({
   error: null,
 });
 
-const orderFormAtom = atom();
+const orderFormAtom = atom<IFormData | {}>({});
