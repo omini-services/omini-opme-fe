@@ -69,3 +69,5 @@ export interface OrdersNetworkResponse {
 export interface ItemsNetworkResponse {
   data: IOrderItem;
 }
+
+export type TSelectedOrder = IOrderItem['id'] | null;

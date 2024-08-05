@@ -1,27 +1,33 @@
 import { useAtom } from 'jotai';
 import { Orders } from '@/components/Orders';
-import { initialState, layoutState, useOrders } from '@/atoms/pages/orders';
+import {
+  ORDER_INITIAL_STATE,
+  layoutState,
+  fetchOrdersAtom,
+} from '@/atoms/orders';
 import { getAllApiRequest } from '@/api/api';
 import { OrdersPageSkeleton } from '@/components/Orders/Skeleton';
 import { TooltipProvider } from '@/components/shadcn/new-york/tooltip';
-import { fetchOrdersAtom } from '@/atoms/pages/orders';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
+import { useOrders } from '@/controllers/orders';
 
 export default function OrdersPage() {
   const instance = useAuth0();
   const [layout, setLayout] = useAtom(layoutState);
   const [fetchOrders, setfetchOrders] = useAtom(fetchOrdersAtom);
-  const { orders, replaceAll, reset } = useOrders();
+  const { getOrders, replaceAll, reset } = useOrders();
   const location = useLocation();
+
+  const orders = useMemo(() => getOrders(), [getOrders]);
 
   useEffect(() => {
     const fetchOrdersData = async () => {
       if (fetchOrders.loading) return;
 
-      if (isEqual(orders, initialState)) {
+      if (isEqual(orders, ORDER_INITIAL_STATE)) {
         setfetchOrders((prev) => ({ ...prev, loading: true }));
 
         try {

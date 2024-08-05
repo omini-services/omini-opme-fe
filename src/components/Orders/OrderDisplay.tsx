@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 
 import { Trash2 } from 'lucide-react';
+import { SaveIcon } from 'lucide-react';
 
 import { Button } from '@/components/shadcn/new-york/button';
 import { Separator } from '@/components/shadcn/new-york/separator';
@@ -23,16 +24,12 @@ import { DataTable } from '../Table/data-table';
 import { Filter } from './TableFilter';
 import { columns } from './columns';
 import { useEffect, useMemo, useState } from 'react';
-import { deleteApiRequest, getApiRequest } from '@/api/api';
+import { apiRequest, deleteApiRequest, getApiRequest } from '@/api/api';
 import { useAuth0 } from '@auth0/auth0-react';
 import { IOrderItem } from '@/types/Order';
-import {
-  fetchOrderItemAtom,
-  orderItemsAtom,
-  useOrderItems,
-  useSelectOrders,
-} from '@/atoms/pages/orders';
-import { useAtom, useAtomValue } from 'jotai';
+import { fetchOrderItemsAtom } from '@/atoms/orders';
+import { useAtom } from 'jotai';
+import { useOrderItems, useSelectOrders } from '@/controllers/orders';
 
 interface OrderDisplayProps {
   order: IOrderItem | null;
@@ -44,12 +41,11 @@ const TAB_ITEMS = 'items';
 export function OrderDisplay({ order }: OrderDisplayProps) {
   const instance = useAuth0();
   const { selectedOrderId } = useSelectOrders();
-  const orderItems = useAtomValue(orderItemsAtom);
   const [fetchOrderItemStatus, setFetchOrderItemStatus] =
-    useAtom(fetchOrderItemAtom);
+    useAtom(fetchOrderItemsAtom);
   const [tab, setTab] = useState<string>(TAB_INFORMATION);
 
-  const { deleteById, replaceAll } = useOrderItems();
+  const { deleteById, replaceAll, getOrderItems } = useOrderItems();
 
   useEffect(() => {
     if (!selectedOrderId) return;
@@ -97,12 +93,35 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
 
         // setTableData(data?.items || []);
       } catch (error) {
-        console.error('Failed to fetch order items', error);
         setFetchOrderItemStatus({ ...fetchOrderItemStatus, error });
       } finally {
         setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: false });
       }
     })();
+  };
+
+  const handleSave = () => {
+    // if (!selectedOrderId) {
+    //   // CREATE
+    //   console.log('creation');
+    //   return;
+    // }
+    // (async () => {
+    //   setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: true });
+    //   try {
+    //     const result = await apiRequest({
+    //       url: `quotations/`,
+    //     });
+    //     console.log('result => ', { result, order });
+    //     // TODO: add reload list after deleting and updating
+    //     // setTableData(data?.items || []);
+    //   } catch (error) {
+    //     console.error('Failed to fetch order items', error);
+    //     setFetchOrderItemStatus({ ...fetchOrderItemStatus, error });
+    //   } finally {
+    //     setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: false });
+    //   }
+    // })();
   };
 
   const isDisabled = useMemo(
@@ -126,9 +145,25 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  disabled={!order}
+                  disabled={!order || isDisabled}
+                  onClick={handleSave}
+                >
+                  <SaveIcon className="h-4 w-4" />
+                  <span className="sr-only">Salvar</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Salvar</TooltipContent>
+            </Tooltip>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={!order || isDisabled}
                   onClick={handleDelete}
-                  disabled={isDisabled}
                 >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">Excluir</span>
@@ -223,7 +258,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
           <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
             {order ? (
               <DataTable
-                data={orderItems}
+                data={getOrderItems()}
                 columns={columns}
                 filter={Filter}
                 loading={fetchOrderItemStatus.loading}

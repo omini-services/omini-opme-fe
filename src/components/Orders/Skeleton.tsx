@@ -197,7 +197,7 @@ export const OrderTableItemsSkeleton = () => {
 //   <div className="ml-auto rounded bg-gray-300 h-4 w-20"></div>
 // </div>
 
-export const OrderSkeleton = (index) => {
+export const OrderSkeleton = (index: any) => {
   return (
     <div
       key={index}
@@ -249,7 +249,7 @@ export const OrderListSkeleton = () => {
       {Array(6)
         .fill()
         .map((_, index) => (
-          <OrderSkeleton index={index} />
+          <OrderSkeleton key={index} index={index} />
         ))}
     </div>
   );

@@ -16,14 +16,12 @@ import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
 import { IOrderItem } from '@/types/Order';
 import {
-  fetchOrderItemAtom,
-  INITIAL_LAYOUT_SIZES,
-  useSelectOrders,
-} from '@/atoms/pages/orders';
-import { ORDER } from '@/constants';
+  fetchOrderItemsAtom,
+  LAYOUT_SIZES_INITIAL_STATE,
+} from '@/atoms/orders';
 import { useEffect } from 'react';
 import { useAtomValue } from 'jotai';
-import { OrderListSkeleton } from './Skeleton';
+import { useSelectOrders } from '@/controllers/orders';
 
 interface IOrders {
   orders: IOrderItem[];
@@ -33,11 +31,11 @@ interface IOrders {
 
 export function Orders({
   orders,
-  layout = INITIAL_LAYOUT_SIZES,
+  layout = LAYOUT_SIZES_INITIAL_STATE,
   setLayout,
 }: IOrders) {
   const { selectedOrderId, selectOrder } = useSelectOrders();
-  const { loading } = useAtomValue(fetchOrderItemAtom);
+  const { loading } = useAtomValue(fetchOrderItemsAtom);
 
   useEffect(() => {
     if (orders && orders.length > 0 && selectedOrderId === null) {
@@ -133,11 +131,7 @@ export function Orders({
                   selectOrder={selectOrder}
                   loading={loading}
                 /> */}
-              {Array(6)
-                .fill()
-                .map((_, index) => (
-                  <div>test</div>
-                ))}
+              test
             </TabsContent>
           </div>
 

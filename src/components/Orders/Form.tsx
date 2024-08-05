@@ -179,9 +179,9 @@ export const OrderForm = ({ order }: IOrderForm) => {
             )}
           />
 
-          <Button type="submit" size="sm">
+          {/* <Button type="submit" size="sm">
             Salvar
-          </Button>
+          </Button> */}
         </form>
       </div>
     </Form>

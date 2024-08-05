@@ -1,14 +1,14 @@
-import { atom, useAtom, useSetAtom } from 'jotai';
-import { useCallback } from 'react';
-import { OrdersNetworkResponse, IOrderItem } from '@/types/Order';
+import {
+  ORDER_INITIAL_STATE,
+  orderItemsAtom,
+  ordersAtom,
+  selectedOrder,
+} from '@/atoms/orders';
 import { IItem } from '@/types/Item';
+import { IOrderItem } from '@/types/Order';
+import { useAtom } from 'jotai';
+import { useCallback } from 'react';
 
-type TSelectedOrder = IOrderItem['id'] | null;
-
-// Atom to manage the selected order
-const selectedOrder = atom<TSelectedOrder>(null);
-
-// Hook to use selected orders state
 export function useSelectOrders() {
   const [order, setOrder] = useAtom(selectedOrder);
 
@@ -30,22 +30,32 @@ export function useSelectOrders() {
   };
 }
 
-// Atom to manage fetch state
-export const fetchOrdersAtom = atom({
-  loading: false,
-  error: null,
-});
+export const useOrderItems = () => {
+  const [orderItems, setOrderItems] = useAtom(orderItemsAtom);
 
-export const initialState: OrdersNetworkResponse = {
-  data: [],
-  currentPage: 0,
-  pageCount: 0,
-  pageSize: 100,
-  rowCount: 0,
+  // Function to insert a new item
+  const insert = (newItem: IItem) => {
+    setOrderItems((prev) => [...prev, newItem]);
+  };
+
+  // Function to delete an item by id
+  const deleteById = (id: number) => {
+    setOrderItems((prev) => [...prev.filter((item) => item.itemCode != id)]);
+  };
+
+  const replaceAll = (newData: IItem[]) => {
+    setOrderItems(newData);
+  };
+
+  const getOrderItems = () => orderItems;
+
+  return {
+    insert,
+    deleteById,
+    replaceAll,
+    getOrderItems,
+  };
 };
-
-// Atom to manage orders state
-export const ordersAtom = atom<OrdersNetworkResponse>(initialState);
 
 export const useOrders = () => {
   const [orders, setOrders] = useAtom(ordersAtom);
@@ -120,11 +130,12 @@ export const useOrders = () => {
   };
 
   const reset = () => {
-    setOrders(initialState);
+    setOrders(ORDER_INITIAL_STATE);
   };
 
+  const getOrders = () => orders;
+
   return {
-    orders,
     replaceAll,
     insert,
     deleteById,
@@ -134,40 +145,6 @@ export const useOrders = () => {
     setPageSize,
     setRowCount,
     reset,
+    getOrders,
   };
 };
-
-export const INITIAL_LAYOUT_SIZES = [30, 70];
-export const layoutState = atom(INITIAL_LAYOUT_SIZES);
-export const collapsedState = atom<boolean | undefined>(undefined);
-
-export const orderItemsAtom = atom<IItem[]>([]);
-
-export const useOrderItems = () => {
-  const setOrderItems = useSetAtom(orderItemsAtom);
-
-  // Function to insert a new item
-  const insert = (newItem: IItem) => {
-    setOrderItems((prev) => [...prev, newItem]);
-  };
-
-  // Function to delete an item by id
-  const deleteById = (id: number) => {
-    setOrderItems((prev) => [...prev.filter((item) => item.itemCode !== id)]);
-  };
-
-  const replaceAll = (newData: IItem[]) => {
-    setOrderItems(newData);
-  };
-
-  return {
-    insert,
-    deleteById,
-    replaceAll,
-  };
-};
-
-export const fetchOrderItemAtom = atom({
-  loading: false,
-  error: null,
-});
