@@ -7,7 +7,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/shadcn/new-york/alert-dialog';
+} from '@/components/ui/alert-dialog';
 import { useAtom } from 'jotai';
 
 import { dialogState } from '@/atoms/dialog';

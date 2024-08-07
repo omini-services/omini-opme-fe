@@ -1,4 +1,4 @@
-import { Progress } from '@/components/shadcn/new-york/progress';
+import { Progress } from '@/components/ui/progress';
 import { useEffect, useState } from 'react';
 
 interface LoadingProps {

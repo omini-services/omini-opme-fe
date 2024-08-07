@@ -15,8 +15,6 @@ import Order from '@/pages/registry/Order';
 // other
 import Dashboard from '@/pages/Dashboard';
 import Layout from '@/pages/Layout';
-import MailPage from '@/pages/Mail';
-import Music from '@/pages/Music';
 import Tasks from '@/pages/Tasks';
 import Orders from '@/pages/Orders';
 import Registry from '@/pages/registry';
@@ -43,7 +41,6 @@ export function Router() {
             <Route path={ROUTES.root.to} element={<Calendar />} />
             <Route path={ROUTES.dashboard.to} element={<Dashboard />} />
             <Route path={ROUTES.tasks.to} element={<Tasks />} />
-            <Route path={ROUTES.music.to} element={<Music />} />
             <Route path={ROUTES.orders.to} element={<Orders />} />
             {/* <Route path={ROUTES.calendar.to} element={<Calendar />} /> */}
           </Route>

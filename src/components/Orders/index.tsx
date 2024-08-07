@@ -1,17 +1,12 @@
 import { Search } from 'lucide-react';
-import { Input } from '@/components/shadcn/new-york/input';
+import { Input } from '@/components/ui/input';
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from '@/components/shadcn/new-york/resizable';
-import { Separator } from '@/components/shadcn/new-york/separator';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/shadcn/new-york/tabs';
+} from '@/components/ui/resizable';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
 import { IOrderItem } from '@/types/Order';
@@ -43,14 +38,6 @@ export function Orders({
     }
   }, [orders]);
 
-  function handlePreviousPage(): void {
-    throw new Error('Function not implemented.');
-  }
-
-  function handleNextPage(): void {
-    throw new Error('Function not implemented.');
-  }
-
   const renderTabControl = () => {
     return (
       <div className="flex items-center px-2 py-2">
@@ -63,13 +50,6 @@ export function Orders({
           >
             Abertos
           </TabsTrigger>
-          {/* <TabsTrigger
-            value="all"
-            className="text-zinc-600 dark:text-zinc-200"
-            disabled={loading}
-          >
-            Todos
-          </TabsTrigger> */}
         </TabsList>
       </div>
     );
@@ -108,7 +88,6 @@ export function Orders({
 
           <Separator />
 
-          {/* Conteúdo das Tabs */}
           <div className="flex-grow overflow-y-scroll">
             <TabsContent value="open" className="h-full m-0">
               <OrderList
@@ -117,42 +96,10 @@ export function Orders({
                 selectOrder={selectOrder}
                 loading={loading}
               />
-              {/* {Array(400)
-                .fill()
-                .map((_, index) => (
-                  <div>test</div>
-                ))} */}
-            </TabsContent>
-
-            <TabsContent value="all" className="h-full m-0">
-              {/* <OrderList
-                  orders={orders}
-                  selectedOrderId={selectedOrderId}
-                  selectOrder={selectOrder}
-                  loading={loading}
-                /> */}
-              test
             </TabsContent>
           </div>
 
           <Separator />
-
-          <div className="flex justify-center items-center h-16 py-2 bg-slate-50">
-            <button
-              className="px-4 py-2 mx-2 bg-blue-500 text-white rounded"
-              onClick={() => handlePreviousPage()}
-              // disabled={currentPage === 1}
-            >
-              test
-            </button>
-            <button
-              className="px-4 py-2 mx-2 bg-blue-500 text-white rounded"
-              onClick={() => handleNextPage()}
-              // disabled={currentPage === totalPages}
-            >
-              test
-            </button>
-          </div>
         </Tabs>
       </ResizablePanel>
 

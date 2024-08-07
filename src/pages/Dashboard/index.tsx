@@ -1,17 +1,12 @@
-import { Button } from '@/components/shadcn/new-york/button';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/shadcn/new-york/card';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/shadcn/new-york/tabs';
+} from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CalendarDateRangePicker } from '@/components/shadcn-dashboard/date-range-picker';
 import { Overview } from '@/components/shadcn-dashboard/overview';
 import { RecentSales } from '@/components/shadcn-dashboard/recent-sales';

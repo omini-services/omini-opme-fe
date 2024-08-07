@@ -1,5 +1,5 @@
 import { Table } from '@tanstack/react-table';
-import { Input } from '@/components/shadcn/new-york/input';
+import { Input } from '@/components/ui/input';
 
 import { priorities, statuses } from '@/pages/Orders/data/data';
 import { DataTableFacetedFilter } from '@/components/Table/data-table-faceted-filter';

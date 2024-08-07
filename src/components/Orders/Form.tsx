@@ -1,7 +1,7 @@
-import { Input } from '@/components/shadcn/new-york/input';
-import { Label } from '@/components/shadcn/new-york/label';
-import { Button } from '@/components/shadcn/new-york/button';
-import { Calendar } from '@/components/shadcn/new-york/calendar';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 
 import {
   Select,
@@ -9,7 +9,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/shadcn/new-york/select';
+} from '@/components/ui/select';
 
 import {
   Form,
@@ -18,13 +18,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/shadcn/new-york/form';
+} from '@/components/ui/form';
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/shadcn/new-york/popover';
+} from '@/components/ui/popover';
 
 import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';

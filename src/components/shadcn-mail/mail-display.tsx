@@ -14,32 +14,28 @@ import {
 import {
   DropdownMenuContent,
   DropdownMenuItem,
-} from '@/components/shadcn/default/dropdown-menu';
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/components/shadcn/new-york/avatar';
-import { Button } from '@/components/shadcn/new-york/button';
-import { Calendar } from '@/components/shadcn/new-york/calendar';
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
-} from '@/components/shadcn/new-york/dropdown-menu';
-import { Label } from '@/components/shadcn/new-york/label';
+} from '@/components/ui/dropdown-menu';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/shadcn/new-york/popover';
-import { Separator } from '@/components/shadcn/new-york/separator';
-import { Switch } from '@/components/shadcn/new-york/switch';
-import { Textarea } from '@/components/shadcn/new-york/textarea';
+} from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/shadcn/new-york/tooltip';
+} from '@/components/ui/tooltip';
 
 // TODO: change this data
 import { Mail } from '@/types/Mail';

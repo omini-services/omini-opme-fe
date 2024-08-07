@@ -3,14 +3,14 @@ import { format } from 'date-fns';
 import { Trash2 } from 'lucide-react';
 import { SaveIcon } from 'lucide-react';
 
-import { Button } from '@/components/shadcn/new-york/button';
-import { Separator } from '@/components/shadcn/new-york/separator';
-import { Textarea } from '@/components/shadcn/new-york/textarea';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/shadcn/new-york/tooltip';
+} from '@/components/ui/tooltip';
 
 import {
   Tabs,
@@ -34,7 +34,7 @@ import {
   useOrderItems,
   useSelectOrders,
 } from '@/controllers/orders';
-import { toast } from '@/components/shadcn/new-york/use-toast';
+import { toast } from '@/components/ui/use-toast';
 import { Spinner } from '../Loading';
 
 interface OrderDisplayProps {

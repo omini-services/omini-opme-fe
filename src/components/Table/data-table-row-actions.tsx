@@ -1,7 +1,7 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Row } from '@tanstack/react-table';
 
-import { Button } from '@/components/shadcn/new-york/button';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@/components/shadcn/new-york/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 
 import { labels } from '@/pages/Tasks/data/data';
 import { taskSchema } from '@/pages/Tasks/data/schema';

@@ -7,7 +7,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
   Menubar,
-} from '@/components/shadcn/new-york/menubar';
+} from '@/components/ui/menubar';
 
 export const MainNav = ({
   className,

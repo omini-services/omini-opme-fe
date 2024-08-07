@@ -22,8 +22,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/shadcn/new-york/table';
-import { Separator } from '@/components/shadcn/new-york/separator';
+} from '@/components/ui/table';
+import { Separator } from '@/components/ui/separator';
 
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableToolbar } from './data-table-toolbar';
