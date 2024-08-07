@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Button } from '@/components/shadcn/new-york/button';
+import { Button } from '@/components/ui/button';
 
 /**
  * Renders a drop down button with child buttons for logging in with a popup or redirect

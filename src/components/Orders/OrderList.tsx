@@ -1,12 +1,10 @@
 import { formatDistanceToNow } from 'date-fns';
 
 import { cn } from '@/lib/utils';
-import { ScrollArea } from '@/components/shadcn/new-york/scroll-area';
-import { Separator } from '@/components/shadcn/new-york/separator';
 import { IOrderList } from '@/types/Order';
 import { HOSPITAL, INSURANCE, ITEM, PATIENT, PHYSICIAN } from '@/constants';
 import CurrencyFormatter from '@/components/CurrencyFormatter';
-import { OrderListSkeleton } from './Skeleton';
+import { Spinner } from '../Loading';
 
 export function OrderList({
   orders,
@@ -96,10 +94,16 @@ export function OrderList({
     ));
   };
 
-  return loading ? (
-    <OrderListSkeleton />
-  ) : (
-    <div className="flex flex-col gap-2 p-2 mb-3">{renderItems()}</div>
+  return (
+    <div className="flex flex-col gap-2 p-2 mb-3 relative h-full">
+      {renderItems()}
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-100 bg-opacity-50 z-10">
+          <div className="text-center">
+            <Spinner />
+          </div>
+        </div>
+      )}
+    </div>
   );
-  // <OrderListSkeleton />
 }

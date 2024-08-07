@@ -1,12 +1,12 @@
 import { Archive, Trash2 } from 'lucide-react';
-import { Button } from '@/components/shadcn/new-york/button';
-import { Separator } from '@/components/shadcn/new-york/separator';
-import { Textarea } from '@/components/shadcn/new-york/textarea';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/shadcn/new-york/tooltip';
+} from '@/components/ui/tooltip';
 import {
   Tabs,
   TabsList,

@@ -1,11 +1,12 @@
 import {
   ORDER_INITIAL_STATE,
+  orderFormAtom,
   orderItemsAtom,
   ordersAtom,
   selectedOrder,
 } from '@/atoms/orders';
 import { IItem } from '@/types/Item';
-import { IOrderItem } from '@/types/Order';
+import { IOrderItem, IOrderForm } from '@/types/Order';
 import { useAtom } from 'jotai';
 import { useCallback } from 'react';
 
@@ -148,3 +149,19 @@ export const useOrders = () => {
     getOrders,
   };
 };
+
+export function useOrderForm() {
+  const [order, setOrder] = useAtom(orderFormAtom);
+
+  const setOrderFormData = useCallback(
+    (data: IOrderItem) => {
+      setOrder(data);
+    },
+    [setOrder]
+  );
+
+  return {
+    oderFormData: order,
+    setOrderFormData,
+  };
+}

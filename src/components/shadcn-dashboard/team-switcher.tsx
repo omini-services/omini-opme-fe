@@ -6,12 +6,8 @@ import {
 } from '@radix-ui/react-icons';
 
 import { cn } from '@/lib/utils';
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/components/shadcn/new-york/avatar';
-import { Button } from '@/components/shadcn/new-york/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -20,7 +16,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '@/components/shadcn/new-york/command';
+} from '@/components/ui/command';
 import {
   Dialog,
   DialogContent,
@@ -29,21 +25,21 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/shadcn/new-york/dialog';
-import { Input } from '@/components/shadcn/new-york/input';
-import { Label } from '@/components/shadcn/new-york/label';
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/shadcn/new-york/popover';
+} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/shadcn/new-york/select';
+} from '@/components/ui/select';
 
 const groups = [
   {

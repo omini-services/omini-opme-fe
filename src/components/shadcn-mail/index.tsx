@@ -14,20 +14,15 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { Input } from '@/components/shadcn/new-york/input';
+import { Input } from '@/components/ui/input';
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from '@/components/shadcn/new-york/resizable';
-import { Separator } from '@/components/shadcn/new-york/separator';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/shadcn/new-york/tabs';
-import { TooltipProvider } from '@/components/shadcn/new-york/tooltip';
+} from '@/components/ui/resizable';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { AccountSwitcher } from './account-switcher';
 import { MailDisplay } from './mail-display';
 import { MailList } from './mail-list';

@@ -2,20 +2,11 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   Menubar,
-  MenubarCheckboxItem,
   MenubarContent,
   MenubarItem,
-  MenubarLabel,
   MenubarMenu,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
   MenubarTrigger,
-} from '@/components/shadcn/new-york/menubar';
+} from '@/components/ui/menubar';
 import { ROUTES } from '@/constants';
 
 export const Menu = () => {

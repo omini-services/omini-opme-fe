@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { Button } from '@/components/shadcn/new-york/button';
+import { Button } from '@/components/ui/button';
 import DialogCenter from '@/components/DialogCenter';
 import { DIALOG_INITIAL_STATE, dialogState } from '@/atoms/dialog';
 import { useSetAtom } from 'jotai';

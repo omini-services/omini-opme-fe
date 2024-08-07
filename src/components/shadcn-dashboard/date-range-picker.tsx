@@ -4,13 +4,13 @@ import { addDays, format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/shadcn/new-york/button';
-import { Calendar } from '@/components/shadcn/new-york/calendar';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/shadcn/new-york/popover';
+} from '@/components/ui/popover';
 
 export function CalendarDateRangePicker({
   className,

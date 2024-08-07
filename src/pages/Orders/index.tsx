@@ -7,7 +7,7 @@ import {
 } from '@/atoms/orders';
 import { getAllApiRequest } from '@/api/api';
 import { OrdersPageSkeleton } from '@/components/Orders/Skeleton';
-import { TooltipProvider } from '@/components/shadcn/new-york/tooltip';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';

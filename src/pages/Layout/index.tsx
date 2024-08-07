@@ -1,6 +1,6 @@
 import { Search } from '@/components/shadcn-dashboard/search';
 import { ProfileMenu } from '@/components/ProfileMenu';
-import { Toaster } from '@/components/shadcn/new-york/toaster';
+import { Toaster } from '@/components/ui/toaster';
 import { Menu } from '@/components/Menu';
 import { Outlet } from 'react-router-dom';
 
@@ -16,7 +16,6 @@ export const Layout = () => {
           <div className="flex h-16 items-center px-4">
             <Menu />
             <div className="ml-auto flex items-center space-x-4">
-              <Search />
               <ProfileMenu />
             </div>
           </div>

@@ -12,7 +12,7 @@ export const ROUTES = {
   signout: { name: 'signout', label: 'Sign Out', to: '/signout' },
   dashboard: { name: 'dashboard', label: 'Dashboard', to: '/dashboard' },
   tasks: { name: 'tasks', label: 'Tasks', to: '/tasks' },
-  music: { name: 'music', label: 'Music', to: '/music' },
+  calendar: { name: 'calendar', label: 'Calendar', to: '/calendar' },
   orders: { name: 'orders', label: `${ORDER}s`, to: '/orders' },
   registry: {
     root: {

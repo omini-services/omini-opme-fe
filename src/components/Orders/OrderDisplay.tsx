@@ -3,14 +3,14 @@ import { format } from 'date-fns';
 import { Trash2 } from 'lucide-react';
 import { SaveIcon } from 'lucide-react';
 
-import { Button } from '@/components/shadcn/new-york/button';
-import { Separator } from '@/components/shadcn/new-york/separator';
-import { Textarea } from '@/components/shadcn/new-york/textarea';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/shadcn/new-york/tooltip';
+} from '@/components/ui/tooltip';
 
 import {
   Tabs,
@@ -23,13 +23,19 @@ import { OrderForm } from './Form';
 import { DataTable } from '../Table/data-table';
 import { Filter } from './TableFilter';
 import { columns } from './columns';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { apiRequest, deleteApiRequest, getApiRequest } from '@/api/api';
 import { useAuth0 } from '@auth0/auth0-react';
 import { IOrderItem } from '@/types/Order';
 import { fetchOrderItemsAtom } from '@/atoms/orders';
 import { useAtom } from 'jotai';
-import { useOrderItems, useSelectOrders } from '@/controllers/orders';
+import {
+  useOrderForm,
+  useOrderItems,
+  useSelectOrders,
+} from '@/controllers/orders';
+import { toast } from '@/components/ui/use-toast';
+import { Spinner } from '../Loading';
 
 interface OrderDisplayProps {
   order: IOrderItem | null;
@@ -40,12 +46,13 @@ const TAB_ITEMS = 'items';
 
 export function OrderDisplay({ order }: OrderDisplayProps) {
   const instance = useAuth0();
-  const { selectedOrderId } = useSelectOrders();
+  const [tab, setTab] = useState<string>(TAB_INFORMATION);
   const [fetchOrderItemStatus, setFetchOrderItemStatus] =
     useAtom(fetchOrderItemsAtom);
-  const [tab, setTab] = useState<string>(TAB_INFORMATION);
-
+  const { selectedOrderId } = useSelectOrders();
   const { deleteById, replaceAll, getOrderItems } = useOrderItems();
+  const { oderFormData } = useOrderForm();
+  const { loading } = fetchOrderItemStatus;
 
   useEffect(() => {
     if (!selectedOrderId) return;
@@ -101,33 +108,20 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
   };
 
   const handleSave = () => {
-    // if (!selectedOrderId) {
-    //   // CREATE
-    //   console.log('creation');
-    //   return;
-    // }
-    // (async () => {
-    //   setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: true });
-    //   try {
-    //     const result = await apiRequest({
-    //       url: `quotations/`,
-    //     });
-    //     console.log('result => ', { result, order });
-    //     // TODO: add reload list after deleting and updating
-    //     // setTableData(data?.items || []);
-    //   } catch (error) {
-    //     console.error('Failed to fetch order items', error);
-    //     setFetchOrderItemStatus({ ...fetchOrderItemStatus, error });
-    //   } finally {
-    //     setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: false });
-    //   }
-    // })();
+    console.log('saving... ', oderFormData);
+    toast({
+      title: 'formulário enviado:',
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">
+            {JSON.stringify(oderFormData, null, 2)}
+          </code>
+        </pre>
+      ),
+    });
   };
 
-  const isDisabled = useMemo(
-    () => fetchOrderItemStatus.loading,
-    [fetchOrderItemStatus.loading]
-  );
+  const isDisabled = useMemo(() => loading, [loading]);
 
   const handleOnTabChange = (tab: string) => setTab(tab);
 
@@ -199,51 +193,30 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
         <TabsContent value={TAB_INFORMATION} className="m-0 h-full">
           {order ? (
             <div className="flex flex-1 flex-col h-full">
-              <div className="flex items-start p-4">
-                <div className="flex items-start gap-4 text-sm">
-                  <div className="font-semibold">
-                    {ORDER}: {order.number}
-                  </div>
-                </div>
-                {order.dueDate && (
-                  <div className="ml-auto text-xs text-muted-foreground">
-                    {format(new Date(order.dueDate), 'PPpp')}
-                  </div>
-                )}
-              </div>
-
-              <Separator />
-
-              <OrderForm order={order} />
-
-              <Separator />
-
-              <div className="p-4">
-                <form>
-                  <div className="grid gap-4">
-                    <Textarea
-                      className="p-4"
-                      placeholder={'Adicionar comentario...'}
-                    />
-                    <div className="flex flex-row gap-2">
-                      <Button onClick={(e) => e.preventDefault()} size="sm">
-                        Adicionar
-                      </Button>
-
-                      <Button
-                        onClick={(e) => e.preventDefault()}
-                        size="sm"
-                        className="ml-auto"
-                      >
-                        Aprovar {ORDER}
-                      </Button>
-
-                      <Button onClick={(e) => e.preventDefault()} size="sm">
-                        Cancelar {ORDER}
-                      </Button>
+              <div className="relative h-full">
+                <div className="flex items-start p-4">
+                  <div className="flex items-start gap-4 text-sm">
+                    <div className="font-semibold">
+                      {ORDER}: {order.number}
                     </div>
                   </div>
-                </form>
+                  {order.dueDate && (
+                    <div className="ml-auto text-xs text-muted-foreground">
+                      {format(new Date(order.dueDate), 'PPpp')}
+                    </div>
+                  )}
+                </div>
+
+                <Separator />
+
+                <OrderForm order={order} />
+                {loading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-slate-100 bg-opacity-50 z-10">
+                    <div className="text-center">
+                      <Spinner />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
@@ -255,17 +228,26 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
 
         {/* Items Tab */}
         <TabsContent value={TAB_ITEMS} className="m-0 h-full">
-          <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
-            {order ? (
-              <DataTable
-                data={getOrderItems()}
-                columns={columns}
-                filter={Filter}
-                loading={fetchOrderItemStatus.loading}
-              />
-            ) : (
-              <div className="p-8 text-center text-muted-foreground">
-                {ORDER} nao selecionado.
+          <div className="relative h-full">
+            <div className="relative hidden h-full flex-1 flex-col space-y-8 p-2 md:flex">
+              {order ? (
+                <DataTable
+                  data={getOrderItems()}
+                  columns={columns}
+                  filter={Filter}
+                />
+              ) : (
+                <div className="p-8 text-center text-muted-foreground">
+                  {ORDER} nao selecionado.
+                </div>
+              )}
+            </div>
+
+            {loading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-slate-100 bg-opacity-50 z-10">
+                <div className="text-center">
+                  <Spinner />
+                </div>
               </div>
             )}
           </div>
