@@ -110,7 +110,7 @@ export function Orders({
 
           {/* Conteúdo das Tabs */}
           <div className="flex-grow overflow-y-scroll">
-            <TabsContent value="open" className="m-0">
+            <TabsContent value="open" className="h-full m-0">
               <OrderList
                 orders={orders}
                 selectedOrderId={selectedOrderId}
@@ -124,7 +124,7 @@ export function Orders({
                 ))} */}
             </TabsContent>
 
-            <TabsContent value="all" className="m-0">
+            <TabsContent value="all" className="h-full m-0">
               {/* <OrderList
                   orders={orders}
                   selectedOrderId={selectedOrderId}

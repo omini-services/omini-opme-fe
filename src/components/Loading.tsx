@@ -1,6 +1,14 @@
 import { Progress } from '@/components/shadcn/new-york/progress';
 import { useEffect, useState } from 'react';
 
+interface LoadingProps {
+  type: 'bar' | 'spin';
+}
+
+export const Spinner = () => {
+  return <div className="spinner" />;
+};
+
 export const ProgressBar = () => {
   const [progress, setProgress] = useState(13);
 
@@ -17,12 +25,14 @@ export const ProgressBar = () => {
   );
 };
 
-const Loading = () => {
+export const Loading = ({ type }: LoadingProps) => {
+  const component = {
+    bar: <ProgressBar />,
+    spin: <Spinner />,
+  }[type];
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="text-center">
-        <ProgressBar />
-      </div>
+      <div className="text-center">{component}</div>
     </div>
   );
 };

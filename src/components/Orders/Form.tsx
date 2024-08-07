@@ -1,9 +1,7 @@
 import { Input } from '@/components/shadcn/new-york/input';
 import { Label } from '@/components/shadcn/new-york/label';
-import { Separator } from '@/components/shadcn/new-york/separator';
 import { Button } from '@/components/shadcn/new-york/button';
 import { Calendar } from '@/components/shadcn/new-york/calendar';
-import { toast } from '@/components/shadcn/new-york/use-toast';
 
 import {
   Select,
@@ -35,10 +33,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { IOrderItem } from '@/types/Order';
-import { useEffect } from 'react'; // Import useEffect
+import { useEffect } from 'react';
+import { useOrderForm } from '@/controllers/orders';
 
 const FormSchema = z.object({
-  number: z.number().optional(), // Adicione campos do schema aqui
+  number: z.number().optional(),
   patientName: z.string().optional(),
   payingSourceType: z.string().optional(),
   hospitalName: z.string().optional(),
@@ -48,27 +47,24 @@ const FormSchema = z.object({
   }),
 });
 
-interface IOrderForm {
+interface IOrderFormProps {
   order: IOrderItem;
 }
 
-export const OrderForm = ({ order }: IOrderForm) => {
+export const OrderForm = ({ order }: IOrderFormProps) => {
+  const { setOrderFormData } = useOrderForm();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    toast({
-      title: 'formulário enviado:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  const handleChange = (field: string, value: any) => {
+    setOrderFormData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
   };
 
-  // Usando useEffect para definir valores iniciais
   useEffect(() => {
     if (order) {
       form.setValue('number', order.number);
@@ -80,6 +76,8 @@ export const OrderForm = ({ order }: IOrderForm) => {
       form.setValue('hospitalName', order.hospitalName);
       form.setValue('insuranceCompanyName', order.insuranceCompanyName);
       form.setValue('dueDate', new Date(order.dueDate));
+
+      setOrderFormData(order);
     }
   }, [order, form]);
 
@@ -87,24 +85,37 @@ export const OrderForm = ({ order }: IOrderForm) => {
     <Form {...form}>
       <div className="flex flex-col p-4 h-full mb-auto">
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          // onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col space-y-4 h-full"
         >
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="number">Número:</Label>
-              <Input id="number" {...form.register('number')} />
+              <Input
+                id="number"
+                {...form.register('number')}
+                onChange={(e) => handleChange('number', e.target.value)}
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="patientName">Nome do Paciente:</Label>
-              <Input id="patientName" {...form.register('patientName')} />
+              <Input
+                id="patientName"
+                {...form.register('patientName')}
+                onChange={(e) => handleChange('patientName', e.target.value)}
+              />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="payingSourceType">Tipo de pagamento:</Label>
-              <Select {...form.register('payingSourceType')}>
+              <Select
+                {...form.register('payingSourceType')}
+                onValueChange={(value) =>
+                  handleChange('payingSourceType', value)
+                }
+              >
                 <SelectTrigger id="payingSourceType">
                   <SelectValue placeholder="Selecione..." />
                 </SelectTrigger>
@@ -116,13 +127,22 @@ export const OrderForm = ({ order }: IOrderForm) => {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="hospitalName">Nome do Hospital</Label>
-              <Input id="hospitalName" {...form.register('hospitalName')} />
+              <Input
+                id="hospitalName"
+                {...form.register('hospitalName')}
+                onChange={(e) => handleChange('hospitalName', e.target.value)}
+              />
             </div>
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="insuranceCompanyName">Nome da Seguradora:</Label>
-            <Select {...form.register('insuranceCompanyName')}>
+            <Select
+              {...form.register('insuranceCompanyName')}
+              onValueChange={(value) =>
+                handleChange('insuranceCompanyName', value)
+              }
+            >
               <SelectTrigger id="insuranceCompanyName">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
@@ -166,7 +186,10 @@ export const OrderForm = ({ order }: IOrderForm) => {
                     <Calendar
                       mode="single"
                       selected={field.value}
-                      onSelect={field.onChange}
+                      onSelect={(date) => {
+                        field.onChange(date);
+                        handleChange('dueDate', date);
+                      }}
                       disabled={(date) =>
                         date > new Date() || date < new Date('1900-01-01')
                       }

@@ -1,25 +1,5 @@
 import { IItem } from './Item';
 
-export interface IFormData {
-  number: string;
-  patientId: string;
-  patientName: string;
-  physicianId: string;
-  physicianName: string;
-  payingSourceType: string;
-  payingSourceId: string;
-  payingSourceName: string;
-  hospitalId: string;
-  hospitalName: string;
-  insuranceCompanyId: string;
-  insuranceCompanyName: string;
-  internalSpecialistId: string;
-  internalSpecialistName: string;
-  dueDate: string;
-  items: IItem[];
-  total: number;
-}
-
 export interface IOrderList {
   orders: IOrderItem[];
   selectedOrderId: IOrderItem['id'] | null;
@@ -38,22 +18,23 @@ export type TFetchResult = {
 
 export interface IOrderItem {
   id: string;
-  number: number;
   patientCode: string;
   patientFirstName: string;
   patientLastName: string;
   physicianCode: string;
   physicianFirstName: string;
   physicianLastName: string;
-  payingSourceType: string;
   payingSourceCode: string;
   payingSourceName: string;
   hospitalCode: string;
-  hospitalName: string;
   insuranceCompanyCode: string;
-  insuranceCompanyName: string;
   internalSpecialistCode: string;
-  dueDate: string;
+  number?: number | undefined;
+  patientName?: string | undefined;
+  payingSourceType?: string | undefined;
+  hospitalName?: string | undefined;
+  insuranceCompanyName?: string | undefined;
+  dueDate: Date | string;
   items: IItem[];
   total: number;
 }

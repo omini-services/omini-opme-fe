@@ -23,23 +23,21 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/shadcn/new-york/table';
+import { Separator } from '@/components/shadcn/new-york/separator';
 
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableToolbar } from './data-table-toolbar';
-import { ProgressBar } from '../Signin/Loading';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filter: React.ComponentType<{ table: ITable<TData> }>;
-  loading: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filter,
-  loading,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -100,44 +98,35 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div className="space-y-4 h-full">
+    <div className="space-y-4 h-full flex flex-col">
       <DataTableToolbar table={table} filter={filter} />
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id} colSpan={header.colSpan}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {loading ? (
-            <TableRow key="loading">
-              <TableCell colSpan={columns.length}>
-                <div className="flex items-center justify-center min-h-96">
-                  <div className="text-center">
-                    <ProgressBar />
-                  </div>
-                </div>
-              </TableCell>
-            </TableRow>
-          ) : (
-            renderTableBody()
-          )}
-        </TableBody>
-      </Table>
-      <DataTablePagination table={table} />
+      <div className="flex-grow overflow-y-auto">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id} colSpan={header.colSpan}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>{renderTableBody()}</TableBody>
+        </Table>
+      </div>
+      <Separator />
+      <div className="flex justify-center items-center p-2 bg-white">
+        <DataTablePagination table={table} />
+      </div>
     </div>
   );
 }
