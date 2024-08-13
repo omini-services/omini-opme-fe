@@ -31,6 +31,7 @@ import {
   useOrderForm,
   useOrderItems,
   useOrders,
+  useOrdersTableSelection,
 } from '@/controllers/orders';
 import { toast } from '@/components/ui/use-toast';
 import { Spinner } from '../Loading';
