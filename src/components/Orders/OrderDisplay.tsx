@@ -50,6 +50,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
   const { replaceAll, getOrderItems } = useOrderItems();
   const { oderFormData } = useOrderForm();
   const { updateById, deleteById } = useOrders();
+  const { rowSelection } = useOrdersTableSelection();
 
   useEffect(() => {
     if (!order?.id) return;
@@ -105,6 +106,10 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
       [TAB_ITEMS]: `quotations/${order?.id}/items/${1}`,
     };
 
+    // TODO: continue from here
+    // delete order or items
+    // delete items based on rowSelection.length
+
     if (!order?.id) return;
 
     (async () => {
@@ -120,7 +125,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
         const { data, status: code } = response;
 
         if (getStatusCode(code)) {
-          deleteById(oderFormData?.id, oderFormData);
+          deleteById(oderFormData?.id);
           toast({
             title: 'formulário enviado:',
             description: (

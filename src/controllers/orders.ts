@@ -4,6 +4,7 @@ import {
   orderFormAtom,
   orderItemsAtom,
   ordersAtom,
+  ordersTableSelection,
   selectedOrder,
 } from '@/atoms/orders';
 import { IItem } from '@/types/Item';
@@ -195,5 +196,14 @@ export const useOrderFetchStatus = () => {
     setOrderItemsError,
     setOrdersLoading,
     setOrdersError,
+  };
+};
+
+export const useOrdersTableSelection = () => {
+  const [selection, setSelection] = useAtom(ordersTableSelection);
+
+  return {
+    rowSelection: selection,
+    setSelection,
   };
 };

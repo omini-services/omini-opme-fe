@@ -31,3 +31,9 @@ export const orderFetchStatusAtom = atom({
 });
 
 export const orderFormAtom = atom<IOrderItem | {}>({});
+
+type TOrdersTableSelection = {
+  [key: number]: boolean;
+};
+
+export const ordersTableSelection = atom<TOrdersTableSelection>({});
