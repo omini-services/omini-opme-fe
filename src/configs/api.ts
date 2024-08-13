@@ -6,13 +6,11 @@ export const callMsGraph = async (props: any) => {
   const bearer = `Bearer ${accessToken}`;
   headers.append('Authorization', bearer);
 
-  const config = {
-    method: 'GET',
-    headers,
-  };
-
   try {
-    return fetch(url, config)
+    return fetch(url, {
+      method: 'GET',
+      headers,
+    })
       .then(async (response) => response.json())
       .catch((error) => console.log('error when getting msg => ', error));
   } catch (error) {
@@ -37,21 +35,18 @@ export const callApi = async ({
   customHeaders = {},
 }: ICallApi) => {
   const headers = {
+    'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json',
     Authorization: `Bearer ${accessToken}`,
     ...customHeaders,
   };
-
-  const config = {
-    method,
-    headers,
-    ...(Object.keys(body).length > 0 && { data: body }),
-    url,
-  };
-
   try {
-    const response = await axios(config);
-    return response.data;
+    return await axios({
+      method,
+      headers,
+      ...(Object.keys(body).length > 0 && { data: body }),
+      url,
+    });
   } catch (error) {
     console.error(error);
     throw error;

@@ -37,11 +37,24 @@ import { useEffect } from 'react';
 import { useOrderForm } from '@/controllers/orders';
 
 const FormSchema = z.object({
-  number: z.number().optional(),
-  patientName: z.string().optional(),
-  payingSourceType: z.string().optional(),
-  hospitalName: z.string().optional(),
-  insuranceCompanyName: z.string().optional(),
+  number: z.number({
+    required_error: 'Uma codigo é necessário.',
+  }),
+  patientFirstName: z.string({
+    required_error: 'Uma nome necessário.',
+  }),
+  patientLastName: z.string({
+    required_error: 'Uma sobrenome é necessário.',
+  }),
+  payingSourceType: z.string({
+    required_error: 'Selecione um tipo de pagamento.',
+  }),
+  hospitalName: z.string({
+    required_error: 'Selecione um hospital.',
+  }),
+  insuranceCompanyName: z.string({
+    required_error: 'Selecione um Convenio.',
+  }),
   dueDate: z.date({
     required_error: 'Uma data é necessária.',
   }),
@@ -68,10 +81,12 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
   useEffect(() => {
     if (order) {
       form.setValue('number', order.number);
-      form.setValue(
-        'patientName',
-        `${order.patientFirstName} ${order.patientLastName}`
-      );
+      // form.setValue(
+      //   'patientName',
+      //   `${order.patientFirstName} ${order.patientLastName}`
+      // );
+      form.setValue('patientFirstName', order.patientFirstName);
+      form.setValue('patientLastName', order.patientLastName);
       form.setValue('payingSourceType', order.payingSourceType);
       form.setValue('hospitalName', order.hospitalName);
       form.setValue('insuranceCompanyName', order.insuranceCompanyName);
@@ -88,9 +103,9 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
           // onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col space-y-4 h-full"
         >
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="number">Número:</Label>
+              <Label htmlFor="number">Codigo:</Label>
               <Input
                 id="number"
                 {...form.register('number')}
@@ -98,11 +113,23 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="patientName">Nome do Paciente:</Label>
+              <Label htmlFor="patientFirstName">Nome do Paciente:</Label>
               <Input
-                id="patientName"
-                {...form.register('patientName')}
-                onChange={(e) => handleChange('patientName', e.target.value)}
+                id="patientFirstName"
+                {...form.register('patientFirstName')}
+                onChange={(e) =>
+                  handleChange('patientFirstName', e.target.value)
+                }
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="patientLastName">Sobrenome do Paciente:</Label>
+              <Input
+                id="patientLastName"
+                {...form.register('patientLastName')}
+                onChange={(e) =>
+                  handleChange('patientLastName', e.target.value)
+                }
               />
             </div>
           </div>

@@ -87,7 +87,7 @@ const Calendar = () => {
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     console.log(
-      `Are you sure you want to delete the event '${clickInfo.event.title}'`
+      `Tem certeza que deseja deletar o evento '${clickInfo.event.title}'`
     );
     clickInfo.event.remove();
   };

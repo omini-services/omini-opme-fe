@@ -98,3 +98,17 @@ export const messages = (data: any) => ({
 export const messagesInPtBr = {
   hello_time: 'Ola, {ts, date, ::yyyyMMdd}',
 };
+
+type STATUS_CODE = {
+  [key: number]: boolean;
+};
+
+const STATUS_200 = 200;
+const STATUS_204 = 204;
+
+export const STATUS_CODE: STATUS_CODE = {
+  [STATUS_200]: true,
+  [STATUS_204]: true,
+};
+
+export const getStatusCode = (code: number) => STATUS_CODE[code] || false;
