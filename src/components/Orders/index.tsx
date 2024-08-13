@@ -9,32 +9,31 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
-import { IOrderItem } from '@/types/Order';
+import { LAYOUT_SIZES_INITIAL_STATE } from '@/atoms/orders';
+import { useEffect, useMemo } from 'react';
 import {
-  fetchOrderItemsAtom,
-  LAYOUT_SIZES_INITIAL_STATE,
-} from '@/atoms/orders';
-import { useEffect } from 'react';
-import { useAtomValue } from 'jotai';
-import { useSelectOrders } from '@/controllers/orders';
+  useOrderFetchStatus,
+  useOrders,
+  useSelectOrders,
+} from '@/controllers/orders';
 
 interface IOrders {
-  orders: IOrderItem[];
   layout: number[] | undefined;
   setLayout: Function;
 }
 
 export function Orders({
-  orders,
   layout = LAYOUT_SIZES_INITIAL_STATE,
   setLayout,
 }: IOrders) {
   const { selectedOrderId, selectOrder } = useSelectOrders();
-  const { loading } = useAtomValue(fetchOrderItemsAtom);
+  const { status } = useOrderFetchStatus();
+  const { orders } = useOrders();
+  const isDisabled = useMemo(() => status.orderItems.loading, [status]);
 
   useEffect(() => {
-    if (orders && orders.length > 0 && selectedOrderId === null) {
-      selectOrder(orders[0].id);
+    if (orders && orders?.data.length > 0 && selectedOrderId === null) {
+      selectOrder(orders?.data[0].id);
     }
   }, [orders]);
 
@@ -46,7 +45,7 @@ export function Orders({
           <TabsTrigger
             value="open"
             className="text-zinc-600 dark:text-zinc-200"
-            disabled={loading}
+            disabled={isDisabled}
           >
             Abertos
           </TabsTrigger>
@@ -64,7 +63,7 @@ export function Orders({
             <Input
               placeholder="Search"
               className="pl-8 w-full"
-              disabled={loading}
+              disabled={isDisabled}
             />
           </div>
         </form>
@@ -91,10 +90,9 @@ export function Orders({
           <div className="flex-grow overflow-y-scroll">
             <TabsContent value="open" className="h-full m-0">
               <OrderList
-                orders={orders}
                 selectedOrderId={selectedOrderId}
                 selectOrder={selectOrder}
-                loading={loading}
+                loading={isDisabled}
               />
             </TabsContent>
           </div>
@@ -107,7 +105,9 @@ export function Orders({
 
       <ResizablePanel defaultSize={layout[1]}>
         <OrderDisplay
-          order={orders.find((item) => item.id === selectedOrderId) || null}
+          order={
+            orders?.data.find((item) => item.id === selectedOrderId) || null
+          }
         />
       </ResizablePanel>
     </ResizablePanelGroup>

@@ -1,7 +1,6 @@
 import { IItem } from './Item';
 
 export interface IOrderList {
-  orders: IOrderItem[];
   selectedOrderId: IOrderItem['id'] | null;
   selectOrder: Function;
   loading: boolean;

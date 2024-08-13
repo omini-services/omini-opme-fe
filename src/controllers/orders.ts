@@ -1,12 +1,13 @@
 import {
-  ORDER_INITIAL_STATE,
+  ORDERS_INITIAL_STATE,
+  orderFetchStatusAtom,
   orderFormAtom,
   orderItemsAtom,
   ordersAtom,
   selectedOrder,
 } from '@/atoms/orders';
 import { IItem } from '@/types/Item';
-import { IOrderItem, IOrderForm } from '@/types/Order';
+import { IOrderItem } from '@/types/Order';
 import { useAtom } from 'jotai';
 import { useCallback } from 'react';
 
@@ -34,12 +35,10 @@ export function useSelectOrders() {
 export const useOrderItems = () => {
   const [orderItems, setOrderItems] = useAtom(orderItemsAtom);
 
-  // Function to insert a new item
   const insert = (newItem: IItem) => {
     setOrderItems((prev) => [...prev, newItem]);
   };
 
-  // Function to delete an item by id
   const deleteById = (id: number) => {
     setOrderItems((prev) => [...prev.filter((item) => item.itemCode != id)]);
   };
@@ -61,7 +60,6 @@ export const useOrderItems = () => {
 export const useOrders = () => {
   const [orders, setOrders] = useAtom(ordersAtom);
 
-  // Função para substituir todo o array data
   const replaceAll = (newData: IOrderItem[]) => {
     setOrders((prev) => ({
       ...prev,
@@ -70,7 +68,6 @@ export const useOrders = () => {
     }));
   };
 
-  // Função para inserir um novo item
   const insert = (newItem: IOrderItem) => {
     setOrders((prev) => ({
       ...prev,
@@ -79,7 +76,6 @@ export const useOrders = () => {
     }));
   };
 
-  // Função para deletar um item pelo id
   const deleteById = (id: number) => {
     setOrders((prev) => ({
       ...prev,
@@ -88,7 +84,6 @@ export const useOrders = () => {
     }));
   };
 
-  // Função para atualizar um item pelo id
   const updateById = (id: number, updatedItem: Partial<IOrderItem>) => {
     setOrders((prev) => ({
       ...prev,
@@ -98,7 +93,6 @@ export const useOrders = () => {
     }));
   };
 
-  // Função para definir a página atual
   const setCurrentPage = (page: number) => {
     setOrders((prev) => ({
       ...prev,
@@ -106,7 +100,6 @@ export const useOrders = () => {
     }));
   };
 
-  // Função para definir o total de páginas
   const setPageCount = (count: number) => {
     setOrders((prev) => ({
       ...prev,
@@ -114,7 +107,6 @@ export const useOrders = () => {
     }));
   };
 
-  // Função para definir o tamanho da página
   const setPageSize = (size: number) => {
     setOrders((prev) => ({
       ...prev,
@@ -122,7 +114,6 @@ export const useOrders = () => {
     }));
   };
 
-  // Função para definir o total de linhas
   const setRowCount = (count: number) => {
     setOrders((prev) => ({
       ...prev,
@@ -131,12 +122,13 @@ export const useOrders = () => {
   };
 
   const reset = () => {
-    setOrders(ORDER_INITIAL_STATE);
+    setOrders(ORDERS_INITIAL_STATE);
   };
 
   const getOrders = () => orders;
 
   return {
+    orders,
     replaceAll,
     insert,
     deleteById,
@@ -165,3 +157,43 @@ export function useOrderForm() {
     setOrderFormData,
   };
 }
+
+export const useOrderFetchStatus = () => {
+  const [status, setStatus] = useAtom(orderFetchStatusAtom);
+
+  const setOrderItemsLoading = (loading: boolean) => {
+    setStatus((prev) => ({
+      ...prev,
+      orderItems: { ...prev.orderItems, loading },
+    }));
+  };
+
+  const setOrderItemsError = (error: any) => {
+    setStatus((prev) => ({
+      ...prev,
+      orderItems: { ...prev.orderItems, error },
+    }));
+  };
+
+  const setOrdersLoading = (loading: boolean) => {
+    setStatus((prev) => ({
+      ...prev,
+      orders: { ...prev.orders, loading },
+    }));
+  };
+
+  const setOrdersError = (error: any) => {
+    setStatus((prev) => ({
+      ...prev,
+      orders: { ...prev.orders, error },
+    }));
+  };
+
+  return {
+    status,
+    setOrderItemsLoading,
+    setOrderItemsError,
+    setOrdersLoading,
+    setOrdersError,
+  };
+};

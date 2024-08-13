@@ -1,54 +1,50 @@
 import { useAtom } from 'jotai';
 import { Orders } from '@/components/Orders';
-import {
-  ORDER_INITIAL_STATE,
-  layoutState,
-  fetchOrdersAtom,
-} from '@/atoms/orders';
-import { getAllApiRequest } from '@/api/api';
+import { ORDERS_INITIAL_STATE, layoutState } from '@/atoms/orders';
+import { apiRequest } from '@/api';
 import { OrdersPageSkeleton } from '@/components/Orders/Skeleton';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
-import { useOrders } from '@/controllers/orders';
+import { useOrderFetchStatus, useOrders } from '@/controllers/orders';
 
 export default function OrdersPage() {
   const instance = useAuth0();
   const [layout, setLayout] = useAtom(layoutState);
-  const [fetchOrders, setfetchOrders] = useAtom(fetchOrdersAtom);
-  const { getOrders, replaceAll, reset } = useOrders();
-  const location = useLocation();
-
-  const orders = useMemo(() => getOrders(), [getOrders]);
+  const { orders, replaceAll, reset } = useOrders();
+  const { status, setOrdersLoading, setOrdersError } = useOrderFetchStatus();
 
   useEffect(() => {
     const fetchOrdersData = async () => {
-      if (fetchOrders.loading) return;
+      if (status.orders.loading) return;
 
-      if (isEqual(orders, ORDER_INITIAL_STATE)) {
-        setfetchOrders((prev) => ({ ...prev, loading: true }));
+      if (isEqual(orders?.data, ORDERS_INITIAL_STATE.data)) {
+        setOrdersLoading(true);
 
         try {
-          const { data } = await getAllApiRequest({
-            instance,
-            model: 'quotations',
-          });
+          const { data, currentPage, pageCount, pageSize, rowCount } =
+            await apiRequest({
+              instance,
+              model: 'quotations',
+              method: 'GET',
+            });
 
-          replaceAll(data || []);
+          replaceAll(data?.data || []);
         } catch (error: any) {
-          setfetchOrders((prev) => ({ ...prev, error }));
+          setOrdersError(error);
         } finally {
-          setfetchOrders((prev) => ({ ...prev, loading: false }));
+          setOrdersLoading(false);
         }
       }
     };
 
     fetchOrdersData();
-  }, [fetchOrders.loading, instance]);
 
-  if (fetchOrders.error) {
+    return () => reset();
+  }, []);
+
+  if (status.orders.error) {
     return (
       <div style={{ textAlign: 'center', padding: '20px' }}>
         <p style={{ color: 'red', fontWeight: 'bold' }}>ERRO de rede</p>
@@ -59,10 +55,10 @@ export default function OrdersPage() {
 
   return (
     <TooltipProvider delayDuration={0}>
-      {fetchOrders.loading || !orders?.data.length ? (
+      {status.orders.loading || !orders?.data.length ? (
         <OrdersPageSkeleton />
       ) : (
-        <Orders orders={orders?.data} layout={layout} setLayout={setLayout} />
+        <Orders layout={layout} setLayout={setLayout} />
       )}
     </TooltipProvider>
   );

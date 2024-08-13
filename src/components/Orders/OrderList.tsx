@@ -5,15 +5,17 @@ import { IOrderList } from '@/types/Order';
 import { HOSPITAL, INSURANCE, ITEM, PATIENT, PHYSICIAN } from '@/constants';
 import CurrencyFormatter from '@/components/CurrencyFormatter';
 import { Spinner } from '../Loading';
+import { useOrders } from '@/controllers/orders';
+import { useMemo } from 'react';
 
 export function OrderList({
-  orders,
   selectedOrderId,
   selectOrder,
   loading,
 }: IOrderList) {
+  const { orders } = useOrders();
   const renderItems = () => {
-    return orders.map((item) => (
+    return orders?.data.map((item) => (
       <button
         key={item.id}
         className={cn(

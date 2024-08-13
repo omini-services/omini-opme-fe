@@ -5,7 +5,6 @@ import { SaveIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
@@ -18,21 +17,20 @@ import {
   TabsTrigger,
   TabsContent,
 } from '../shadcn/new-york/tabs';
-import { ORDER } from '@/constants';
+import { getStatusCode, ORDER, STATUS_CODE } from '@/constants';
 import { OrderForm } from './Form';
 import { DataTable } from '../Table/data-table';
 import { Filter } from './TableFilter';
 import { columns } from './columns';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { apiRequest, deleteApiRequest, getApiRequest } from '@/api/api';
+import { apiRequest } from '@/api';
 import { useAuth0 } from '@auth0/auth0-react';
 import { IOrderItem } from '@/types/Order';
-import { fetchOrderItemsAtom } from '@/atoms/orders';
-import { useAtom } from 'jotai';
 import {
+  useOrderFetchStatus,
   useOrderForm,
   useOrderItems,
-  useSelectOrders,
+  useOrders,
 } from '@/controllers/orders';
 import { toast } from '@/components/ui/use-toast';
 import { Spinner } from '../Loading';
@@ -47,36 +45,59 @@ const TAB_ITEMS = 'items';
 export function OrderDisplay({ order }: OrderDisplayProps) {
   const instance = useAuth0();
   const [tab, setTab] = useState<string>(TAB_INFORMATION);
-  const [fetchOrderItemStatus, setFetchOrderItemStatus] =
-    useAtom(fetchOrderItemsAtom);
-  const { selectedOrderId } = useSelectOrders();
-  const { deleteById, replaceAll, getOrderItems } = useOrderItems();
+  const { setOrderItemsLoading, setOrderItemsError, status } =
+    useOrderFetchStatus();
+  const { replaceAll, getOrderItems } = useOrderItems();
   const { oderFormData } = useOrderForm();
-  const { loading } = fetchOrderItemStatus;
+  const { updateById, deleteById } = useOrders();
 
   useEffect(() => {
-    if (!selectedOrderId) return;
+    if (!order?.id) return;
 
     const fetch = async () => {
-      setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: true });
+      setOrderItemsLoading(true);
       try {
-        const { data } = await getApiRequest({
+        const { data, status: code } = await apiRequest({
           instance,
-          url: `quotations/${selectedOrderId}`,
+          url: `quotations/${order?.id}`,
           method: 'GET',
         });
 
-        replaceAll(data?.items || []);
+        if (getStatusCode(code)) {
+          replaceAll(data?.data?.items || []);
+        } else {
+          toast({
+            title: 'erro ao carregar items:',
+            description: (
+              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                <code className="text-white">
+                  Ocorreu um erro ao carregar dados do orcamente numero:{' '}
+                  {order?.number}
+                </code>
+              </pre>
+            ),
+          });
+        }
       } catch (error: any) {
-        console.error('Failed to fetch order items', error);
-        setFetchOrderItemStatus({ ...fetchOrderItemStatus, error });
+        toast({
+          title: 'erro ao carregar items:',
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Ocorreu um erro ao carregar dados do orcamente numero:{' '}
+                {order?.number}
+              </code>
+            </pre>
+          ),
+        });
+        setOrderItemsError(error);
       } finally {
-        setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: false });
+        setOrderItemsLoading(false);
       }
     };
 
     fetch();
-  }, [selectedOrderId]);
+  }, [order?.id]);
 
   const handleDelete = () => {
     const deleteMapUrl = {
@@ -84,44 +105,122 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
       [TAB_ITEMS]: `quotations/${order?.id}/items/${1}`,
     };
 
-    if (!selectedOrderId) return;
+    if (!order?.id) return;
 
     (async () => {
-      setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: true });
+      setOrderItemsLoading(true);
+
       try {
-        const result = await deleteApiRequest({
+        const response = await apiRequest({
           instance,
           url: deleteMapUrl[tab],
+          method: 'DELETE',
         });
 
-        console.log('result => ', { result, order });
+        const { data, status: code } = response;
 
-        // TODO: add reload list after deleting and updating
-
-        // setTableData(data?.items || []);
+        if (getStatusCode(code)) {
+          deleteById(oderFormData?.id, oderFormData);
+          toast({
+            title: 'formulário enviado:',
+            description: (
+              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                <code className="text-white">
+                  Orcamento numero: {oderFormData?.number} deletado com sucesso!
+                </code>
+              </pre>
+            ),
+          });
+        } else {
+          toast({
+            title: 'erro ao atualizar orcamento:',
+            description: (
+              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                <code className="text-white">
+                  Ocorreu um erro ao deletar um orcamente numero:{' '}
+                  {oderFormData?.number}
+                </code>
+              </pre>
+            ),
+          });
+        }
       } catch (error) {
-        setFetchOrderItemStatus({ ...fetchOrderItemStatus, error });
+        setOrderItemsError(error);
+        toast({
+          title: 'erro ao atualizar orcamento:',
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Ocorreu um erro ao deletar um orcamente numero:{' '}
+                {oderFormData?.number}
+              </code>
+            </pre>
+          ),
+        });
       } finally {
-        setFetchOrderItemStatus({ ...fetchOrderItemStatus, loading: false });
+        setOrderItemsLoading(false);
       }
     })();
   };
 
-  const handleSave = () => {
-    console.log('saving... ', oderFormData);
-    toast({
-      title: 'formulário enviado:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">
-            {JSON.stringify(oderFormData, null, 2)}
-          </code>
-        </pre>
-      ),
-    });
+  const handleSave = async () => {
+    try {
+      setOrderItemsLoading(true);
+
+      const response = await apiRequest({
+        instance,
+        model: 'quotations',
+        method: 'PUT',
+        id: oderFormData?.id,
+        body: JSON.stringify(oderFormData, null, 2),
+      });
+
+      const { data, status: code } = response;
+
+      if (getStatusCode(code)) {
+        updateById(oderFormData?.id, oderFormData);
+        toast({
+          title: 'formulário enviado:',
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Orcamento numero: {oderFormData?.number} atualizado com sucesso!
+              </code>
+            </pre>
+          ),
+        });
+      } else {
+        toast({
+          title: 'erro ao atualizar orcamento:',
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Ocorreu um erro ao atualizar um orcamente numero:{' '}
+                {oderFormData?.number}
+              </code>
+            </pre>
+          ),
+        });
+      }
+    } catch (error) {
+      toast({
+        title: 'erro ao atualizar orcamento:',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              Ocorreu um erro ao atualizar um orcamente numero:{' '}
+              {oderFormData?.number}
+            </code>
+          </pre>
+        ),
+      });
+      setOrderItemsError(error);
+    } finally {
+      setOrderItemsLoading(false);
+    }
   };
 
-  const isDisabled = useMemo(() => loading, [loading]);
+  const isDisabled = useMemo(() => status.orderItems.loading, [status]);
 
   const handleOnTabChange = (tab: string) => setTab(tab);
 
@@ -210,7 +309,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                 <Separator />
 
                 <OrderForm order={order} />
-                {loading && (
+                {isDisabled && (
                   <div className="absolute inset-0 flex items-center justify-center bg-slate-100 bg-opacity-50 z-10">
                     <div className="text-center">
                       <Spinner />
@@ -243,7 +342,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
               )}
             </div>
 
-            {loading && (
+            {isDisabled && (
               <div className="absolute inset-0 flex items-center justify-center bg-slate-100 bg-opacity-50 z-10">
                 <div className="text-center">
                   <Spinner />
