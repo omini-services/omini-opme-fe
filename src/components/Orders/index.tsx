@@ -31,6 +31,7 @@ export function Orders({
   const { orders } = useOrders();
   const isDisabled = useMemo(() => status.orderItems.loading, [status]);
 
+  // TODO: selecionar o primeiro item dos orcamentos apos deletar um orcamento
   useEffect(() => {
     if (orders && orders?.data.length > 0 && selectedOrderId === null) {
       selectOrder(orders?.data[0].id);

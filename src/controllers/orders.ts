@@ -4,6 +4,7 @@ import {
   orderFormAtom,
   orderItemsAtom,
   ordersAtom,
+  ordersTableSelection,
   selectedOrder,
 } from '@/atoms/orders';
 import { IItem } from '@/types/Item';
@@ -39,8 +40,8 @@ export const useOrderItems = () => {
     setOrderItems((prev) => [...prev, newItem]);
   };
 
-  const deleteById = (id: number) => {
-    setOrderItems((prev) => [...prev.filter((item) => item.itemCode != id)]);
+  const deleteById = (code: string) => {
+    setOrderItems((prev) => [...prev.filter((item) => item.itemCode != code)]);
   };
 
   const replaceAll = (newData: IItem[]) => {
@@ -50,9 +51,9 @@ export const useOrderItems = () => {
   const getOrderItems = () => orderItems;
 
   return {
-    insert,
-    deleteById,
-    replaceAll,
+    insertItem: insert,
+    deleteItemByCode: deleteById,
+    replaceAllItems: replaceAll,
     getOrderItems,
   };
 };
@@ -153,7 +154,7 @@ export function useOrderForm() {
   );
 
   return {
-    oderFormData: order,
+    orderFormData: order,
     setOrderFormData,
   };
 }
@@ -195,5 +196,14 @@ export const useOrderFetchStatus = () => {
     setOrderItemsError,
     setOrdersLoading,
     setOrdersError,
+  };
+};
+
+export const useOrdersTableSelection = () => {
+  const [selection, setSelection] = useAtom(ordersTableSelection);
+
+  return {
+    rowSelection: selection,
+    setSelection,
   };
 };

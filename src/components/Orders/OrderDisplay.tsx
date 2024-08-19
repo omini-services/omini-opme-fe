@@ -17,12 +17,12 @@ import {
   TabsTrigger,
   TabsContent,
 } from '../shadcn/new-york/tabs';
-import { getStatusCode, ORDER, STATUS_CODE } from '@/constants';
+import { getStatusCode, ORDER } from '@/constants';
 import { OrderForm } from './Form';
 import { DataTable } from '../Table/data-table';
 import { Filter } from './TableFilter';
 import { columns } from './columns';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { apiRequest } from '@/api';
 import { useAuth0 } from '@auth0/auth0-react';
 import { IOrderItem } from '@/types/Order';
@@ -31,25 +31,53 @@ import {
   useOrderForm,
   useOrderItems,
   useOrders,
+  useOrdersTableSelection,
 } from '@/controllers/orders';
 import { toast } from '@/components/ui/use-toast';
 import { Spinner } from '../Loading';
 
+import { DIALOG_INITIAL_STATE, dialogState } from '@/atoms/dialog';
+import { useSetAtom } from 'jotai';
+import { handleDelete, TAB_INFORMATION, TAB_ITEMS } from './helpers';
+
 interface OrderDisplayProps {
   order: IOrderItem | null;
 }
-
-const TAB_INFORMATION = 'information';
-const TAB_ITEMS = 'items';
 
 export function OrderDisplay({ order }: OrderDisplayProps) {
   const instance = useAuth0();
   const [tab, setTab] = useState<string>(TAB_INFORMATION);
   const { setOrderItemsLoading, setOrderItemsError, status } =
     useOrderFetchStatus();
-  const { replaceAll, getOrderItems } = useOrderItems();
-  const { oderFormData } = useOrderForm();
+  const { replaceAllItems, getOrderItems, deleteItemByCode } = useOrderItems();
+  const { orderFormData } = useOrderForm();
   const { updateById, deleteById } = useOrders();
+  const { rowSelection, setSelection } = useOrdersTableSelection();
+
+  const dialogOptions = {
+    ...DIALOG_INITIAL_STATE,
+    show: true,
+    title: 'Confirmação',
+    body: `Tem certeza de que deseja excluir?`,
+    positive: 'Sim',
+    negative: 'Cancelar',
+    positiveCallback: () =>
+      handleDelete({
+        tab,
+        order,
+        instance,
+        apiRequest,
+        rowSelection,
+        orderFormData,
+        deleteOrderById: deleteById,
+        deleteItemByCode,
+        setOrderItemsError,
+        setOrderItemsLoading,
+        items: getOrderItems(),
+      }),
+  };
+
+  const setDialog = useSetAtom(dialogState);
 
   useEffect(() => {
     if (!order?.id) return;
@@ -64,7 +92,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
         });
 
         if (getStatusCode(code)) {
-          replaceAll(data?.data?.items || []);
+          replaceAllItems(data?.data?.items || []);
         } else {
           toast({
             title: 'erro ao carregar items:',
@@ -97,71 +125,11 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
     };
 
     fetch();
-  }, [order?.id]);
 
-  const handleDelete = () => {
-    const deleteMapUrl = {
-      [TAB_INFORMATION]: `quotations/${order?.id}`,
-      [TAB_ITEMS]: `quotations/${order?.id}/items/${1}`,
+    return () => {
+      setSelection({});
     };
-
-    if (!order?.id) return;
-
-    (async () => {
-      setOrderItemsLoading(true);
-
-      try {
-        const response = await apiRequest({
-          instance,
-          url: deleteMapUrl[tab],
-          method: 'DELETE',
-        });
-
-        const { data, status: code } = response;
-
-        if (getStatusCode(code)) {
-          deleteById(oderFormData?.id, oderFormData);
-          toast({
-            title: 'formulário enviado:',
-            description: (
-              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <code className="text-white">
-                  Orcamento numero: {oderFormData?.number} deletado com sucesso!
-                </code>
-              </pre>
-            ),
-          });
-        } else {
-          toast({
-            title: 'erro ao atualizar orcamento:',
-            description: (
-              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <code className="text-white">
-                  Ocorreu um erro ao deletar um orcamente numero:{' '}
-                  {oderFormData?.number}
-                </code>
-              </pre>
-            ),
-          });
-        }
-      } catch (error) {
-        setOrderItemsError(error);
-        toast({
-          title: 'erro ao atualizar orcamento:',
-          description: (
-            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">
-                Ocorreu um erro ao deletar um orcamente numero:{' '}
-                {oderFormData?.number}
-              </code>
-            </pre>
-          ),
-        });
-      } finally {
-        setOrderItemsLoading(false);
-      }
-    })();
-  };
+  }, [order?.id]);
 
   const handleSave = async () => {
     try {
@@ -171,20 +139,21 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
         instance,
         model: 'quotations',
         method: 'PUT',
-        id: oderFormData?.id,
-        body: JSON.stringify(oderFormData, null, 2),
+        id: orderFormData?.id,
+        body: JSON.stringify(orderFormData, null, 2),
       });
 
       const { data, status: code } = response;
 
       if (getStatusCode(code)) {
-        updateById(oderFormData?.id, oderFormData);
+        updateById(orderFormData?.id, orderFormData);
         toast({
           title: 'formulário enviado:',
           description: (
             <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
               <code className="text-white">
-                Orcamento numero: {oderFormData?.number} atualizado com sucesso!
+                Orcamento numero: {orderFormData?.number} atualizado com
+                sucesso!
               </code>
             </pre>
           ),
@@ -196,7 +165,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
             <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
               <code className="text-white">
                 Ocorreu um erro ao atualizar um orcamente numero:{' '}
-                {oderFormData?.number}
+                {orderFormData?.number}
               </code>
             </pre>
           ),
@@ -209,7 +178,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">
               Ocorreu um erro ao atualizar um orcamente numero:{' '}
-              {oderFormData?.number}
+              {orderFormData?.number}
             </code>
           </pre>
         ),
@@ -232,31 +201,36 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
         onValueChange={handleOnTabChange}
       >
         <div className="flex items-center p-2">
+          {tab != TAB_ITEMS && (
+            <div className="flex items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    disabled={!order || isDisabled}
+                    onClick={handleSave}
+                  >
+                    <SaveIcon className="h-4 w-4" />
+                    <span className="sr-only">Salvar</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Salvar</TooltipContent>
+              </Tooltip>
+            </div>
+          )}
           <div className="flex items-center gap-2">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  disabled={!order || isDisabled}
-                  onClick={handleSave}
-                >
-                  <SaveIcon className="h-4 w-4" />
-                  <span className="sr-only">Salvar</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Salvar</TooltipContent>
-            </Tooltip>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  disabled={!order || isDisabled}
-                  onClick={handleDelete}
+                  disabled={
+                    !order ||
+                    isDisabled ||
+                    (tab == TAB_ITEMS && !Object.entries(rowSelection).length)
+                  }
+                  onClick={() => setDialog(dialogOptions)}
                 >
                   <Trash2 className="h-4 w-4" />
                   <span className="sr-only">Excluir</span>

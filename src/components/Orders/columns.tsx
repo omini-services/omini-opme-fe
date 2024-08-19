@@ -34,7 +34,7 @@ export const columns: ColumnDef<Item>[] = [
         className="translate-y-[2px]"
       />
     ),
-    cell: ({ row }) => (
+    cell: ({ row, table, ...rest }) => (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -44,6 +44,15 @@ export const columns: ColumnDef<Item>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: 'itemCode',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Item Code" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-[150px]">{row.getValue('itemCode')}</div>
+    ),
   },
   {
     accessorKey: 'lineId',
@@ -65,15 +74,7 @@ export const columns: ColumnDef<Item>[] = [
     enableSorting: true,
     enableHiding: false,
   },
-  {
-    accessorKey: 'itemCode',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Item Code" />
-    ),
-    cell: ({ row }) => (
-      <div className="w-[150px]">{row.getValue('itemCode')}</div>
-    ),
-  },
+
   {
     accessorKey: 'itemName',
     header: ({ column }) => (
