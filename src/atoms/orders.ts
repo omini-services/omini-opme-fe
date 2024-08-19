@@ -32,7 +32,7 @@ export const orderFetchStatusAtom = atom({
 
 export const orderFormAtom = atom<IOrderItem | {}>({});
 
-type TOrdersTableSelection = {
+export type TOrdersTableSelection = {
   [key: number]: boolean;
 };
 

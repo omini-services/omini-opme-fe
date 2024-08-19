@@ -105,10 +105,16 @@ type STATUS_CODE = {
 
 const STATUS_200 = 200;
 const STATUS_204 = 204;
+const STATUS_404 = 404;
+const STATUS_500 = 500;
+const STATUS_401 = 401;
 
 export const STATUS_CODE: STATUS_CODE = {
   [STATUS_200]: true,
   [STATUS_204]: true,
+  [STATUS_404]: false,
+  [STATUS_500]: false,
+  [STATUS_401]: false,
 };
 
 export const getStatusCode = (code: number) => STATUS_CODE[code] || false;

@@ -1,4 +1,4 @@
-import { Search } from '@/components/shadcn-dashboard/search';
+import DialogCenter from '@/components/DialogCenter';
 import { ProfileMenu } from '@/components/ProfileMenu';
 import { Toaster } from '@/components/ui/toaster';
 import { Menu } from '@/components/Menu';
@@ -11,6 +11,7 @@ export const Layout = () => {
   return (
     <IntlProvider locale={intl.locale} messages={intl.messages}>
       <Toaster />
+
       <div className="flex-col md:flex h-screen">
         <div className="border-b">
           <div className="flex h-16 items-center px-4">
@@ -21,6 +22,7 @@ export const Layout = () => {
           </div>
         </div>
         <Outlet />
+        <DialogCenter />
       </div>
     </IntlProvider>
   );

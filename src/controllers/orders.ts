@@ -40,8 +40,8 @@ export const useOrderItems = () => {
     setOrderItems((prev) => [...prev, newItem]);
   };
 
-  const deleteById = (id: number) => {
-    setOrderItems((prev) => [...prev.filter((item) => item.itemCode != id)]);
+  const deleteById = (code: string) => {
+    setOrderItems((prev) => [...prev.filter((item) => item.itemCode != code)]);
   };
 
   const replaceAll = (newData: IItem[]) => {
@@ -51,9 +51,9 @@ export const useOrderItems = () => {
   const getOrderItems = () => orderItems;
 
   return {
-    insert,
-    deleteById,
-    replaceAll,
+    insertItem: insert,
+    deleteItemByCode: deleteById,
+    replaceAllItems: replaceAll,
     getOrderItems,
   };
 };
@@ -154,7 +154,7 @@ export function useOrderForm() {
   );
 
   return {
-    oderFormData: order,
+    orderFormData: order,
     setOrderFormData,
   };
 }
