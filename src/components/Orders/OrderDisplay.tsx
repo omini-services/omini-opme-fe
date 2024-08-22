@@ -38,7 +38,13 @@ import { Spinner } from '../Loading';
 
 import { DIALOG_INITIAL_STATE, dialogState } from '@/atoms/dialog';
 import { useSetAtom } from 'jotai';
-import { handleDelete, TAB_INFORMATION, TAB_ITEMS } from './helpers';
+import {
+  fetchOrders,
+  handleDelete,
+  handleSave,
+  TAB_INFORMATION,
+  TAB_ITEMS,
+} from './helpers';
 
 interface OrderDisplayProps {
   order: IOrderItem | null;
@@ -67,6 +73,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
         order,
         instance,
         apiRequest,
+        setSelection,
         rowSelection,
         orderFormData,
         deleteOrderById: deleteById,
@@ -82,112 +89,19 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
   useEffect(() => {
     if (!order?.id) return;
 
-    const fetch = async () => {
-      setOrderItemsLoading(true);
-      try {
-        const { data, status: code } = await apiRequest({
-          instance,
-          url: `quotations/${order?.id}`,
-          method: 'GET',
-        });
-
-        if (getStatusCode(code)) {
-          replaceAllItems(data?.data?.items || []);
-        } else {
-          toast({
-            title: 'erro ao carregar items:',
-            description: (
-              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <code className="text-white">
-                  Ocorreu um erro ao carregar dados do orcamente numero:{' '}
-                  {order?.number}
-                </code>
-              </pre>
-            ),
-          });
-        }
-      } catch (error: any) {
-        toast({
-          title: 'erro ao carregar items:',
-          description: (
-            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">
-                Ocorreu um erro ao carregar dados do orcamente numero:{' '}
-                {order?.number}
-              </code>
-            </pre>
-          ),
-        });
-        setOrderItemsError(error);
-      } finally {
-        setOrderItemsLoading(false);
-      }
-    };
-
-    fetch();
+    fetchOrders({
+      instance,
+      order,
+      setOrderItemsLoading,
+      apiRequest,
+      replaceAllItems,
+      setOrderItemsError,
+    });
 
     return () => {
       setSelection({});
     };
   }, [order?.id]);
-
-  const handleSave = async () => {
-    try {
-      setOrderItemsLoading(true);
-
-      const response = await apiRequest({
-        instance,
-        model: 'quotations',
-        method: 'PUT',
-        id: orderFormData?.id,
-        body: JSON.stringify(orderFormData, null, 2),
-      });
-
-      const { data, status: code } = response;
-
-      if (getStatusCode(code)) {
-        updateById(orderFormData?.id, orderFormData);
-        toast({
-          title: 'formulário enviado:',
-          description: (
-            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">
-                Orcamento numero: {orderFormData?.number} atualizado com
-                sucesso!
-              </code>
-            </pre>
-          ),
-        });
-      } else {
-        toast({
-          title: 'erro ao atualizar orcamento:',
-          description: (
-            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">
-                Ocorreu um erro ao atualizar um orcamente numero:{' '}
-                {orderFormData?.number}
-              </code>
-            </pre>
-          ),
-        });
-      }
-    } catch (error) {
-      toast({
-        title: 'erro ao atualizar orcamento:',
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              Ocorreu um erro ao atualizar um orcamente numero:{' '}
-              {orderFormData?.number}
-            </code>
-          </pre>
-        ),
-      });
-      setOrderItemsError(error);
-    } finally {
-      setOrderItemsLoading(false);
-    }
-  };
 
   const isDisabled = useMemo(() => status.orderItems.loading, [status]);
 
@@ -209,7 +123,16 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                     variant="ghost"
                     size="icon"
                     disabled={!order || isDisabled}
-                    onClick={handleSave}
+                    onClick={() =>
+                      handleSave({
+                        instance,
+                        apiRequest,
+                        updateById,
+                        orderFormData,
+                        setOrderItemsError,
+                        setOrderItemsLoading,
+                      })
+                    }
                   >
                     <SaveIcon className="h-4 w-4" />
                     <span className="sr-only">Salvar</span>
@@ -294,7 +217,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
             </div>
           ) : (
             <div className="p-8 text-center text-muted-foreground">
-              {ORDER} nao selecionado.
+              {ORDER} não selecionado.
             </div>
           )}
         </TabsContent>
@@ -311,7 +234,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                 />
               ) : (
                 <div className="p-8 text-center text-muted-foreground">
-                  {ORDER} nao selecionado.
+                  {ORDER} não selecionado.
                 </div>
               )}
             </div>
