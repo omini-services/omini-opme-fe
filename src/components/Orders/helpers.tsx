@@ -9,10 +9,11 @@ import { IItem } from '@/types/Item';
 export const TAB_INFORMATION = 'information';
 export const TAB_ITEMS = 'items';
 
-interface PropsHandleDelete {
+interface IPropsHandleDelete {
   tab: string;
   items: IItem[];
   apiRequest: Function;
+  setSelection: Function;
   order: IOrderItem | null;
   deleteOrderById: Function;
   deleteItemByCode: Function;
@@ -29,13 +30,14 @@ export const handleDelete = async ({
   items,
   instance,
   apiRequest,
+  setSelection,
   rowSelection,
   orderFormData,
   deleteOrderById,
   deleteItemByCode,
   setOrderItemsError,
   setOrderItemsLoading,
-}: PropsHandleDelete) => {
+}: IPropsHandleDelete) => {
   const deleteMapUrl = {
     [TAB_INFORMATION]: `quotations/${order?.id}`,
     [TAB_ITEMS]: `quotations/${order?.id}/items/`, // Base URL for items
@@ -70,6 +72,7 @@ export const handleDelete = async ({
             ),
           });
         } else {
+          setSelection({});
           deleteItemByCode(itemCode);
         }
       }
@@ -132,6 +135,137 @@ export const handleDelete = async ({
         </pre>
       ),
     });
+  } finally {
+    setOrderItemsLoading(false);
+  }
+};
+
+interface IPropsHandleSave {
+  apiRequest: Function;
+  setOrderItemsError: Function;
+  orderFormData: IOrderItem | {};
+  setOrderItemsLoading: Function;
+  instance: Auth0ContextInterface;
+  updateById: Function;
+}
+
+export const handleSave = async ({
+  instance,
+  apiRequest,
+  updateById,
+  orderFormData,
+  setOrderItemsError,
+  setOrderItemsLoading,
+}: IPropsHandleSave) => {
+  try {
+    setOrderItemsLoading(true);
+
+    const response = await apiRequest({
+      instance,
+      model: 'quotations',
+      method: 'PUT',
+      id: orderFormData?.id,
+      body: JSON.stringify(orderFormData, null, 2),
+    });
+
+    const { data, status: code } = response;
+
+    if (getStatusCode(code)) {
+      updateById(orderFormData?.id, orderFormData);
+      toast({
+        title: 'formulário enviado:',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              Orcamento numero: {orderFormData?.number} atualizado com sucesso!
+            </code>
+          </pre>
+        ),
+      });
+    } else {
+      toast({
+        title: 'erro ao atualizar orcamento:',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              Ocorreu um erro ao atualizar um orcamente numero:{' '}
+              {orderFormData?.number}
+            </code>
+          </pre>
+        ),
+      });
+    }
+  } catch (error) {
+    toast({
+      title: 'erro ao atualizar orcamento:',
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">
+            Ocorreu um erro ao atualizar um orcamente numero:{' '}
+            {orderFormData?.number}
+          </code>
+        </pre>
+      ),
+    });
+    setOrderItemsError(error);
+  } finally {
+    setOrderItemsLoading(false);
+  }
+};
+
+interface IPropsFetchOrders {
+  instance: Auth0ContextInterface;
+  order: IOrderItem | null;
+  setOrderItemsLoading: Function;
+  apiRequest: Function;
+  replaceAllItems: Function;
+  setOrderItemsError: Function;
+}
+
+export const fetchOrders = async ({
+  instance,
+  order,
+  setOrderItemsLoading,
+  apiRequest,
+  replaceAllItems,
+  setOrderItemsError,
+}: IPropsFetchOrders) => {
+  setOrderItemsLoading(true);
+  try {
+    const { data, status: code } = await apiRequest({
+      instance,
+      url: `quotations/${order?.id}`,
+      method: 'GET',
+    });
+
+    if (getStatusCode(code)) {
+      replaceAllItems(data?.data?.items || []);
+    } else {
+      toast({
+        title: 'erro ao carregar items:',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              Ocorreu um erro ao carregar dados do orcamente numero:{' '}
+              {order?.number}
+            </code>
+          </pre>
+        ),
+      });
+    }
+  } catch (error: any) {
+    toast({
+      title: 'erro ao carregar items:',
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">
+            Ocorreu um erro ao carregar dados do orcamente numero:{' '}
+            {order?.number}
+          </code>
+        </pre>
+      ),
+    });
+    setOrderItemsError(error);
   } finally {
     setOrderItemsLoading(false);
   }
