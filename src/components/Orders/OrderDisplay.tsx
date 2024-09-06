@@ -17,7 +17,7 @@ import {
   TabsTrigger,
   TabsContent,
 } from '../shadcn/new-york/tabs';
-import { getStatusCode, ORDER } from '@/constants';
+import { ORDER } from '@/constants';
 import { OrderForm } from './Form';
 import { DataTable } from '../Table/data-table';
 import { Filter } from './TableFilter';
@@ -33,13 +33,12 @@ import {
   useOrders,
   useOrdersTableSelection,
 } from '@/controllers/orders';
-import { toast } from '@/components/ui/use-toast';
 import { Spinner } from '../Loading';
 
 import { DIALOG_INITIAL_STATE, dialogState } from '@/atoms/dialog';
 import { useSetAtom } from 'jotai';
 import {
-  fetchOrders,
+  fetchApiRequest,
   handleDelete,
   handleSave,
   TAB_INFORMATION,
@@ -89,13 +88,22 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
   useEffect(() => {
     if (!order?.id) return;
 
-    fetchOrders({
+    fetchApiRequest({
       instance,
-      order,
-      setOrderItemsLoading,
+      setLoading: setOrderItemsLoading,
       apiRequest,
-      replaceAllItems,
-      setOrderItemsError,
+      successCallback: (data) => replaceAllItems(data?.data?.items || []),
+      setError: setOrderItemsError,
+      errorMessage: (
+        <>
+          Ocorreu um erro ao carregar dados do orcamente numero: {order?.number}
+        </>
+      ),
+      errorTitle: 'erro ao carregar items:',
+      apiRequestOptions: {
+        url: `quotations/${order?.id}`,
+        method: 'GET',
+      },
     });
 
     return () => {
@@ -196,9 +204,12 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                       {ORDER}: {order.number}
                     </div>
                   </div>
-                  {order.dueDate && (
-                    <div className="ml-auto text-xs text-muted-foreground">
-                      {format(new Date(order.dueDate), 'PPpp')}
+                  {order.createdOn && (
+                    <div className="ml-auto text-xs">
+                      {`Criado em: ${format(
+                        new Date(order.createdOn),
+                        'PPpp'
+                      )}`}
                     </div>
                   )}
                 </div>
