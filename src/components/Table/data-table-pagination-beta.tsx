@@ -9,6 +9,8 @@ interface DataTablePaginationProps<TData> {
     handleSetCurrentPage: (page: number) => void,
     totalPages: number,
     currentPage: number,
+    hasPreviousPage: boolean,
+    hasNextPage: boolean
   }
 }
 
@@ -25,11 +27,11 @@ export function DataTablePaginationBeta<TData>({
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious onClick={pagination.handlePreviousPage} />
+          <PaginationPrevious onClick={pagination.handlePreviousPage} disabled={!pagination.hasPreviousPage} />
         </PaginationItem>
         {Array.from({ length: pagination.totalPages }, (_, index) => (
           <PaginationItem key={index}>
-            <PaginationButton isActive={pagination.currentPage === (index +1)}
+            <PaginationButton isActive={pagination.currentPage === (index + 1)}
               onClick={() => pagination.handleSetCurrentPage(index + 1)}>
               {index + 1}
             </PaginationButton>
@@ -39,7 +41,7 @@ export function DataTablePaginationBeta<TData>({
           <PaginationEllipsis />
         </PaginationItem>
         <PaginationItem>
-          <PaginationNext onClick={pagination.handlePreviousPage} />
+          <PaginationNext onClick={pagination.handlePreviousPage}  disabled={!pagination.hasNextPage} />
         </PaginationItem>
       </PaginationContent>
     </Pagination>

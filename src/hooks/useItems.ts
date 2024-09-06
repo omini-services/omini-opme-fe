@@ -4,24 +4,29 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 export function useItems(pageSize = 20) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
 
   const instance = useAuth0();
   const { data, isLoading } = useQuery({
-    queryKey: ['items', { currentPage, pageSize }],
-    queryFn: () => ItemsService.getAll(instance, currentPage, pageSize),
+    queryKey: ['items', { page, pageSize }],
+    queryFn: () => ItemsService.getAll(instance, page, pageSize),
   });
 
+  const totalPages = data?.pageCount ?? 0;
+  const currentPage = data?.currentPage ?? 0;
+  const hasPreviousPage = currentPage > 1;
+  const hasNextPage = currentPage < totalPages;
+
   function handleNextPage() {
-    setCurrentPage(prevState => prevState + 1);
+    setPage(prevState => prevState + 1);
   }
 
   function handlePreviousPage() {
-    setCurrentPage(prevState => prevState - 1);
+    setPage(prevState => prevState - 1);
   }
 
   function handleSetCurrentPage(page: number){
-    setCurrentPage(page)
+    setPage(page)
   }
 
   console.log(data)
@@ -33,8 +38,10 @@ export function useItems(pageSize = 20) {
       handleNextPage,
       handlePreviousPage,
       handleSetCurrentPage,
-      totalPages: data?.pageCount ?? 0,
-      currentPage: data?.currentPage ?? 0
+      totalPages,
+      currentPage,
+      hasPreviousPage,
+      hasNextPage
     }
   }
 }

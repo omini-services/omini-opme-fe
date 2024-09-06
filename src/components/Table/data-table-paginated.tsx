@@ -36,7 +36,9 @@ interface DataTablePaginatedProps<TData, TValue> {
     handlePreviousPage: () => void,
     handleSetCurrentPage: (page: number) => void,
     totalPages: number,
-    currentPage: number
+    currentPage: number,
+    hasPreviousPage: boolean,
+    hasNextPage: boolean
   }
 }
 
