@@ -8,6 +8,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
 import { useOrderFetchStatus, useOrders } from '@/controllers/orders';
+import { fetchApiRequest } from '@/components/Orders/helpers';
 
 export default function OrdersPage() {
   const instance = useAuth0();
@@ -20,22 +21,20 @@ export default function OrdersPage() {
       if (status.orders.loading) return;
 
       if (isEqual(orders?.data, ORDERS_INITIAL_STATE.data)) {
-        setOrdersLoading(true);
-
-        try {
-          const { data, currentPage, pageCount, pageSize, rowCount } =
-            await apiRequest({
-              instance,
-              model: 'quotations',
-              method: 'GET',
-            });
-
-          replaceAll(data?.data || []);
-        } catch (error: any) {
-          setOrdersError(error);
-        } finally {
-          setOrdersLoading(false);
-        }
+        fetchApiRequest({
+          instance,
+          setLoading: setOrdersLoading,
+          apiRequest,
+          successCallback: (data) => replaceAll(data?.data || []),
+          setError: setOrdersError,
+          errorMessage: <>Ocorreu um erro ao carregar orcamentos</>,
+          errorTitle: 'erro ao carregar orcamentos:',
+          apiRequestOptions: {
+            instance,
+            model: 'quotations',
+            method: 'GET',
+          },
+        });
       }
     };
 

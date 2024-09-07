@@ -2,6 +2,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+import { Separator } from '@/components/ui/separator';
 
 import {
   Select,
@@ -33,18 +34,28 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { IOrderItem } from '@/types/Order';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useOrderForm } from '@/controllers/orders';
+import { InsuranceSelectField } from '../InsuranceSelectField';
+import { PAYING_SOURCE_TYPE } from '@/constants';
 
 const FormSchema = z.object({
   number: z.number({
-    required_error: 'Uma codigo é necessário.',
+    required_error: 'Um codigo é necessário.',
   }),
   patientFirstName: z.string({
-    required_error: 'Uma nome necessário.',
+    required_error: 'Um nome necessário.',
   }),
+  patientMiddleName: z.string(),
   patientLastName: z.string({
-    required_error: 'Uma sobrenome é necessário.',
+    required_error: 'Um sobrenome é necessário.',
+  }),
+  physicianFirstName: z.string({
+    required_error: 'Nome do médico necessário.',
+  }),
+  physicianMiddleName: z.string(),
+  physicianLastName: z.string({
+    required_error: 'Sobrenome do médico é necessário.',
   }),
   payingSourceType: z.string({
     required_error: 'Selecione um tipo de pagamento.',
@@ -52,7 +63,7 @@ const FormSchema = z.object({
   hospitalName: z.string({
     required_error: 'Selecione um hospital.',
   }),
-  insuranceCompanyName: z.string({
+  insuranceCompanyCode: z.string({
     required_error: 'Selecione um Convenio.',
   }),
   dueDate: z.date({
@@ -66,54 +77,55 @@ interface IOrderFormProps {
 
 export const OrderForm = ({ order }: IOrderFormProps) => {
   const { setOrderFormData } = useOrderForm();
+  const [showInsuranceField, setShowInsuranceField] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   const handleChange = (field: string, value: any) => {
-    setOrderFormData((prevData) => ({
+    setOrderFormData((prevData: any) => ({
       ...prevData,
       [field]: value,
     }));
+
+    if (field === 'payingSourceType') {
+      setShowInsuranceField(value === PAYING_SOURCE_TYPE.INSURANCE);
+    }
   };
 
   useEffect(() => {
     if (order) {
+      const payingSourceType = order.payingSourceType?.toLowerCase();
+
       form.setValue('number', order.number);
-      // form.setValue(
-      //   'patientName',
-      //   `${order.patientFirstName} ${order.patientLastName}`
-      // );
       form.setValue('patientFirstName', order.patientFirstName);
+      form.setValue('patientMiddleName', order.patientMiddleName);
       form.setValue('patientLastName', order.patientLastName);
-      form.setValue('payingSourceType', order.payingSourceType);
+      form.setValue('physicianFirstName', order.physicianFirstName);
+      form.setValue('physicianMiddleName', order.physicianMiddleName);
+      form.setValue('physicianLastName', order.physicianLastName);
+      form.setValue('payingSourceType', payingSourceType);
       form.setValue('hospitalName', order.hospitalName);
-      form.setValue('insuranceCompanyName', order.insuranceCompanyName);
+      form.setValue('insuranceCompanyCode', order.insuranceCompanyCode);
       form.setValue('dueDate', new Date(order.dueDate));
 
       setOrderFormData(order);
+      setShowInsuranceField(payingSourceType == PAYING_SOURCE_TYPE.INSURANCE);
     }
   }, [order, form]);
 
   return (
     <Form {...form}>
       <div className="flex flex-col p-4 h-full mb-auto">
-        <form
-          // onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col space-y-4 h-full"
-        >
-          <div className="grid grid-cols-3 gap-4">
+        <form className="flex flex-col space-y-4 h-full">
+          <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+            Dados do Paciente
+          </h2>
+
+          <div className="grid grid-cols-3 gap-2">
             <div className="grid gap-2">
-              <Label htmlFor="number">Codigo:</Label>
-              <Input
-                id="number"
-                {...form.register('number')}
-                onChange={(e) => handleChange('number', e.target.value)}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="patientFirstName">Nome do Paciente:</Label>
+              <Label htmlFor="patientFirstName">* Nome:</Label>
               <Input
                 id="patientFirstName"
                 {...form.register('patientFirstName')}
@@ -123,7 +135,17 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="patientLastName">Sobrenome do Paciente:</Label>
+              <Label htmlFor="patientMiddleName">Nome do meio:</Label>
+              <Input
+                id="patientMiddleName"
+                {...form.register('patientMiddleName')}
+                onChange={(e) =>
+                  handleChange('patientMiddleName', e.target.value)
+                }
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="patientLastName">* Sobrenome:</Label>
               <Input
                 id="patientLastName"
                 {...form.register('patientLastName')}
@@ -134,54 +156,84 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+            Dados do Médico
+          </h2>
+
+          <div className="grid  grid-cols-3 gap-2">
             <div className="grid gap-2">
-              <Label htmlFor="payingSourceType">Tipo de pagamento:</Label>
+              <Label htmlFor="physicianFirstName">* Nome:</Label>
+              <Input
+                id="physicianFirstName"
+                {...form.register('physicianFirstName')}
+                onChange={(e) =>
+                  handleChange('physicianFirstName', e.target.value)
+                }
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="physicianMiddleName">Nome do meio:</Label>
+              <Input
+                id="physicianMiddleName"
+                {...form.register('physicianMiddleName')}
+                onChange={(e) =>
+                  handleChange('physicianMiddleName', e.target.value)
+                }
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="physicianLastName">* Sobrenome:</Label>
+              <Input
+                id="physicianLastName"
+                {...form.register('physicianLastName')}
+                onChange={(e) =>
+                  handleChange('physicianLastName', e.target.value)
+                }
+              />
+            </div>
+          </div>
+
+          <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">
+            Dados de Pagamento
+          </h2>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div className="grid gap-2">
+              <Label htmlFor="payingSourceType">* Tipo de pagamento:</Label>
               <Select
                 {...form.register('payingSourceType')}
                 onValueChange={(value) =>
                   handleChange('payingSourceType', value)
                 }
+                value={form.watch('payingSourceType')}
               >
                 <SelectTrigger id="payingSourceType">
                   <SelectValue placeholder="Selecione..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="insurance">Convênio</SelectItem>
-                  <SelectItem value="private">Particular</SelectItem>
+                  <SelectItem value={PAYING_SOURCE_TYPE.PRIVATE}>
+                    Particular
+                  </SelectItem>
+                  <SelectItem value={PAYING_SOURCE_TYPE.INSURANCE}>
+                    Convênio
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="hospitalName">Nome do Hospital</Label>
-              <Input
-                id="hospitalName"
-                {...form.register('hospitalName')}
-                onChange={(e) => handleChange('hospitalName', e.target.value)}
-              />
-            </div>
+            {showInsuranceField && (
+              <InsuranceSelectField onChange={handleChange} form={form} />
+            )}
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="insuranceCompanyName">Nome da Seguradora:</Label>
-            <Select
-              {...form.register('insuranceCompanyName')}
-              onValueChange={(value) =>
-                handleChange('insuranceCompanyName', value)
-              }
-            >
-              <SelectTrigger id="insuranceCompanyName">
-                <SelectValue placeholder="Selecione..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="amil">Amil</SelectItem>
-                <SelectItem value="sul-america">Sul America</SelectItem>
-                <SelectItem value="unimed">Unimed</SelectItem>
-                <SelectItem value="prevent-senior">Prevent Senior</SelectItem>
-                <SelectItem value="omint">Omint</SelectItem>
-                <SelectItem value="bradesco">Bradesco</SelectItem>
-              </SelectContent>
-            </Select>
+            <Label htmlFor="hospitalName">* Nome do Hospital</Label>
+            <Input
+              id="hospitalName"
+              {...form.register('hospitalName')}
+              onChange={(e) => handleChange('hospitalName', e.target.value)}
+            />
           </div>
 
           <FormField
@@ -189,7 +241,7 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
             name="dueDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Data</FormLabel>
+                <FormLabel>Data de Vencimento:</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>

@@ -16,29 +16,37 @@ export type TFetchResult = {
 };
 
 export interface IOrderItem {
+  // order data
   id: string;
+  number?: number;
+  dueDate: Date | string;
+  createdOn?: Date | string;
+  items: IItem[];
+  total: number;
+  // patitent data
   patientCode: string;
   patientFirstName: string;
+  patientMiddleName: string;
   patientLastName: string;
+  // physician data
   physicianCode: string;
   physicianFirstName: string;
   physicianLastName: string;
+  // payment data
   payingSourceCode: string;
   payingSourceName: string;
-  hospitalCode: string;
-  insuranceCompanyCode: string;
-  internalSpecialistCode: string;
-  number?: number | undefined;
-  patientName?: string | undefined;
   payingSourceType?: string | undefined;
+  // hospital data
   hospitalName?: string | undefined;
+  hospitalCode: string;
+  // insurance data
   insuranceCompanyName?: string | undefined;
-  dueDate: Date | string;
-  items: IItem[];
-  total: number;
+  insuranceCompanyCode: string;
+  // specialist
+  internalSpecialistCode: string;
 }
 
-export interface OrdersNetworkResponse {
+export interface IOrdersNetworkResponse {
   currentPage: number;
   pageSize: number;
   rowCount: number;
