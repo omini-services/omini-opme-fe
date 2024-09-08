@@ -1,8 +1,5 @@
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { Separator } from '@/components/ui/separator';
 
 import {
   Select,
@@ -27,17 +24,17 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
+import { PAYING_SOURCE_TYPE } from '@/constants';
+import { useOrderForm } from '@/controllers/orders';
 import { cn } from '@/lib/utils';
-import { CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
+import { IOrderItem } from '@/types/Order';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { IOrderItem } from '@/types/Order';
-import { useEffect, useState } from 'react';
-import { useOrderForm } from '@/controllers/orders';
 import { InsuranceSelectField } from '../InsuranceSelectField';
-import { PAYING_SOURCE_TYPE } from '@/constants';
 
 const FormSchema = z.object({
   number: z.number({

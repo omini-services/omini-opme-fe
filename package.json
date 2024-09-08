@@ -33,7 +33,9 @@
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.1.2",
+    "@tanstack/react-query": "^5.53.1",
     "@tanstack/react-table": "^8.20.1",
+    "@tanstack/react-virtual": "^3.10.6",
     "@types/lodash": "^4.17.7",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
@@ -61,6 +63,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.53.0",
     "@types/node": "^20.14.5",
     "@types/react": "npm:types-react@rc",
     "@types/react-dom": "npm:types-react-dom@rc",

@@ -15,13 +15,14 @@ import Order from '@/pages/registry/Order';
 // other
 import Dashboard from '@/pages/Dashboard';
 import Layout from '@/pages/Layout';
-import Tasks from '@/pages/Tasks';
 import Orders from '@/pages/Orders';
+import Tasks from '@/pages/Tasks';
 import Registry from '@/pages/registry';
 
+import Calendar from '@/components/Calendar';
+import ItemsPage from '@/pages/Items';
 import Signin from '@/pages/Signin';
 import PrivateRoute from './PrivateRoute';
-import Calendar from '@/components/Calendar';
 
 export function Router() {
   return (
@@ -49,9 +50,9 @@ export function Router() {
             {/* <Route
                 path={ROUTES.registry.hospital.to}
                 element={<Hospital />}
-              />
-              <Route path={ROUTES.registry.item.to} element={<Item />} />
-              <Route path={ROUTES.registry.patient.to} element={<Patient />} />
+              /> */}
+            <Route path={ROUTES.registry.item.to} element={<ItemsPage />} />
+            {/* <Route path={ROUTES.registry.patient.to} element={<Patient />} />
               <Route
                 path={ROUTES.registry.physician.to}
                 element={<Physician />}
