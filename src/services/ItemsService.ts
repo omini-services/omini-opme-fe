@@ -17,6 +17,7 @@ interface IItem {
 
 export class ItemsService {
   static async getAll(instance: Auth0ContextInterface<User>, currentPage = 1, pageSize = 10) {
+    await new Promise(resolve => setTimeout(resolve, 1000))
     const { data } =
       await apiRequest({
         instance,

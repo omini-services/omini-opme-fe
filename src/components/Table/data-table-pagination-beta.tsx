@@ -3,10 +3,11 @@ import { Pagination, PaginationButton, PaginationContent, PaginationEllipsis, Pa
 import { useState } from 'react';
 
 interface DataTablePaginationProps<TData> {
+  pages: (number | string)[];
   pagination: {
-    handleNextPage: () => void,
-    handlePreviousPage: () => void,
-    handleSetCurrentPage: (page: number) => void,
+    nextPage: () => void,
+    previousPage: () => void,
+    setPage: (page: number) => void,
     totalPages: number,
     currentPage: number,
     hasPreviousPage: boolean,
@@ -15,7 +16,7 @@ interface DataTablePaginationProps<TData> {
 }
 
 export function DataTablePaginationBeta<TData>({
-  pagination,
+  pagination, pages
 }: DataTablePaginationProps<TData>) {
   const [pageSize, setPageSize] = useState('10');
 
@@ -27,21 +28,35 @@ export function DataTablePaginationBeta<TData>({
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious onClick={pagination.handlePreviousPage} disabled={!pagination.hasPreviousPage} />
+          <PaginationPrevious onClick={pagination.previousPage} disabled={!pagination.hasPreviousPage} />
         </PaginationItem>
-        {Array.from({ length: pagination.totalPages }, (_, index) => (
-          <PaginationItem key={index}>
-            <PaginationButton isActive={pagination.currentPage === (index + 1)}
-              onClick={() => pagination.handleSetCurrentPage(index + 1)}>
-              {index + 1}
+
+        {pages.map(page => {
+          const isEllipsisPosition = typeof page === 'string';
+
+          if (isEllipsisPosition) {
+            return (
+              <PaginationItem key={page}>
+                <PaginationButton disabled>
+                  <PaginationEllipsis />
+                </PaginationButton>
+              </PaginationItem>
+            )
+          }
+
+          return (<PaginationItem key={page}>
+            <PaginationButton isActive={pagination.currentPage === Number(page)}
+              onClick={() => pagination.setPage(Number(page))}>
+              {page}
             </PaginationButton>
-          </PaginationItem>
-        ))}
+          </PaginationItem>)
+        })}
+
         <PaginationItem>
           <PaginationEllipsis />
         </PaginationItem>
         <PaginationItem>
-          <PaginationNext onClick={pagination.handlePreviousPage}  disabled={!pagination.hasNextPage} />
+          <PaginationNext onClick={pagination.nextPage} disabled={!pagination.hasNextPage} />
         </PaginationItem>
       </PaginationContent>
     </Pagination>

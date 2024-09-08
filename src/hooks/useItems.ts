@@ -1,47 +1,58 @@
 import { ItemsService } from "@/services/ItemsService";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 export function useItems(pageSize = 20) {
-  const [page, setPage] = useState(1);
+  // const { currentPage, nextPage, previousPage, setPage } = usePagination();
 
   const instance = useAuth0();
-  const { data, isLoading } = useQuery({
-    queryKey: ['items', { page, pageSize }],
-    queryFn: () => ItemsService.getAll(instance, page, pageSize),
+
+  // const queryClient = useQueryClient();
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ['items', { page: currentPage, pageSize }],
+  //   queryFn: () => ItemsService.getAll(instance, currentPage, pageSize),
+  // });
+
+
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    queryKey: ['items'],
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) => ItemsService.getAll(instance, pageParam, pageSize),
+    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      const totalPages = lastPage?.pageCount ?? 0;
+      const isLastPage = allPages.length >= totalPages;
+
+      console.log(lastPage)
+
+      if (isLastPage) {
+        return null;
+      }
+
+      return lastPageParam + 1;
+    }
   });
 
-  const totalPages = data?.pageCount ?? 0;
-  const currentPage = data?.currentPage ?? 0;
-  const hasPreviousPage = currentPage > 1;
-  const hasNextPage = currentPage < totalPages;
 
-  function handleNextPage() {
-    setPage(prevState => prevState + 1);
-  }
+  // const totalPages = data?.pageCount?? 0;
+  // const hasPreviousPage = currentPage > 1;
+  // const hasNextPage = currentPage < totalPages;
 
-  function handlePreviousPage() {
-    setPage(prevState => prevState - 1);
-  }
+  // useEffect(()=> {
+  //   const nextPage = currentPage + 1;
 
-  function handleSetCurrentPage(page: number){
-    setPage(page)
-  }
+  //   queryClient.prefetchQuery({
+  //     queryKey: ['items', { page: nextPage, pageSize }],
+  //     queryFn: () => ItemsService.getAll(instance, currentPage, pageSize),
+  //   });
+  // }, [currentPage, hasNextPage])
 
-  console.log(data)
+  const items = data?.pages.flatMap(page => page.data);
 
   return {
-    items: data?.data ?? [],
+    items: items ?? [],
     isLoading,
-    pagination: {
-      handleNextPage,
-      handlePreviousPage,
-      handleSetCurrentPage,
-      totalPages,
-      currentPage,
-      hasPreviousPage,
-      hasNextPage
-    }
+    nextPage: fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
   }
 }

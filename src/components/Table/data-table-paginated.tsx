@@ -31,10 +31,11 @@ import { DataTablePaginationBeta } from './data-table-pagination-beta';
 interface DataTablePaginatedProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  pages: (number | string)[],
   pagination: {
-    handleNextPage: () => void,
-    handlePreviousPage: () => void,
-    handleSetCurrentPage: (page: number) => void,
+    nextPage: () => void,
+    previousPage: () => void,
+    setPage: (page: number) => void,
     totalPages: number,
     currentPage: number,
     hasPreviousPage: boolean,
@@ -45,6 +46,7 @@ interface DataTablePaginatedProps<TData, TValue> {
 export function DataTablePaginated<TData, TValue>({
   columns,
   data,
+  pages,
   pagination
 }: DataTablePaginatedProps<TData, TValue>) {
   const { rowSelection, setSelection } = useOrdersTableSelection();
@@ -133,7 +135,7 @@ export function DataTablePaginated<TData, TValue>({
       </div>
       <Separator />
       <div className="flex justify-center items-center p-2 bg-white">
-        <DataTablePaginationBeta pagination={pagination} />
+        <DataTablePaginationBeta pagination={pagination} pages={pages} />
       </div>
     </div>
   );
