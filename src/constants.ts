@@ -1,4 +1,4 @@
-export const INSURANCE = 'Empresa';
+export const INSURANCE = 'Convenio';
 export const HOSPITAL = 'Hospital';
 export const ITEM = 'Item';
 export const PATIENT = 'Paciente';
@@ -97,6 +97,7 @@ export const messages = (data: any) => ({
 
 export const messagesInPtBr = {
   hello_time: 'Ola, {ts, date, ::yyyyMMdd}',
+  months: 'meses',
 };
 
 type STATUS_CODE = {
@@ -118,3 +119,8 @@ export const STATUS_CODE: STATUS_CODE = {
 };
 
 export const getStatusCode = (code: number) => STATUS_CODE[code] || false;
+
+export const PAYING_SOURCE_TYPE = {
+  INSURANCE: 'insurance',
+  PRIVATE: 'private',
+};

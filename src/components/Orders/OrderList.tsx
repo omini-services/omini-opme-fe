@@ -6,7 +6,6 @@ import { HOSPITAL, INSURANCE, ITEM, PATIENT, PHYSICIAN } from '@/constants';
 import CurrencyFormatter from '@/components/CurrencyFormatter';
 import { Spinner } from '../Loading';
 import { useOrders } from '@/controllers/orders';
-import { useMemo } from 'react';
 
 export function OrderList({
   selectedOrderId,
@@ -43,9 +42,7 @@ export function OrderList({
                   : 'text-muted-foreground'
               )}
             >
-              {formatDistanceToNow(new Date(item.dueDate), {
-                addSuffix: true,
-              })}
+              {`Vence em: ${formatDistanceToNow(new Date(item.dueDate))}`}
             </div>
           </div>
           <div className="flex flex-row gap-2">

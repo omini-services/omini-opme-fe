@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai';
 import { useCallback } from 'react';
-import { OrdersNetworkResponse, IOrderItem } from '@/types/Order';
+import { IOrdersNetworkResponse, IOrderItem } from '@/types/Order';
 
 export type TSelectedOrder = IOrderItem['id'] | null;
 
@@ -40,7 +40,7 @@ export const fetchOrderAtom = atom({
 });
 
 // Atom to manage orders state
-export const ordersAtom = atom<OrdersNetworkResponse>({
+export const ordersAtom = atom<IOrdersNetworkResponse>({
   data: [],
   currentPage: 1,
   pageCount: 1,
@@ -48,7 +48,7 @@ export const ordersAtom = atom<OrdersNetworkResponse>({
   rowCount: 11,
 });
 
-export const orderItemsAtom = atom<OrdersNetworkResponse>({
+export const orderItemsAtom = atom<IOrdersNetworkResponse>({
   data: [],
   currentPage: 1,
   pageCount: 1,
