@@ -22,8 +22,6 @@ export function useItems(pageSize = 20) {
       const totalPages = lastPage?.pageCount ?? 0;
       const isLastPage = allPages.length >= totalPages;
 
-      console.log(lastPage)
-
       if (isLastPage) {
         return null;
       }

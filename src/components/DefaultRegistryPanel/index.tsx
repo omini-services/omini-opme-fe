@@ -15,7 +15,7 @@ export function DefaultPanelRegistry({ left, right }: DefaultPanelRegistryProps)
       onLayout={(sizes) => setLayout(sizes)}
       className="h-full items-stretch space-y-2"
     >
-      <ResizablePanel defaultSize={layout[0]}>
+      <ResizablePanel minSize = {layout[0]} defaultSize={layout[0]}>
         {left.content}
       </ResizablePanel>
 

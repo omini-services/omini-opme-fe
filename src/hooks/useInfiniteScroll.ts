@@ -14,7 +14,7 @@ const useInfiteScroll = ({
   hasNextPage,
   isFetchingNextPage,
   scrollCallback,
-  rootRef = undefined,
+  rootRef = null,
   rootMargin = '0px'
 }: UseIntersectionObserverOptions) => {
   useEffect(() => {

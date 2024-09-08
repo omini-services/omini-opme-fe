@@ -1,54 +1,30 @@
-import { layoutState } from "@/atoms/items";
-import { DefaultPanelRegistry } from "@/components/DefaultRegistryPanel";
+import { ButtonCard } from "@/components/ButtonCard";
+import { ProgressBar } from "@/components/ProgressBar";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import useInfiteScroll from "@/hooks/useInfiniteScroll";
 import { useItems } from "@/hooks/useItems";
+import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { TabsList, TabsTrigger } from "@radix-ui/react-tabs";
-import { useAtom } from "jotai";
-import { useRef } from "react";
+import { forwardRef, useRef, useState } from "react";
 
 export default function ItemsPage() {
-  const [layout, setLayout] = useAtom(layoutState);
+  const [layout, setLayout] = useState([30, 70]);
 
   const { items, isLoading, nextPage, hasNextPage, isFetchingNextPage } = useItems(10);
 
-  const triggerLoadingRef = useRef<HTMLElement>(null)
+  const triggerLoadingRef = useRef(null)
+  const rootRef = useRef(null)
 
   useInfiteScroll({
     ref: triggerLoadingRef,
     hasNextPage,
     isFetchingNextPage,
     scrollCallback: nextPage,
-    //rootMargin: '100px' // Optional
+    rootRef: rootRef.current,
+    rootMargin: '40px' // Optional
   });
-
-  // useEffect(() => {
-  //   if (!divRef.current) {
-  //     return;
-  //   }
-  //   const observer = new IntersectionObserver((entries, obs) => {
-  //     const { isIntersecting } = entries[0];
-
-  //     if (!hasNextPage) {
-  //       obs.disconnect();
-  //       return
-  //     }
-
-  //     if (isIntersecting && !isFetchingNextPage) {
-  //       nextPage();
-  //     }
-  //   },
-  //     {
-  //       // root: divRef.current
-  //       rootMargin: '75px' //20%
-  //     }
-  //   );
-
-  //   observer.observe(divRef.current);
-
-  //   return () => {
-  //     observer.disconnect();
-  //   }
-  // }, [isLoading, nextPage, hasNextPage])
 
   // // const pages = useMemo(()=> {
   // //   return generateEllipsisPagination(pagination.currentPage, pagination.totalPages);
@@ -88,19 +64,88 @@ export default function ItemsPage() {
     );
   };
 
-  const LeftContent = () => (
-    <div>left</div>
-  )
+  const LeftContent = forwardRef<HTMLDivElement>((_, ref) => (
+    <ScrollArea className="h-full">
+      <div className="flex flex-col gap-2 p-2 h-full">
+        {items.map((item) => (
+          <ButtonCard className="pr-0" key={item.code}>
+            <div className="flex flex-row w-full">
+              <div className="w-full pr-2">
+                <div className="flex gap-2">
+                  <div className="font-semibold min-w-32">Nome comercial:</div>
+                  <div className="line-clamp-2">{item.salesName}</div>
+                  <span className="ml-auto font-semibold">{item.code}</span>
+                </div>
+                <div className="flex">
+                  <div className="flex flex-row items-center gap-2">
+                    <div className="flex font-semibold min-w-32 h-full">Nome técnico:</div>
+                    <div className="line-clamp-2">{item.name}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center justify-center pr-1">
+                <ChevronRightIcon />
+              </div>
+            </div>
+          </ButtonCard>
+        ))}
+      </div>
+      <div ref={ref}></div>
+    </ScrollArea>
+  ))
 
   const RightContent = () => (
     <div>right</div>
   )
 
   return (
-    <DefaultPanelRegistry
-      left={{ content: <LeftContent /> }}
-      right={{ content: <RightContent /> }}
-    >
-    </DefaultPanelRegistry>
+    <>
+
+      <p className="text-xl font-bold p-2">Items</p>
+      {(isFetchingNextPage || isLoading) && <ProgressBar/>}
+      <Separator />
+
+      <ResizablePanelGroup
+        direction="horizontal"
+        onLayout={(sizes) => setLayout(sizes)}
+        className="h-full items-stretch space-y-2"
+      >
+        <ResizablePanel minSize={layout[0]} defaultSize={layout[0]}>
+          <ScrollArea className="h-full" ref={rootRef} type="hover">
+            <div className="flex flex-col gap-2 p-3 h-full">
+              {items.map((item) => (
+                <ButtonCard className="pr-0" key={item.code}>
+                  <div className="flex flex-row w-full">
+                    <div className="w-full pr-2">
+                      <div className="flex gap-2">
+                        <div className="font-semibold min-w-32">Nome comercial:</div>
+                        <div className="line-clamp-2">{item.salesName}</div>
+                        <span className="ml-auto font-semibold">{item.code}</span>
+                      </div>
+                      <div className="flex">
+                        <div className="flex flex-row items-center gap-2">
+                          <div className="flex font-semibold min-w-32 h-full">Nome técnico:</div>
+                          <div className="line-clamp-2">{item.name}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-center pr-1">
+                      <ChevronRightIcon />
+                    </div>
+                  </div>
+                </ButtonCard>
+              ))}
+              <div ref={triggerLoadingRef}></div>
+            </div>
+          </ScrollArea>
+        </ResizablePanel>
+
+        <ResizableHandle withHandle />
+
+        <ResizablePanel defaultSize={layout[1]}>
+          right
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </>
   );
 }
