@@ -1,13 +1,14 @@
 import { ButtonCard } from "@/components/ButtonCard";
 import { ProgressBar } from "@/components/ProgressBar";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import useInfiteScroll from "@/hooks/useInfiniteScroll";
 import { useItems } from "@/hooks/useItems";
 import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { forwardRef, useRef, useState } from "react";
+import { ItemForm } from "./ItemForm";
 
 export default function ItemsPage() {
   const [layout, setLayout] = useState([30, 70]);
@@ -102,7 +103,7 @@ export default function ItemsPage() {
     <>
 
       <p className="text-xl font-bold p-2">Items</p>
-      {(isFetchingNextPage || isLoading) && <ProgressBar/>}
+      {(isFetchingNextPage || isLoading) && <ProgressBar />}
       <Separator />
 
       <ResizablePanelGroup
@@ -143,7 +144,10 @@ export default function ItemsPage() {
         <ResizableHandle withHandle />
 
         <ResizablePanel defaultSize={layout[1]}>
-          right
+          <ScrollArea className='whitespace-nowrap h-full'>
+            <ItemForm className="p-3"/>
+            <ScrollBar orientation="horizontal"/>
+          </ScrollArea>
         </ResizablePanel>
       </ResizablePanelGroup>
     </>
