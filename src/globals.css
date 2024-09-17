@@ -42,9 +42,6 @@ body,
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-
-    --scrollbar-color: 220 10% 75%;
-    --scrollbar-thumb: 0 0% 80%;
   }
 
   .dark {
@@ -79,8 +76,6 @@ body,
 
   * {
     @apply border-border;
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--scrollbar-thumb)) transparent;
   }
 
   body {

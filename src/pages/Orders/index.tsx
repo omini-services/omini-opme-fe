@@ -1,14 +1,14 @@
-import { useAtom } from 'jotai';
-import { Orders } from '@/components/Orders';
-import { ORDERS_INITIAL_STATE, layoutState } from '@/atoms/orders';
 import { apiRequest } from '@/api';
+import { ORDERS_INITIAL_STATE, layoutState } from '@/atoms/orders';
+import { Orders } from '@/components/Orders';
 import { OrdersPageSkeleton } from '@/components/Orders/Skeleton';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { useAuth0 } from '@auth0/auth0-react';
-import { useEffect, useMemo } from 'react';
-import isEqual from 'lodash/isEqual';
-import { useOrderFetchStatus, useOrders } from '@/controllers/orders';
 import { fetchApiRequest } from '@/components/Orders/helpers';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { useOrderFetchStatus, useOrders } from '@/controllers/orders';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useAtom } from 'jotai';
+import isEqual from 'lodash/isEqual';
+import { useEffect } from 'react';
 
 export default function OrdersPage() {
   const instance = useAuth0();

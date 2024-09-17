@@ -6,11 +6,14 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { IItem } from '@/services/ItemsService';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SaveIcon, Trash2Icon } from 'lucide-react';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { CornerDownLeftIcon, ListPlusIcon, SaveIcon, Trash2Icon } from 'lucide-react';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import { ItemAtoms } from './atoms/item';
 
 const schema = z.object({
   code: z.string().min(1, "Código do item é obrigatório").max(50),
@@ -30,24 +33,68 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 interface IFormProps {
-  item: FormData
+  item: IItem | null
   className?: string;
+  disabled: boolean;
 }
 
-export function ItemForm({ item, className }: IFormProps) {
+const convertToFormData = (item: IItem): FormData => {
+  return {
+    code: item.code,
+    salesName: item.salesName,
+    technicalName: item.name,
+    description: item.description,
+    uom: item.uom,
+    anvisaCode: item.anvisaCode,
+    anvisaDueDate: new Date(item.anvisaDueDate),
+    supplierCode: item.supplierCode,
+    supplierName: item.supplierCode,
+    cst: item.cst,
+    susCode: item.susCode,
+    ncmCode: item.ncmCode,
+  };
+};
+
+export function ItemForm({ item, className, disabled = false }: IFormProps) {
+  const setFormModeNew = useSetAtom(ItemAtoms.FormMode.formModeNewAtom)
+  const setFormModeView = useSetAtom(ItemAtoms.FormMode.formModeViewAtom)
+  const formMode = useAtomValue(ItemAtoms.FormMode.current)
+
+  console.log("render item form", formMode)
+  console.log("render item form", item)
+
   const form = useForm<FormData>({
-    values: {
-      ...item
-    },
-    // mode: 'onSubmit',
-    // reValidateMode: 'onChange',
     resolver: zodResolver(schema),
+    defaultValues: {
+      code: "",
+      salesName: "",
+      technicalName: "",
+      description: "",
+      uom: "",
+      anvisaCode: "",
+      anvisaDueDate: new Date(),
+      supplierCode: "",
+      supplierName: "",
+      cst: "",
+      susCode: "",
+      ncmCode: "",
+    }
   });
 
   const {
     handleSubmit: hookFormHandleSubmit,
-    register
+    register,
+    reset
   } = form;
+
+  useEffect(() => {
+    if (!item) {
+      reset();
+    } else {
+      const formData = convertToFormData(item!)
+      reset({ ...formData }, { keepDefaultValues: true })
+    }
+  }, [item])
 
   const handleSubmit = hookFormHandleSubmit((data) => {
     console.log('submiteu')
@@ -57,50 +104,93 @@ export function ItemForm({ item, className }: IFormProps) {
     }
   );
 
+  const handleNew = () => {
+    setFormModeNew()
+  }
+
+  const handleReturn = () => {
+    setFormModeView()
+  }
+
+  const isDisabled = disabled;
+  const isEditMode = formMode === "edit"
+
   return (
     <FormProvider {...form}>
-      <div className="w-full pl-1.5">
+      <div className="flex w-full pl-1.5">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
+                disabled={!isEditMode}
+                onClick={handleReturn}
               >
-                <SaveIcon size={18} />
+                <CornerDownLeftIcon size={20} />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Salvar</TooltipContent>
+            <TooltipContent>Voltar</TooltipContent>
+          </Tooltip>
+          <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
+                disabled={isDisabled}
+                onClick={handleNew}
               >
-                <Trash2Icon size={18} />
+                <ListPlusIcon size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Novo</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={isDisabled}
+                onClick={handleSubmit}
+              >
+                <SaveIcon size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Salvar</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={isDisabled}
+                className="ml-auto pr-1.5"
+              >
+                <Trash2Icon size={20} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Excluir</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
-      <form onSubmit={handleSubmit} className={cn("flex flex-col gap-3 min-w-[880px]", className)}>
+      <form className={cn("flex flex-col gap-3 min-w-[880px]", className)}>
         <FormItemGroup>
           <Label htmlFor="code">Código</Label>
-          <Input {...register("code")} className="w-56" />
+          <Input {...register("code")} className="w-56" disabled />
         </FormItemGroup>
         <div className="flex flex-row w-full gap-3">
           <FormItemGroup>
             <Label htmlFor="salesName">Nome comercial</Label>
-            <Input {...register("salesName")} />
+            <Input {...register("salesName")} disabled={isDisabled} />
           </FormItemGroup>
           <FormItemGroup>
             <Label htmlFor="technicalName">Nome técnico</Label>
-            <Input {...register("technicalName")} />
+            <Input {...register("technicalName")} disabled={isDisabled} />
           </FormItemGroup>
         </div>
         <FormItemGroup>
           <Label htmlFor="description">Descrição</Label>
-          <Input {...register("description")} />
+          <Input {...register("description")} disabled={isDisabled} />
         </FormItemGroup>
         <Tabs defaultValue="general" className="w-full">
           <TabsList className="grid grid-cols-2 w-[400px]">
@@ -113,23 +203,23 @@ export function ItemForm({ item, className }: IFormProps) {
                 <div className='flex flex-row gap-4'>
                   <FormItemGroup>
                     <Label htmlFor="anvisaCode">Cód. Anvisa</Label>
-                    <Input {...register("anvisaCode")} />
+                    <Input {...register("anvisaCode")} disabled={isDisabled} />
                   </FormItemGroup>
                   <FormItemGroup>
                     <Label htmlFor="anvisaDueDate">Dt. Anvisa</Label>
-                    <Input {...register("anvisaDueDate")} />
+                    <Input {...register("anvisaDueDate")} disabled={isDisabled} />
                   </FormItemGroup>
                   <FormItemGroup>
                     <Label htmlFor="cst">CST</Label>
-                    <Input {...register("cst")} />
+                    <Input {...register("cst")} disabled={isDisabled} />
                   </FormItemGroup>
                   <FormItemGroup>
                     <Label htmlFor="susCode">Cód. SUS</Label>
-                    <Input {...register("susCode")} />
+                    <Input {...register("susCode")} disabled={isDisabled} />
                   </FormItemGroup>
                   <FormItemGroup>
                     <Label htmlFor="ncmCode">Cód. NCM</Label>
-                    <Input {...register("ncmCode")} />
+                    <Input {...register("ncmCode")} disabled={isDisabled} />
                   </FormItemGroup>
                 </div>
               </CardContent>
@@ -141,15 +231,15 @@ export function ItemForm({ item, className }: IFormProps) {
                 <div className='flex flex-row gap-4'>
                   <FormItemGroup className='w-56'>
                     <Label htmlFor="supplierCode">Cód. fornecedor</Label>
-                    <Input {...register("supplierCode")} />
+                    <Input {...register("supplierCode")} disabled={isDisabled} />
                   </FormItemGroup>
                   <FormItemGroup >
                     <Label htmlFor="supplierName">Nome fornecedor</Label>
-                    <Input {...register("supplierName")} />
+                    <Input {...register("supplierName")} disabled={isDisabled} />
                   </FormItemGroup>
                   <FormItemGroup className='w-56'>
                     <Label htmlFor="uom">Un. medida</Label>
-                    <Input {...register("uom")} />
+                    <Input {...register("uom")} disabled={isDisabled} />
                   </FormItemGroup>
                 </div>
               </CardContent>

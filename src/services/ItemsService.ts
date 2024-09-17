@@ -1,7 +1,7 @@
 import { apiRequest } from "@/api";
 import { Auth0ContextInterface, User } from "@auth0/auth0-react";
 
-interface IItem {
+export interface IItem {
   code: string;
   name: string;
   salesName: string;
