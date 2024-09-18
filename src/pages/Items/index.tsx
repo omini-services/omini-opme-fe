@@ -11,8 +11,6 @@ export default function ItemsPage() {
   const isLoading = useAtomValue(ItemAtoms.IsLoading)
   const itemSelected = useAtomValue(ItemAtoms.ItemSelected)
 
-  console.log('page loaded ', itemSelected)
-
   return (
     <div className="flex flex-col">
       <div className="flex flex-col">

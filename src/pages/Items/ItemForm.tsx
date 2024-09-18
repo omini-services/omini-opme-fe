@@ -2,6 +2,10 @@ import { FormItemGroup } from '@/components/FormItemGroup';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+
+
+
+import DatePickerInput from '@/components/ui/date-picker-input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -22,7 +26,7 @@ const schema = z.object({
   description: z.string().min(1, "Descrição é obrigatória").max(200),
   uom: z.string().min(1, "Unidade de medida é obrigatória").max(100),
   anvisaCode: z.string().min(1, "Código Anvisa é obrigatório").max(100),
-  anvisaDueDate: z.date(),
+  anvisaDueDate: z.date().optional(),
   supplierCode: z.string().max(100),
   supplierName: z.string().max(100),
   cst: z.string().min(1).max(3),
@@ -60,11 +64,7 @@ export function ItemForm({ item, className, disabled = false }: IFormProps) {
   const setFormModeView = useSetAtom(ItemAtoms.FormMode.formModeViewAtom)
   const formMode = useAtomValue(ItemAtoms.FormMode.current)
 
-  console.log("render item form", formMode)
-  console.log("render item form", item)
-
   const form = useForm<FormData>({
-    resolver: zodResolver(schema),
     defaultValues: {
       code: "",
       salesName: "",
@@ -72,19 +72,21 @@ export function ItemForm({ item, className, disabled = false }: IFormProps) {
       description: "",
       uom: "",
       anvisaCode: "",
-      anvisaDueDate: new Date(),
+      anvisaDueDate: undefined,
       supplierCode: "",
       supplierName: "",
       cst: "",
       susCode: "",
       ncmCode: "",
-    }
+    },
+    resolver: zodResolver(schema),
   });
 
   const {
     handleSubmit: hookFormHandleSubmit,
     register,
-    reset
+    reset,
+    control
   } = form;
 
   useEffect(() => {
@@ -207,7 +209,7 @@ export function ItemForm({ item, className, disabled = false }: IFormProps) {
                   </FormItemGroup>
                   <FormItemGroup>
                     <Label htmlFor="anvisaDueDate">Dt. Anvisa</Label>
-                    <Input {...register("anvisaDueDate")} disabled={isDisabled} />
+                    <DatePickerInput className='w-40' name="anvisaDueDate" control={control} disabled={isDisabled}></DatePickerInput>
                   </FormItemGroup>
                   <FormItemGroup>
                     <Label htmlFor="cst">CST</Label>
