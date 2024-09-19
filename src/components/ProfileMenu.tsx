@@ -1,6 +1,5 @@
-
 export function ProfileMenu() {
-  return (<></>)
+  return <></>;
   // const { logout, user } = useAuth0();
   // const { name, picture, email } = user;
   // const navigate = useNavigate();
