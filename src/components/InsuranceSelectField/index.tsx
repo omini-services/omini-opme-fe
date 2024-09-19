@@ -11,17 +11,14 @@ import { fetchApiRequest } from '../Orders/helpers';
 import { apiRequest } from '@/api';
 import { useInsurance, useInsuranceFetchStatus } from '@/controllers/insurance';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useOrderForm, useSelectOrders } from '@/controllers/orders';
 
 export const InsuranceSelectField = ({ form, onChange }) => {
-  const { orderFormData } = useOrderForm();
   const instance = useAuth0();
   const {
     insurances: { data: insurancesData },
     replaceAll,
-    reset,
   } = useInsurance();
-  const { selectedOrderId } = useSelectOrders();
+
   const { setInsuranceLoading, setInsuranceError } = useInsuranceFetchStatus();
 
   useEffect(() => {
@@ -40,18 +37,6 @@ export const InsuranceSelectField = ({ form, onChange }) => {
       },
     });
   }, []);
-
-  useEffect(() => {
-    const initialInsuranceCompanyCode = orderFormData['insuranceCompanyCode'];
-    console.log('handleChange => ', {
-      form: form.getValues(),
-      orderFormData,
-      initialInsuranceCompanyCode,
-    });
-    if (initialInsuranceCompanyCode) {
-      onChange('insuranceCompanyCode', initialInsuranceCompanyCode);
-    }
-  }, [insurancesData, form]);
 
   return (
     <div className="grid gap-2">

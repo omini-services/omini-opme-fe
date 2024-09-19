@@ -24,6 +24,9 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+
 import { PAYING_SOURCE_TYPE } from '@/constants';
 import { useOrderForm } from '@/controllers/orders';
 import { cn } from '@/lib/utils';
@@ -85,6 +88,8 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
       ...prevData,
       [field]: value,
     }));
+
+    form.setValue(field, value);
 
     if (field === 'payingSourceType') {
       setShowInsuranceField(value === PAYING_SOURCE_TYPE.INSURANCE);
