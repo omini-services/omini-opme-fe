@@ -93,7 +93,7 @@ export default function DatePickerInput<T extends FieldValues>({ control, name, 
               <CalendarIcon className="h-4 w-4" />
             </Button>
           </PopoverTrigger>
-          <Input value={inputValue} onChange={handleInputChange} maxLength={10} {...props} />
+          <Input className="w-full" value={inputValue} onChange={handleInputChange} maxLength={10} {...props} />
         </fieldset>
       </PopoverAnchor>
       <PopoverContent className="w-auto p-0" align="start">

@@ -209,7 +209,7 @@ export function ItemForm({ item, className, disabled = false }: IFormProps) {
                   </FormItemGroup>
                   <FormItemGroup>
                     <Label htmlFor="anvisaDueDate">Dt. Anvisa</Label>
-                    <DatePickerInput className='w-40' name="anvisaDueDate" control={control} disabled={isDisabled}></DatePickerInput>
+                    <DatePickerInput name="anvisaDueDate" control={control} disabled={isDisabled}></DatePickerInput>
                   </FormItemGroup>
                   <FormItemGroup>
                     <Label htmlFor="cst">CST</Label>
