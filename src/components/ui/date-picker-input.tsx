@@ -33,10 +33,12 @@ export default function DatePickerInput<T extends FieldValues>({ control, name, 
       return;
     }
 
-    const date = parse(field.value, 'dd/MM/yyyy', new Date());
-    if (isValid(date)) {
-      setDate(date)
-      return;
+    if (field.value) {
+      const date = parse(field.value, 'dd/MM/yyyy', new Date());
+      if (isValid(date)) {
+        setDate(date)
+        return;
+      }
     }
 
     setInputValue('')
