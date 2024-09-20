@@ -12,7 +12,7 @@ import { apiRequest } from '@/api';
 import { useInsurance, useInsuranceFetchStatus } from '@/controllers/insurance';
 import { useAuth0 } from '@auth0/auth0-react';
 
-export const InsuranceSelectField = ({ form, onChange }) => {
+export const InsuranceSelectField = ({ form, onChange, disabled }) => {
   const instance = useAuth0();
   const {
     insurances: { data: insurancesData },
@@ -45,6 +45,7 @@ export const InsuranceSelectField = ({ form, onChange }) => {
         {...form.register('insuranceCompanyCode')}
         value={form.watch('insuranceCompanyCode')}
         onValueChange={(value) => onChange('insuranceCompanyCode', value)}
+        disabled={disabled}
       >
         <SelectTrigger id="insuranceCompanyCode">
           <SelectValue placeholder="Selecione..." />

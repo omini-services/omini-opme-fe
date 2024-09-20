@@ -99,7 +99,7 @@ export function ItemForm({ item, className, disabled = false }: IFormProps) {
 
   const handleSubmit = hookFormHandleSubmit(
     (data) => {
-      console.log('submiteu');
+      console.log('submit');
     },
     (errors) => {
       console.log({ errors });
