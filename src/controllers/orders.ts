@@ -53,7 +53,7 @@ export const useOrderItems = () => {
   return {
     insertItem: insert,
     deleteItemByCode: deleteById,
-    replaceAllItems: replaceAll,
+    replaceAllOrderItems: replaceAll,
     getOrderItems,
   };
 };

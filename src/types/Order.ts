@@ -18,9 +18,9 @@ export type TFetchResult = {
 export interface IOrderItem {
   // order data
   id: string;
-  number?: number;
+  number: number;
   dueDate: Date | string;
-  createdOn?: Date | string;
+  createdOn: Date | string;
   items: IItem[];
   total: number;
   // patitent data
@@ -31,16 +31,17 @@ export interface IOrderItem {
   // physician data
   physicianCode: string;
   physicianFirstName: string;
+  physicianMiddleName: string;
   physicianLastName: string;
   // payment data
   payingSourceCode: string;
   payingSourceName: string;
-  payingSourceType?: string | undefined;
+  payingSourceType: string;
   // hospital data
-  hospitalName?: string | undefined;
+  hospitalName: string;
   hospitalCode: string;
   // insurance data
-  insuranceCompanyName?: string | undefined;
+  insuranceCompanyName: string;
   insuranceCompanyCode: string;
   // specialist
   internalSpecialistCode: string;

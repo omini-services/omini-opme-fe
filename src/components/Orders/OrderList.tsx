@@ -14,22 +14,18 @@ export function OrderList({
   const triggerLoadingRef = useRef(null);
   const rootRef = useRef(null);
   const { orders } = useOrders();
-
-  const renderItems = () => {
-    return orders?.data.map((item) => (
-      <Card
-        selectedOrderId={selectedOrderId}
-        item={item}
-        selectOrder={selectOrder}
-      />
-    ));
-  };
-
   return (
     <div className="flex flex-grow-0 h-[calc(100vh-10rem)] w-[28rem] min-w-[28rem]">
       <ScrollArea className="h-full w-full" ref={rootRef}>
         <div className="flex flex-col gap-2 p-2 h-full w-full">
-          {renderItems()}
+          {orders?.data.map((item) => (
+            <Card
+              key={item.id}
+              selectedOrderId={selectedOrderId}
+              item={item}
+              selectOrder={selectOrder}
+            />
+          ))}
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center bg-slate-100 bg-opacity-50 z-10 text-center">
               <Spinner />

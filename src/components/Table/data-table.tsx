@@ -86,7 +86,7 @@ export function DataTable<TData, TValue>({
     return (
       <TableRow>
         <TableCell colSpan={columns.length} className="h-24 text-center">
-          No results.
+          Sem itens.
         </TableCell>
       </TableRow>
     );
@@ -99,7 +99,7 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div className="space-y-4 h-full flex flex-col">
+    <div className="flex flex-col space-y-4 h-full w-full">
       <DataTableToolbar table={table} filter={filter} />
       <div className="flex-grow overflow-y-auto">
         <Table>
