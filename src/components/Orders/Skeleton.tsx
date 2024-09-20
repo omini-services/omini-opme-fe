@@ -41,16 +41,6 @@ export const OrderDisplaySkeleton = () => {
               </TooltipTrigger>
               <TooltipContent>Excluir</TooltipContent>
             </Tooltip>
-            <Separator orientation="vertical" className="mx-1 h-6" />
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" disabled>
-                  <Trash2 className="h-4 w-4" />
-                  <span className="sr-only">Excluir</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Excluir</TooltipContent>
-            </Tooltip>
           </div>
 
           <div className="ml-auto flex items-center">

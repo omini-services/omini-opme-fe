@@ -1,15 +1,9 @@
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from '@/components/ui/resizable';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { OrderDisplay } from './OrderDisplay';
 import { OrderList } from './OrderList';
-import { LAYOUT_SIZES_INITIAL_STATE } from '@/atoms/orders';
 import { useEffect, useMemo } from 'react';
 import {
   useOrderFetchStatus,
@@ -17,15 +11,7 @@ import {
   useSelectOrders,
 } from '@/controllers/orders';
 
-interface IOrders {
-  layout: number[] | undefined;
-  setLayout: Function;
-}
-
-export function Orders({
-  layout = LAYOUT_SIZES_INITIAL_STATE,
-  setLayout,
-}: IOrders) {
+export function Orders() {
   const { selectedOrderId, selectOrder } = useSelectOrders();
   const { status } = useOrderFetchStatus();
   const { orders } = useOrders();
@@ -73,44 +59,34 @@ export function Orders({
   };
 
   return (
-    <ResizablePanelGroup
-      direction="horizontal"
-      onLayout={(sizes) => setLayout(sizes)}
-      className="h-full items-stretch"
-    >
-      <ResizablePanel defaultSize={layout[0]} minSize={25} maxSize={29}>
-        <Tabs defaultValue="open" className="flex flex-1 flex-col h-full">
-          {renderTabControl()}
+    <div className="flex flex-row flex-grow">
+      <Tabs defaultValue="open" className="flex flex-0 flex-col h-full">
+        {renderTabControl()}
 
-          <Separator />
+        <Separator />
 
-          {renderSearch()}
+        {renderSearch()}
 
-          <Separator />
+        <Separator />
 
-          <div className="flex-grow overflow-y-scroll">
-            <TabsContent value="open" className="h-full m-0">
-              <OrderList
-                selectedOrderId={selectedOrderId}
-                selectOrder={selectOrder}
-                loading={isDisabled}
-              />
-            </TabsContent>
-          </div>
+        <TabsContent value="open" className="h-full m-0">
+          <OrderList
+            selectedOrderId={selectedOrderId}
+            selectOrder={selectOrder}
+            loading={isDisabled}
+          />
+        </TabsContent>
+      </Tabs>
 
-          <Separator />
-        </Tabs>
-      </ResizablePanel>
+      <Separator orientation="vertical" className="min-h-full" />
 
-      <ResizableHandle withHandle />
-
-      <ResizablePanel defaultSize={layout[1]}>
+      <div className="flex flex-1 flex-col h-full">
         <OrderDisplay
           order={
             orders?.data.find((item) => item.id === selectedOrderId) || null
           }
         />
-      </ResizablePanel>
-    </ResizablePanelGroup>
+      </div>
+    </div>
   );
 }
