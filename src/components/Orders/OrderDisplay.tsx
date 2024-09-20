@@ -207,7 +207,11 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                         <Button
                           variant="ghost"
                           size="icon"
-                          disabled={!order || isDisabled}
+                          disabled={
+                            !order ||
+                            isDisabled ||
+                            !Object.values(rowSelection).length
+                          }
                           onClick={() =>
                             setDialog({
                               ...DIALOG_INITIAL_STATE,
@@ -218,14 +222,6 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                               negative: 'Cancelar',
                               positiveCallback: () =>
                                 handleDeleteItem({
-                                  // order,
-                                  // instance,
-                                  // apiRequest,
-                                  // orderFormData,
-                                  // deleteById,
-                                  // setError: setOrderItemsError,
-                                  // setLoading: setOrderItemsLoading,
-
                                   order,
                                   items: getOrderItems(),
                                   instance,
