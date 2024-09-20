@@ -97,6 +97,10 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
   };
 
   useEffect(() => {
+    console.log('first useffect -> ', {
+      order,
+      form,
+    });
     if (order) {
       const payingSourceType = order.payingSourceType?.toLowerCase();
 
@@ -282,10 +286,6 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
               </FormItem>
             )}
           />
-
-          {/* <Button type="submit" size="sm">
-            Salvar
-          </Button> */}
         </form>
       </div>
     </Form>

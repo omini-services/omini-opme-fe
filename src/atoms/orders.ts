@@ -11,14 +11,9 @@ export const ORDERS_INITIAL_STATE: IOrdersNetworkResponse = {
   rowCount: 0,
 };
 
-export const LAYOUT_SIZES_INITIAL_STATE = [30, 70];
-
 export const selectedOrder = atom<TSelectedOrder>(null);
 export const ordersAtom = atom<IOrdersNetworkResponse>(ORDERS_INITIAL_STATE);
 export const orderItemsAtom = atom<IItem[]>([]);
-
-export const collapsedState = atom<boolean | undefined>(undefined);
-export const layoutState = atom(LAYOUT_SIZES_INITIAL_STATE);
 
 export const orderFetchStatusAtom = atom({
   orderItems: { loading: false, error: null },
