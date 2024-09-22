@@ -3,7 +3,7 @@ import { getStatusCode } from '@/constants';
 import { toast } from '@/components/ui/use-toast';
 import { IOrderItem } from '@/types/Order';
 import { TOrdersTableSelection } from '@/atoms/orders';
-import { IItem } from '@/types/Item';
+import { IFormData, IItem } from '@/types/Item';
 
 interface IPropsHandleDeleteOrder {
   order: IOrderItem | null;
@@ -195,7 +195,7 @@ export const handleSave = async ({
     if (getStatusCode(code)) {
       updateById(orderFormData?.id, orderFormData);
       toast({
-        title: 'formulário enviado:',
+        title: 'Formulário enviado:',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">
@@ -206,7 +206,7 @@ export const handleSave = async ({
       });
     } else {
       toast({
-        title: 'erro ao atualizar orcamento:',
+        title: 'Erro ao atualizar orcamento:',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">
@@ -219,7 +219,7 @@ export const handleSave = async ({
     }
   } catch (error) {
     toast({
-      title: 'erro ao atualizar orcamento:',
+      title: 'Erro ao atualizar orcamento:',
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">
@@ -281,6 +281,91 @@ export const fetchApiRequest = async ({
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{errorMessage}</code>
+        </pre>
+      ),
+    });
+    setError(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+interface IPropsHandleSaveItem {
+  order: IOrderItem | null;
+  apiRequest: Function;
+  setError: Function;
+  item: IItem;
+  formData: IFormData;
+  setLoading: Function;
+  instance: Auth0ContextInterface;
+  updateById: Function;
+}
+
+export const handleSaveItem = async ({
+  instance,
+  apiRequest,
+  updateById,
+  item,
+  order,
+  formData,
+  setError,
+  setLoading,
+}: IPropsHandleSaveItem) => {
+  try {
+    setLoading(true);
+
+    const response = await apiRequest({
+      instance,
+      url: `quotations/${order?.id}/items/${item.lineId}`,
+      method: 'PUT',
+      body: JSON.stringify(
+        {
+          quotationId: order?.id,
+          lineId: item.lineId,
+          lineOrder: item.lineOrder,
+          itemCode: item.itemCode,
+          ...formData,
+        },
+        null,
+        2
+      ),
+    });
+
+    const { data, status: code } = response;
+
+    if (getStatusCode(code)) {
+      // TODO: atualizar lista de items do orcamento com o valor novo.
+      updateById(item.itemCode, data);
+      toast({
+        title: 'Formulário enviado:',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              Item {item.itemCode} atualizado com sucesso!
+            </code>
+          </pre>
+        ),
+      });
+    } else {
+      toast({
+        title: 'Erro ao atualizar orcamento:',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              Ocorreu um erro ao atualizar um item {item.itemCode}
+            </code>
+          </pre>
+        ),
+      });
+    }
+  } catch (error) {
+    toast({
+      title: 'Erro ao atualizar orcamento:',
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">
+            Ocorreu um erro ao atualizar um item {item.itemCode}
+          </code>
         </pre>
       ),
     });

@@ -22,7 +22,6 @@ import {
   SaveIcon,
   Trash2Icon,
 } from 'lucide-react';
-import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { ItemAtoms } from './atoms/item';
