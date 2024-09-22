@@ -335,13 +335,13 @@ export const handleSaveItem = async ({
 
     if (getStatusCode(code)) {
       // TODO: atualizar lista de items do orcamento com o valor novo.
-      updateById(item.lineId, data);
+      updateById(item.itemCode, data);
       toast({
         title: 'Formulário enviado:',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">
-              Item numero: {item.lineId} atualizado com sucesso!
+              Item {item.itemCode} atualizado com sucesso!
             </code>
           </pre>
         ),
@@ -352,7 +352,7 @@ export const handleSaveItem = async ({
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">
-              Ocorreu um erro ao atualizar um item numero: {item.lineId}
+              Ocorreu um erro ao atualizar um item {item.itemCode}
             </code>
           </pre>
         ),
@@ -364,7 +364,7 @@ export const handleSaveItem = async ({
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">
-            Ocorreu um erro ao atualizar um item numero: {item.lineId}
+            Ocorreu um erro ao atualizar um item {item.itemCode}
           </code>
         </pre>
       ),
