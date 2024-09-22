@@ -27,3 +27,11 @@ export type TOrdersTableSelection = {
 };
 
 export const ordersTableSelection = atom<TOrdersTableSelection>({});
+
+export const ITEM_FORM_INITIAL_STATE = {
+  show: false,
+  onSubmit: (data: any) => {},
+  cancel: () => {},
+};
+
+export const itemFormModalState = atom(ITEM_FORM_INITIAL_STATE);

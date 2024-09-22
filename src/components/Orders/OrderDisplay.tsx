@@ -1,6 +1,13 @@
+import { useSetAtom } from 'jotai';
 import { format } from 'date-fns';
 
-import { Trash2, SaveIcon, DiamondPlus, DiamondMinus } from 'lucide-react';
+import {
+  Trash2,
+  SaveIcon,
+  DiamondPlus,
+  DiamondMinus,
+  Pencil,
+} from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -10,15 +17,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-import { ORDER } from '@/constants';
-import { OrderForm } from './Form';
-import { DataTable } from '../Table/data-table';
-import { Filter } from './TableFilter';
-import { columns } from './columns';
-import { useEffect, useMemo } from 'react';
-import { apiRequest } from '@/api';
-import { useAuth0 } from '@auth0/auth0-react';
-import { IOrderItem } from '@/types/Order';
 import {
   useOrderFetchStatus,
   useOrderForm,
@@ -26,16 +24,29 @@ import {
   useOrders,
   useOrdersTableSelection,
 } from '@/controllers/orders';
-import { Spinner } from '../Loading';
 
 import { DIALOG_INITIAL_STATE, dialogState } from '@/atoms/dialog';
-import { useSetAtom } from 'jotai';
+
+import { ORDER } from '@/constants';
+import { useEffect, useMemo } from 'react';
+import { apiRequest } from '@/api';
+import { useAuth0 } from '@auth0/auth0-react';
+import { IOrderItem } from '@/types/Order';
+
+import { OrderForm } from './Form';
+import { DataTable } from '../Table/data-table';
+import { columns } from './columns';
+import { Spinner } from '../Loading';
+import { Filter } from './TableFilter';
+
 import {
   fetchApiRequest,
   handleDeleteItem,
   handleDeleteOrder,
   handleSave,
+  handleSaveItem,
 } from './helpers';
+import { itemFormModalState } from '@/atoms/orders';
 
 interface OrderDisplayProps {
   order: IOrderItem | null;
@@ -52,6 +63,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
   const { rowSelection, setSelection } = useOrdersTableSelection();
 
   const setDialog = useSetAtom(dialogState);
+  const setItemModal = useSetAtom(itemFormModalState);
 
   useEffect(() => {
     if (!order?.id) return;
@@ -80,6 +92,30 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
   }, [order?.id]);
 
   const isDisabled = useMemo(() => status.orderItems.loading, [status]);
+
+  const handleEditItem = () => {
+    setItemModal({
+      show: true,
+      onSubmit: (data) => {
+        console.log('Dados enviados:', data);
+        const itemPosition = Object.entries(rowSelection)[0][0];
+        const item = getOrderItems()[itemPosition];
+        handleSaveItem({
+          instance,
+          apiRequest,
+          updateById: () => {},
+          item,
+          formData: data,
+          order,
+          setError: setOrderItemsError,
+          setLoading: setOrderItemsLoading,
+        });
+      },
+      cancel: () => {
+        console.log('Edição cancelada');
+      },
+    });
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -191,7 +227,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                           disabled={!order || isDisabled}
                           onClick={
                             () => {}
-                            // handleCreate()
+                            // handleCreateItem()
                           }
                         >
                           <DiamondPlus className="h-4 w-4" />
@@ -201,6 +237,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                       <TooltipContent>Adicionar Item</TooltipContent>
                     </Tooltip>
                   </div>
+
                   <div className="flex items-center gap-2">
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -240,6 +277,27 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>Excluir Item</TooltipContent>
+                    </Tooltip>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          disabled={
+                            !order ||
+                            isDisabled ||
+                            Object.values(rowSelection).length != 1
+                          }
+                          onClick={() => handleEditItem()}
+                        >
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar Item</span>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Editar Item</TooltipContent>
                     </Tooltip>
                   </div>
                 </div>

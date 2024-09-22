@@ -5,6 +5,7 @@ import { OrdersPageSkeleton } from '@/components/Orders/Skeleton';
 import { fetchApiRequest } from '@/components/Orders/helpers';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { useOrderFetchStatus, useOrders } from '@/controllers/orders';
+import EditItemModal from '@/components/Orders/EditItemModal';
 import { useAuth0 } from '@auth0/auth0-react';
 import isEqual from 'lodash/isEqual';
 import { useEffect } from 'react';
@@ -51,12 +52,15 @@ export default function OrdersPage() {
   }
 
   return (
-    <TooltipProvider delayDuration={0}>
-      {status.orders.loading || !orders?.data.length ? (
-        <OrdersPageSkeleton />
-      ) : (
-        <Orders />
-      )}
-    </TooltipProvider>
+    <>
+      <TooltipProvider delayDuration={0}>
+        {status.orders.loading || !orders?.data.length ? (
+          <OrdersPageSkeleton />
+        ) : (
+          <Orders />
+        )}
+      </TooltipProvider>
+      <EditItemModal />
+    </>
   );
 }
