@@ -2,7 +2,7 @@ import { Table } from '@tanstack/react-table';
 import { Input } from '@/components/ui/input';
 
 import { priorities, statuses } from '@/pages/Orders/data/data';
-import { DataTableFacetedFilter } from '@/components/Table/data-table-faceted-filter';
+import { DataTableFacetedFilter } from '@/components/ItemsTable/data-table-faceted-filter';
 
 interface FilterProps<TData> {
   table: Table<TData>;

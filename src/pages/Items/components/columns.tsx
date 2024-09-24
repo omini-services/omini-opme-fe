@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { Checkbox } from '@/components/shadcn/new-york/checkbox';
 
-import { DataTableColumnHeader } from '@/components/Table/data-table-column-header';
+import { DataTableColumnHeader } from '@/components/ItemsTable/data-table-column-header';
 import { IItemResponse } from '@/types/ItemResponse';
 import { MainTableRowActions } from './main-table-row-actions';
 
@@ -17,9 +17,8 @@ export const columns: ColumnDef<IItemResponse>[] = [
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Selectionar todos"
-        className='text-center'
+        className="text-center"
       />
-
     ),
     cell: ({ row }) => (
       <Checkbox
@@ -35,37 +34,38 @@ export const columns: ColumnDef<IItemResponse>[] = [
   {
     accessorKey: 'code',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Código" className='items-end' />
+      <DataTableColumnHeader
+        column={column}
+        title="Código"
+        className="items-end"
+      />
     ),
     cell: ({ row }) => (
-      <div className='items-center'>{row.getValue('code')}</div>
+      <div className="items-center">{row.getValue('code')}</div>
     ),
     enableSorting: true,
     enableHiding: false,
-    size: 200
+    size: 200,
   },
   {
     accessorKey: 'salesName',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Nome" />
     ),
-    cell: ({ row }) => (
-      <div>{row.getValue('salesName')}</div>
-    ),
-    size: 300
-  },{
+    cell: ({ row }) => <div>{row.getValue('salesName')}</div>,
+    size: 300,
+  },
+  {
     accessorKey: 'name',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Nome Completo" />
     ),
-    cell: ({ row }) => (
-      <div>{row.getValue('name')}</div>
-    ),
-    size: 500
+    cell: ({ row }) => <div>{row.getValue('name')}</div>,
+    size: 500,
   },
   {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }) => <MainTableRowActions row={row} />,
-    size: 20
+    size: 20,
   },
 ];

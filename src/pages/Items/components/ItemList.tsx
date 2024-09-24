@@ -5,7 +5,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { ChevronRightIcon } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { ItemAtoms } from '../atoms/item';
-import { useInfiniteItems } from '../useInfiniteItems';
+import { useInfiniteItems } from '../hooks';
 
 export function ItemList() {
   const setItemsLoading = useSetAtom(ItemAtoms.IsLoading);

@@ -3,8 +3,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 
-import { DataTableColumnHeader } from '@/components/Table/data-table-column-header';
-import { DataTableRowActions } from '@/components/Table/data-table-row-actions';
+import { DataTableColumnHeader } from '@/components/ItemsTable/data-table-column-header';
+import { DataTableRowActions } from '@/components/ItemsTable/data-table-row-actions';
 import { format } from 'date-fns';
 import { statuses, priorities } from '@/pages/Orders/data/data';
 

@@ -6,7 +6,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
+} from '@/components/ui/select';
 import { fetchApiRequest } from '../Orders/helpers';
 import { apiRequest } from '@/api';
 import { useInsurance, useInsuranceFetchStatus } from '@/controllers/insurance';
