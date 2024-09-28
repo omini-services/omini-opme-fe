@@ -87,8 +87,6 @@ const AddItemModal: React.FC = () => {
     };
   }, [show]);
 
-  // TODO: adicionar items no select para cadastro
-
   return (
     <AlertDialog open={show}>
       <AlertDialogContent>
@@ -112,9 +110,15 @@ const AddItemModal: React.FC = () => {
                   <SelectValue placeholder="Selecione..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="item1">Item 1</SelectItem>
-                  <SelectItem value="item2">Item 2</SelectItem>
-                  <SelectItem value="item3">Item 3</SelectItem>
+                  {!fetchLoading ? (
+                    items.map((item) => (
+                      <SelectItem key={item.code} value={item.code}>
+                        {item.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="">Carregando...</SelectItem>
+                  )}
                 </SelectContent>
               </Select>
               {form.formState.errors.selectedItem && (
