@@ -5,7 +5,7 @@ import { IOrderItem } from '@/types/Order';
 import { TOrdersTableSelection } from '@/atoms/orders';
 import { IFormData, IItem } from '@/types/Item';
 
-interface IPropsHandleDeleteOrder {
+interface IPropsDeleteOrder {
   order: IOrderItem | null;
   instance: Auth0ContextInterface;
   apiRequest: Function;
@@ -15,7 +15,7 @@ interface IPropsHandleDeleteOrder {
   setLoading: Function;
 }
 
-export const handleDeleteOrder = async ({
+export const fetchDeleteOrder = async ({
   order,
   instance,
   apiRequest,
@@ -23,7 +23,7 @@ export const handleDeleteOrder = async ({
   deleteById,
   setError,
   setLoading,
-}: IPropsHandleDeleteOrder) => {
+}: IPropsDeleteOrder) => {
   if (!order?.id) return;
 
   setLoading(true);
@@ -79,7 +79,7 @@ export const handleDeleteOrder = async ({
   }
 };
 
-interface IPropsHandleDeleteItem {
+interface IPropsDeleteItem {
   order: IOrderItem | null;
   items: IItem[];
   instance: Auth0ContextInterface;
@@ -91,7 +91,7 @@ interface IPropsHandleDeleteItem {
   deleteItemByCode: Function;
 }
 
-export const handleDeleteItem = async ({
+export const fetchDeleteItem = async ({
   order,
   items,
   instance,
@@ -101,7 +101,7 @@ export const handleDeleteItem = async ({
   setSelection,
   rowSelection,
   deleteItemByCode,
-}: IPropsHandleDeleteItem) => {
+}: IPropsDeleteItem) => {
   if (!order?.id) return;
 
   setLoading(true);
@@ -162,7 +162,7 @@ export const handleDeleteItem = async ({
   }
 };
 
-interface IPropsHandleSave {
+interface IPropsUpdateOrder {
   apiRequest: Function;
   setError: Function;
   orderFormData: IOrderItem | {};
@@ -171,14 +171,14 @@ interface IPropsHandleSave {
   updateById: Function;
 }
 
-export const handleSave = async ({
+export const fetchUpdateOrder = async ({
   instance,
   apiRequest,
   updateById,
   orderFormData,
   setError,
   setLoading,
-}: IPropsHandleSave) => {
+}: IPropsUpdateOrder) => {
   try {
     setLoading(true);
 
@@ -290,7 +290,7 @@ export const fetchApiRequest = async ({
   }
 };
 
-interface IPropsHandleSaveItem {
+interface IPropsUpdateItem {
   order: IOrderItem | null;
   apiRequest: Function;
   setError: Function;
@@ -298,19 +298,19 @@ interface IPropsHandleSaveItem {
   formData: IFormData;
   setLoading: Function;
   instance: Auth0ContextInterface;
-  updateById: Function;
+  replaceAll: Function;
 }
 
-export const handleSaveItem = async ({
+export const fetchUpdateItem = async ({
   instance,
   apiRequest,
-  updateById,
+  replaceAll,
   item,
   order,
   formData,
   setError,
   setLoading,
-}: IPropsHandleSaveItem) => {
+}: IPropsUpdateItem) => {
   try {
     setLoading(true);
 
@@ -331,11 +331,13 @@ export const handleSaveItem = async ({
       ),
     });
 
-    const { data, status: code } = response;
+    const {
+      data: { data },
+      status: code,
+    } = response;
 
     if (getStatusCode(code)) {
-      // TODO: atualizar lista de items do orcamento com o valor novo.
-      updateById(item.itemCode, data);
+      replaceAll(data.items);
       toast({
         title: 'Formulário enviado:',
         description: (
@@ -365,6 +367,90 @@ export const handleSaveItem = async ({
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">
             Ocorreu um erro ao atualizar um item {item.itemCode}
+          </code>
+        </pre>
+      ),
+    });
+    setError(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+interface IPropsAddItem {
+  order: IOrderItem | null;
+  apiRequest: Function;
+  setError: Function;
+  formData: IFormData;
+  setLoading: Function;
+  instance: Auth0ContextInterface;
+  replaceAll: Function;
+}
+
+export const fetchAddItem = async ({
+  instance,
+  apiRequest,
+  replaceAll,
+  order,
+  formData,
+  setError,
+  setLoading,
+}: IPropsAddItem) => {
+  try {
+    setLoading(true);
+
+    const response = await apiRequest({
+      instance,
+      url: `quotations/${order?.id}/items/`,
+      method: 'POST',
+      body: JSON.stringify(
+        {
+          quotationId: order?.id,
+          lineOrder: formData.lineOrder,
+          itemCode: formData.itemCode,
+          ...formData,
+        },
+        null,
+        2
+      ),
+    });
+
+    const {
+      data: { data },
+      status: code,
+    } = response;
+
+    if (getStatusCode(code)) {
+      replaceAll(data.items);
+      toast({
+        title: 'Formulário enviado:',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              Item {formData.itemCode} adicionado com sucesso!
+            </code>
+          </pre>
+        ),
+      });
+    } else {
+      toast({
+        title: 'Erro ao atualizar orcamento:',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              Ocorreu um erro ao adicionar um item {formData.itemCode}
+            </code>
+          </pre>
+        ),
+      });
+    }
+  } catch (error) {
+    toast({
+      title: 'Erro ao atualizar orcamento:',
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">
+            Ocorreu um erro ao adicionar um item {formData.itemCode}
           </code>
         </pre>
       ),

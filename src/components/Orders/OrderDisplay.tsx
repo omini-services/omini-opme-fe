@@ -34,19 +34,20 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { IOrderItem } from '@/types/Order';
 
 import { OrderForm } from './Form';
-import { DataTable } from '../Table/data-table';
+import { ItemsTable } from '../ItemsTable';
 import { columns } from './columns';
 import { Spinner } from '../Loading';
 import { Filter } from './TableFilter';
 
 import {
   fetchApiRequest,
-  handleDeleteItem,
-  handleDeleteOrder,
-  handleSave,
-  handleSaveItem,
+  fetchDeleteItem,
+  fetchDeleteOrder,
+  fetchUpdateOrder,
+  fetchUpdateItem,
+  fetchAddItem,
 } from './helpers';
-import { itemFormModalState } from '@/atoms/orders';
+import { addItemFormModalState, editItemFormModalState } from '@/atoms/orders';
 
 interface OrderDisplayProps {
   order: IOrderItem | null;
@@ -63,7 +64,8 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
   const { rowSelection, setSelection } = useOrdersTableSelection();
 
   const setDialog = useSetAtom(dialogState);
-  const setItemModal = useSetAtom(itemFormModalState);
+  const setEditItemModal = useSetAtom(editItemFormModalState);
+  const setAddItemModal = useSetAtom(addItemFormModalState);
 
   useEffect(() => {
     if (!order?.id) return;
@@ -94,16 +96,15 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
   const isDisabled = useMemo(() => status.orderItems.loading, [status]);
 
   const handleEditItem = () => {
-    setItemModal({
+    setEditItemModal({
       show: true,
       onSubmit: (data) => {
-        console.log('Dados enviados:', data);
         const itemPosition = Object.entries(rowSelection)[0][0];
         const item = getOrderItems()[itemPosition];
-        handleSaveItem({
+        fetchUpdateItem({
           instance,
           apiRequest,
-          updateById: () => {},
+          replaceAll: replaceAllOrderItems,
           item,
           formData: data,
           order,
@@ -111,8 +112,22 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
           setLoading: setOrderItemsLoading,
         });
       },
-      cancel: () => {
-        console.log('Edição cancelada');
+    });
+  };
+
+  const handleAddItem = () => {
+    setAddItemModal({
+      show: true,
+      onSubmit: (data) => {
+        fetchAddItem({
+          instance,
+          apiRequest,
+          replaceAll: replaceAllOrderItems,
+          formData: data,
+          order,
+          setError: setOrderItemsError,
+          setLoading: setOrderItemsLoading,
+        });
       },
     });
   };
@@ -149,7 +164,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                           size="icon"
                           disabled={!order || isDisabled}
                           onClick={() =>
-                            handleSave({
+                            fetchUpdateOrder({
                               instance,
                               apiRequest,
                               updateById,
@@ -182,7 +197,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                               positive: 'Sim',
                               negative: 'Cancelar',
                               positiveCallback: () =>
-                                handleDeleteOrder({
+                                fetchDeleteOrder({
                                   order,
                                   instance,
                                   apiRequest,
@@ -225,10 +240,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                           variant="ghost"
                           size="icon"
                           disabled={!order || isDisabled}
-                          onClick={
-                            () => {}
-                            // handleCreateItem()
-                          }
+                          onClick={handleAddItem}
                         >
                           <DiamondPlus className="h-4 w-4" />
                           <span className="sr-only">Adicionar Item</span>
@@ -258,7 +270,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
                               positive: 'Sim',
                               negative: 'Cancelar',
                               positiveCallback: () =>
-                                handleDeleteItem({
+                                fetchDeleteItem({
                                   order,
                                   items: getOrderItems(),
                                   instance,
@@ -306,10 +318,12 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
               <Separator />
 
               <div className="flex items-center p-2 h-full w-full">
-                <DataTable
+                <ItemsTable
                   data={getOrderItems()}
                   columns={columns}
                   filter={Filter}
+                  rowSelection={rowSelection}
+                  setSelection={setSelection}
                 />
               </div>
 
