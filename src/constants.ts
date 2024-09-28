@@ -104,14 +104,16 @@ type STATUS_CODE = {
   [key: number]: boolean;
 };
 
-const STATUS_200 = 200;
+const STATUS_200 = 200; // OK
+const STATUS_201 = 201; // CREATED
 const STATUS_204 = 204;
-const STATUS_404 = 404;
-const STATUS_500 = 500;
-const STATUS_401 = 401;
+const STATUS_404 = 404; // NOT FOUND
+const STATUS_500 = 500; // ITERNAl SERVER ERROR
+const STATUS_401 = 401; // UNAUTHORIZED
 
 export const STATUS_CODE: STATUS_CODE = {
   [STATUS_200]: true,
+  [STATUS_201]: true,
   [STATUS_204]: true,
   [STATUS_404]: false,
   [STATUS_500]: false,

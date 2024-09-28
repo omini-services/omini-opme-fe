@@ -4,6 +4,7 @@ import { toast } from '@/components/ui/use-toast';
 import { IOrderItem } from '@/types/Order';
 import { TOrdersTableSelection } from '@/atoms/orders';
 import { IFormData, IItem } from '@/types/Item';
+import { ItemFormData } from '@/components/AddItemModal/index';
 
 interface IPropsDeleteOrder {
   order: IOrderItem | null;
@@ -381,10 +382,11 @@ interface IPropsAddItem {
   order: IOrderItem | null;
   apiRequest: Function;
   setError: Function;
-  formData: IFormData;
+  formData: ItemFormData;
   setLoading: Function;
   instance: Auth0ContextInterface;
   replaceAll: Function;
+  item: IFormData;
 }
 
 export const fetchAddItem = async ({
@@ -395,6 +397,7 @@ export const fetchAddItem = async ({
   formData,
   setError,
   setLoading,
+  item,
 }: IPropsAddItem) => {
   try {
     setLoading(true);
@@ -406,9 +409,10 @@ export const fetchAddItem = async ({
       body: JSON.stringify(
         {
           quotationId: order?.id,
-          lineOrder: formData.lineOrder,
-          itemCode: formData.itemCode,
-          ...formData,
+          lineOrder: '0', // TODO: add this?
+          itemCode: item.code, // TODO: add this?
+          unitPrice: formData.unitPrice,
+          quantity: formData.quantity,
         },
         null,
         2
@@ -427,7 +431,7 @@ export const fetchAddItem = async ({
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">
-              Item {formData.itemCode} adicionado com sucesso!
+              Item {item.code} adicionado com sucesso!
             </code>
           </pre>
         ),
@@ -438,7 +442,7 @@ export const fetchAddItem = async ({
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">
-              Ocorreu um erro ao adicionar um item {formData.itemCode}
+              Ocorreu um erro ao adicionar um item {item.code}
             </code>
           </pre>
         ),
@@ -450,7 +454,7 @@ export const fetchAddItem = async ({
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">
-            Ocorreu um erro ao adicionar um item {formData.itemCode}
+            Ocorreu um erro ao adicionar um item {item.code}
           </code>
         </pre>
       ),
