@@ -48,6 +48,7 @@ import {
   fetchAddItem,
 } from './helpers';
 import { addItemFormModalState, editItemFormModalState } from '@/atoms/orders';
+import { useFetchItems } from '@/pages/Items/hooks';
 
 interface OrderDisplayProps {
   order: IOrderItem | null;
@@ -66,6 +67,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
   const setDialog = useSetAtom(dialogState);
   const setEditItemModal = useSetAtom(editItemFormModalState);
   const setAddItemModal = useSetAtom(addItemFormModalState);
+  const { items } = useFetchItems();
 
   useEffect(() => {
     if (!order?.id) return;
@@ -119,6 +121,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
     setAddItemModal({
       show: true,
       onSubmit: (data) => {
+        const item = items.find((item) => item.code == data.selectedItem);
         fetchAddItem({
           instance,
           apiRequest,
@@ -127,6 +130,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
           order,
           setError: setOrderItemsError,
           setLoading: setOrderItemsLoading,
+          item,
         });
       },
     });

@@ -36,7 +36,7 @@ const schema = z.object({
     .min(1, 'A quantidade deve ser pelo menos 1'),
 });
 
-type FormData = z.infer<typeof schema>;
+export type ItemFormData = z.infer<typeof schema>;
 
 const AddItemModal: React.FC = () => {
   const { items, fetchLoading } = useFetchItems();
