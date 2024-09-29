@@ -13,7 +13,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import { IItem } from '@/services/ItemsService';
+import { IItem, ItemsService } from '@/services/ItemsService';
+import { useAuth0 } from '@auth0/auth0-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
@@ -27,7 +28,8 @@ import { z } from 'zod';
 import { ItemAtoms } from './atoms/item';
 
 const schema = z.object({
-  code: z.string().min(1, 'Código do item é obrigatório').max(50),
+  //code: z.string().min(1, 'Código do item é obrigatório').max(50),
+  code: z.string().optional(),
   salesName: z.string().min(1, 'Nome comercial é obritaório').max(100),
   technicalName: z.string().min(1, 'Nome técnico é obrigatório').max(100),
   description: z.string().min(1, 'Descrição é obrigatória').max(200),
@@ -95,10 +97,10 @@ export function ItemForm({ item, className, disabled = false }: IFormProps) {
   });
 
   const { handleSubmit: hookFormHandleSubmit, register, reset, control } = form;
-
+  const instance = useAuth0();
   const handleSubmit = hookFormHandleSubmit(
-    (data) => {
-      console.log('submit');
+    async (data) => {
+      ItemsService.add(instance, { name: data.technicalName, ...data })
     },
     (errors) => {
       console.log({ errors });

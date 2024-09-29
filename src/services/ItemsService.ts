@@ -27,4 +27,14 @@ export class ItemsService {
 
     return data;
   }
+
+  static async add(instance: Auth0ContextInterface<User>, data: any) {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    await apiRequest({
+      instance,
+      model: `items`,
+      method: 'POST',
+      body: data
+    })
+  }
 }
