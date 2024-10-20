@@ -40,12 +40,12 @@ import { Spinner } from '../Loading';
 import { Filter } from './TableFilter';
 
 import {
-  fetchApiRequest,
+  fetchGeneric,
+  fetchAddItem,
   fetchDeleteItem,
+  fetchUpdateItem,
   fetchDeleteOrder,
   fetchUpdateOrder,
-  fetchUpdateItem,
-  fetchAddItem,
 } from './helpers';
 import { addItemFormModalState, editItemFormModalState } from '@/atoms/orders';
 import { useFetchItems } from '@/pages/Items/hooks';
@@ -72,19 +72,15 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
   useEffect(() => {
     if (!order?.id) return;
 
-    fetchApiRequest({
-      instance,
+    fetchGeneric({
       setLoading: setOrderItemsLoading,
       apiRequest,
-      successCallback: (data) => replaceAllOrderItems(data?.data?.items || []),
+      successCallback: (data: any) =>
+        replaceAllOrderItems(data?.data?.items || []),
       setError: setOrderItemsError,
-      errorMessage: (
-        <>
-          Ocorreu um erro ao carregar dados do orcamente numero: {order?.number}
-        </>
-      ),
-      errorTitle: 'Erro ao carregar items:',
+      errorMessage: `Ocorreu um erro ao carregar dados do orcamente numero: ${order?.number}`,
       apiRequestOptions: {
+        instance,
         url: `quotations/${order?.id}`,
         method: 'GET',
       },
