@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { fetchApiRequest } from '../Orders/helpers';
+import { fetchGeneric } from '../Orders/helpers';
 import { apiRequest } from '@/api';
 import { useInsurance, useInsuranceFetchStatus } from '@/controllers/insurance';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -22,14 +22,12 @@ export const InsuranceSelectField = ({ form, onChange, disabled }) => {
   const { setInsuranceLoading, setInsuranceError } = useInsuranceFetchStatus();
 
   useEffect(() => {
-    fetchApiRequest({
-      instance,
+    fetchGeneric({
       setLoading: setInsuranceLoading,
       apiRequest,
-      successCallback: (data) => replaceAll(data?.data || []),
+      successCallback: (data: any) => replaceAll(data?.data || []),
       setError: setInsuranceError,
-      errorMessage: <>Ocorreu um erro ao carregar convenios</>,
-      errorTitle: 'Erro ao carregar convênios:',
+      errorMessage: 'Ocorreu um erro ao carregar convenios',
       apiRequestOptions: {
         instance,
         model: 'insurancecompanies',

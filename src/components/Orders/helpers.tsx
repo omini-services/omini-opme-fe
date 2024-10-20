@@ -5,6 +5,7 @@ import { IOrderItem } from '@/types/Order';
 import { TOrdersTableSelection } from '@/atoms/orders';
 import { IFormData, IItem } from '@/types/Item';
 import { ItemFormData } from '@/components/AddItemModal/index';
+import { IAPICall } from '@/api/types';
 
 interface IPropsDeleteOrder {
   order: IOrderItem | null;
@@ -236,61 +237,6 @@ export const fetchUpdateOrder = async ({
   }
 };
 
-interface IPropsFetch {
-  setError: Function;
-  errorTitle: string;
-  setLoading: Function;
-  apiRequest: Function;
-  successCallback: Function;
-  apiRequestOptions: Object;
-  instance: Auth0ContextInterface;
-  errorMessage: React.ReactNode | null;
-}
-
-export const fetchApiRequest = async ({
-  instance,
-  setError,
-  errorTitle,
-  setLoading,
-  apiRequest,
-  errorMessage,
-  successCallback,
-  apiRequestOptions,
-}: IPropsFetch) => {
-  setLoading(true);
-  try {
-    const { data, status: code } = await apiRequest({
-      instance,
-      ...apiRequestOptions,
-    });
-
-    if (getStatusCode(code)) {
-      successCallback(data);
-    } else {
-      toast({
-        title: errorTitle,
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{errorMessage}</code>
-          </pre>
-        ),
-      });
-    }
-  } catch (error: any) {
-    toast({
-      title: errorTitle,
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{errorMessage}</code>
-        </pre>
-      ),
-    });
-    setError(error);
-  } finally {
-    setLoading(false);
-  }
-};
-
 interface IPropsUpdateItem {
   order: IOrderItem | null;
   apiRequest: Function;
@@ -460,6 +406,78 @@ export const fetchAddItem = async ({
       ),
     });
     setError(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+interface IFetchGeneric {
+  apiRequest: Function;
+  apiRequestOptions: IAPICall;
+  setLoading: Function;
+  setError: Function;
+  successCallback: Function;
+  errorCallback?: Function;
+  successMessage?: string;
+  errorMessage?: string;
+}
+
+export const fetchGeneric = async ({
+  apiRequest,
+  setLoading,
+  setError,
+  successCallback = () => {},
+  errorCallback = () => {},
+  successMessage,
+  errorMessage,
+  apiRequestOptions,
+}: IFetchGeneric) => {
+  setLoading(true);
+
+  try {
+    const response = await apiRequest({
+      ...apiRequestOptions,
+      body: apiRequestOptions.body
+        ? JSON.stringify(apiRequestOptions.body, null, 2)
+        : {},
+    });
+
+    const { status: code, data } = response;
+
+    if (getStatusCode(code)) {
+      successCallback(data);
+      successMessage &&
+        toast({
+          title: 'Sucesso:',
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">{successMessage}</code>
+            </pre>
+          ),
+        });
+    } else {
+      errorMessage &&
+        toast({
+          title: 'Erro:',
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">{errorMessage}</code>
+            </pre>
+          ),
+        });
+      if (errorCallback) errorCallback();
+    }
+  } catch (error) {
+    setError(error);
+    errorMessage &&
+      toast({
+        title: 'Erro:',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{errorMessage}</code>
+          </pre>
+        ),
+      });
   } finally {
     setLoading(false);
   }

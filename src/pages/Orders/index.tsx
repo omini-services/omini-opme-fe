@@ -2,7 +2,7 @@ import { apiRequest } from '@/api';
 import { ORDERS_INITIAL_STATE } from '@/atoms/orders';
 import { Orders } from '@/components/Orders';
 import { OrdersPageSkeleton } from '@/components/Orders/Skeleton';
-import { fetchApiRequest } from '@/components/Orders/helpers';
+import { fetchGeneric } from '@/components/Orders/helpers';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { useOrderFetchStatus, useOrders } from '@/controllers/orders';
 import EditItemModal from '@/components/EditItemModal';
@@ -10,6 +10,7 @@ import AddItemModal from '@/components/AddItemModal';
 import { useAuth0 } from '@auth0/auth0-react';
 import isEqual from 'lodash/isEqual';
 import { useEffect } from 'react';
+import { IOrderItem } from '@/types/Order';
 
 export default function OrdersPage() {
   const instance = useAuth0();
@@ -21,14 +22,13 @@ export default function OrdersPage() {
       if (status.orders.loading) return;
 
       if (isEqual(orders?.data, ORDERS_INITIAL_STATE.data)) {
-        fetchApiRequest({
-          instance,
-          setLoading: setOrdersLoading,
+        fetchGeneric({
           apiRequest,
-          successCallback: (data) => replaceAll(data?.data || []),
+          setLoading: setOrdersLoading,
           setError: setOrdersError,
-          errorMessage: <>Ocorreu um erro ao carregar orcamentos</>,
-          errorTitle: 'erro ao carregar orcamentos:',
+          successCallback: (data: any) => replaceAll(data?.data || []),
+          errorCallback: () => {},
+          errorMessage: 'Ocorreu um erro ao carregar orcamentos',
           apiRequestOptions: {
             instance,
             model: 'quotations',
