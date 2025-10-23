@@ -12,7 +12,7 @@ const PrivateRoute = ({ component: Component }: IPrivateRoute) => {
   const { isAuthenticated, isLoading, error, logout } = useAuth0();
 
   if (isLoading) {
-    return <Loading />;
+    return <Loading type='bar' />;
   }
 
   return isAuthenticated ? <Component /> : <Signin />;

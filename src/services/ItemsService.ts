@@ -1,5 +1,5 @@
-import { apiRequest } from "@/api";
-import { Auth0ContextInterface, User } from "@auth0/auth0-react";
+import { apiRequest } from '@/api';
+import { Auth0ContextInterface, User } from '@auth0/auth0-react';
 
 export interface IItem {
   code: string;
@@ -16,25 +16,28 @@ export interface IItem {
 }
 
 export class ItemsService {
-  static async getAll(instance: Auth0ContextInterface<User>, currentPage = 1, pageSize = 10) {
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    const { data } =
-      await apiRequest({
-        instance,
-        model: `items?currentPage=${currentPage}&pageSize=${pageSize}`,
-        method: 'GET',
-      });
+  static async getAll(
+    instance: Auth0ContextInterface<User>,
+    currentPage = 1,
+    pageSize = 10
+  ) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const { data } = await apiRequest({
+      instance,
+      model: `items?currentPage=${currentPage}&pageSize=${pageSize}`,
+      method: 'GET',
+    });
 
     return data;
   }
 
   static async add(instance: Auth0ContextInterface<User>, data: any) {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     await apiRequest({
       instance,
       model: `items`,
       method: 'POST',
-      body: data
-    })
+      body: data,
+    });
   }
 }

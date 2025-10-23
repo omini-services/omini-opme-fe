@@ -12,7 +12,7 @@ import { ROUTES } from '@/constants';
 export const Menu = () => {
   const navigate = useNavigate();
 
-  const handleOnSelect = (path) => navigate(path);
+  const handleOnSelect = (path: string) => navigate(path);
 
   return (
     <Menubar className="rounded-none border-b border-none px-2 lg:px-4">

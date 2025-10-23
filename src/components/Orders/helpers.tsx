@@ -2,7 +2,7 @@ import { Auth0ContextInterface } from '@auth0/auth0-react';
 import { getStatusCode } from '@/constants';
 import { toast } from '@/components/ui/use-toast';
 import { IOrderItem } from '@/types/Order';
-import { TOrdersTableSelection } from '@/atoms/orders';
+import { ORDER_FORM_INITIAL_STATE, TOrdersTableSelection } from '@/atoms/orders';
 import { IFormData, IItem } from '@/types/Item';
 import { ItemFormData } from '@/components/AddItemModal/index';
 import { IAPICall } from '@/api/types';
@@ -11,7 +11,7 @@ interface IPropsDeleteOrder {
   order: IOrderItem | null;
   instance: Auth0ContextInterface;
   apiRequest: Function;
-  orderFormData: IOrderItem | {};
+  orderFormData: IOrderItem | typeof ORDER_FORM_INITIAL_STATE;
   deleteById: Function;
   setError: Function;
   setLoading: Function;
@@ -110,7 +110,7 @@ export const fetchDeleteItem = async ({
 
   try {
     for (const rowId of Object.keys(rowSelection)) {
-      const { lineId, itemCode } = items[rowId];
+      const { lineId, itemCode } = items[parseInt(rowId)];
 
       const response = await apiRequest({
         instance,
@@ -167,7 +167,7 @@ export const fetchDeleteItem = async ({
 interface IPropsUpdateOrder {
   apiRequest: Function;
   setError: Function;
-  orderFormData: IOrderItem | {};
+  orderFormData: IOrderItem | typeof ORDER_FORM_INITIAL_STATE;
   setLoading: Function;
   instance: Auth0ContextInterface;
   updateById: Function;
@@ -426,8 +426,8 @@ export const fetchGeneric = async ({
   apiRequest,
   setLoading,
   setError,
-  successCallback = () => {},
-  errorCallback = () => {},
+  successCallback = () => { },
+  errorCallback = () => { },
   successMessage,
   errorMessage,
   apiRequestOptions,

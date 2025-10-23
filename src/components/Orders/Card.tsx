@@ -5,7 +5,7 @@ import { HOSPITAL, INSURANCE, ITEM, PATIENT, PHYSICIAN } from '@/constants';
 import CurrencyFormatter from '@/components/CurrencyFormatter';
 
 interface ICardProps {
-  selectedOrderId: string | null;
+  selectedOrderId: IOrderItem['id'] | string | null | number;
   selectOrder: Function;
   item: IOrderItem;
 }

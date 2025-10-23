@@ -7,9 +7,11 @@ import { Outlet } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
 import intl from '@/i18n';
 
+const IntlProviderWrapper: any = IntlProvider
+
 export const Layout = () => {
   return (
-    <IntlProvider locale={intl.locale} messages={intl.messages}>
+    <IntlProviderWrapper locale={intl.locale} messages={intl.messages}>
       <Toaster />
 
       <div className="flex-col md:flex h-screen">
@@ -24,7 +26,7 @@ export const Layout = () => {
         <Outlet />
         <DialogCenter />
       </div>
-    </IntlProvider>
+    </IntlProviderWrapper>
   );
 };
 

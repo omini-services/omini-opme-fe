@@ -1,7 +1,7 @@
 import { IItem } from './Item';
 
 export interface IOrderList {
-  selectedOrderId: IOrderItem['id'] | null;
+  selectedOrderId: IOrderItem['id'] | string | null | number;
   selectOrder: Function;
   loading: boolean;
 }
@@ -17,7 +17,7 @@ export type TFetchResult = {
 
 export interface IOrderItem {
   // order data
-  id: string;
+  id: string | number;
   number: number;
   dueDate: Date | string;
   createdOn: Date | string;

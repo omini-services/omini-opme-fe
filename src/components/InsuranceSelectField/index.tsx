@@ -12,7 +12,13 @@ import { apiRequest } from '@/api';
 import { useInsurance, useInsuranceFetchStatus } from '@/controllers/insurance';
 import { useAuth0 } from '@auth0/auth0-react';
 
-export const InsuranceSelectField = ({ form, onChange, disabled }) => {
+interface InsuranceSelectFieldProps {
+  form: any;
+  onChange: (field: string, value: string) => void;
+  disabled?: boolean;
+}
+
+export const InsuranceSelectField = ({ form, onChange, disabled }: InsuranceSelectFieldProps) => {
   const instance = useAuth0();
   const {
     insurances: { data: insurancesData },

@@ -1,41 +1,42 @@
-import { cn } from "@/lib/utils";
-import { SaveIcon, Trash2 } from "lucide-react";
-import { Button } from "../ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { cn } from '@/lib/utils';
+import { Button } from '../ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip';
 
 interface IToolbarProps {
   className: string;
+  children: any;
 }
 
-export function Toolbar({className} : IToolbarProps) {
+export function Toolbar({ className, children }: IToolbarProps) {
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn('w-full', className)}>
       <TooltipProvider>
-        <Tooltip>
-          <ToolbarButton label="Salvar" icon={SaveIcon}></ToolbarButton>
-          <ToolbarButton label="Excluir" icon={Trash2}></ToolbarButton>
-        </Tooltip>
+        <Tooltip>{children}</Tooltip>
       </TooltipProvider>
     </div>
-  )
+  );
 }
 
 interface IToolbarButtonProps {
   label: string;
   icon: React.ComponentType<{ size?: number }>;
+  props?: Object;
 }
-function ToolbarButton({ label, icon: Icon }: IToolbarButtonProps) {
+
+function ToolbarButton({ label, icon: Icon, props }: IToolbarButtonProps) {
   return (
     <>
       <TooltipTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-        >
+        <Button variant="ghost" size="icon" {...props}>
           <Icon size={18} />
         </Button>
       </TooltipTrigger>
       <TooltipContent>{label}</TooltipContent>
     </>
-  )
+  );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
@@ -38,6 +38,11 @@ const schema = z.object({
 
 export type ItemFormData = z.infer<typeof schema>;
 
+interface Item {
+  code: string;
+  name: string;
+}
+
 const AddItemModal: React.FC = () => {
   const { items, fetchLoading } = useFetchItems();
 
@@ -47,11 +52,11 @@ const AddItemModal: React.FC = () => {
   const [formError, setFormError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<FormData>({
+  const form = useForm<ItemFormData>({
     resolver: zodResolver(schema),
   });
 
-  const handleFormSubmit = async (form) => {
+  const handleFormSubmit = async (form: UseFormReturn<ItemFormData>) => {
     try {
       setIsLoading(true);
       const data = form.getValues();
@@ -102,7 +107,6 @@ const AddItemModal: React.FC = () => {
             <div className="grid mb-2 gap-2">
               <Label htmlFor="selectedItem">Item</Label>
               <Select
-                {...form.register('selectedItem')}
                 value={form.watch('selectedItem')}
                 onValueChange={(value) => form.setValue('selectedItem', value)}
               >
@@ -111,7 +115,7 @@ const AddItemModal: React.FC = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {!fetchLoading ? (
-                    items.map((item) => (
+                    items.map((item: { code: any; name: string; }) => (
                       <SelectItem key={item.code} value={item.code}>
                         {item.name}
                       </SelectItem>

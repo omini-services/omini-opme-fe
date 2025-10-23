@@ -16,6 +16,8 @@ export const metadata = {
   description: 'Example dashboard app built using the components.',
 };
 
+const OverviewWrapper: any = Overview;
+
 export default function Dashboard() {
   return (
     <div className="hidden flex-col md:flex h-full">
@@ -150,7 +152,7 @@ export default function Dashboard() {
                   <CardTitle>Overview</CardTitle>
                 </CardHeader>
                 <CardContent className="pl-2">
-                  <Overview />
+                  <OverviewWrapper />
                 </CardContent>
               </Card>
               <Card className="col-span-3">

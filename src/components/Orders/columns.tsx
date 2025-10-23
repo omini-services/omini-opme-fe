@@ -8,7 +8,7 @@ import { DataTableRowActions } from '@/components/ItemsTable/data-table-row-acti
 import { format } from 'date-fns';
 import { statuses, priorities } from '@/pages/Orders/data/data';
 
-interface Item {
+export interface Item {
   lineId: number;
   lineOrder: number;
   itemCode: string;
@@ -18,7 +18,10 @@ interface Item {
   unitPrice: number;
   lineTotal: number;
   quantity: number;
+  status?: string;
+  priority?: string;
 }
+
 
 export const columns: ColumnDef<Item>[] = [
   {
@@ -103,11 +106,10 @@ export const columns: ColumnDef<Item>[] = [
     cell: ({ row }) => {
       const date = row.getValue('anvisaDueDate');
       return (
-        <div className="w-[150px]">{format(new Date(date), 'dd/MM/yyyy')}</div>
+        <div className="w-[150px]">{format(new Date(date as string | number | Date), 'dd/MM/yyyy')}</div>
       );
     },
   },
-  ,
   {
     accessorKey: 'unitPrice',
     header: ({ column }) => (

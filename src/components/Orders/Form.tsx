@@ -96,11 +96,14 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
     },
   });
 
-  const handleChange = (field: string, value: any) => {
-    setOrderFormData((prevData: any) => ({
-      ...prevData,
+  const handleChange = (
+    field: keyof z.infer<typeof FormSchema>,
+    value: string | number | Date
+  ) => {
+    setOrderFormData({
+      ...order,
       [field]: value,
-    }));
+    });
 
     form.setValue(field, value);
 
@@ -219,7 +222,7 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
               </div>
               <div className="flex-col mb-2">
                 <InsuranceSelectField
-                  onChange={handleChange}
+                  onChange={(value) => handleChange('insuranceCompanyCode', value)}
                   form={form}
                   disabled={showInsuranceField}
                 />
@@ -267,7 +270,7 @@ export const OrderForm = ({ order }: IOrderFormProps) => {
                         selected={field.value}
                         onSelect={(date) => {
                           field.onChange(date);
-                          handleChange('dueDate', date);
+                          handleChange('dueDate', date as Date);
                         }}
                         disabled={(date) =>
                           date > new Date() || date < new Date('1900-01-01')

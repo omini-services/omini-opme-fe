@@ -49,6 +49,8 @@ import {
 } from './helpers';
 import { addItemFormModalState, editItemFormModalState } from '@/atoms/orders';
 import { useFetchItems } from '@/pages/Items/hooks';
+import { parse } from 'path';
+import { IItem } from '@/types/Item';
 
 interface OrderDisplayProps {
   order: IOrderItem | null;
@@ -98,7 +100,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
       show: true,
       onSubmit: (data) => {
         const itemPosition = Object.entries(rowSelection)[0][0];
-        const item = getOrderItems()[itemPosition];
+        const item = getOrderItems()[parseInt(itemPosition)];
         fetchUpdateItem({
           instance,
           apiRequest,
@@ -117,7 +119,7 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
     setAddItemModal({
       show: true,
       onSubmit: (data) => {
-        const item = items.find((item) => item.code == data.selectedItem);
+        const item = items.find((item: IItem) => item.code == data.selectedItem);
         fetchAddItem({
           instance,
           apiRequest,
@@ -155,68 +157,62 @@ export function OrderDisplay({ order }: OrderDisplayProps) {
 
                 <Separator orientation="vertical" className="mx-2 h-6" />
 
-                <div className="flex items-center">
-                  <div className="flex items-center gap-2">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          disabled={!order || isDisabled}
-                          onClick={() =>
-                            fetchUpdateOrder({
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      disabled={!order || isDisabled}
+                      onClick={() =>
+                        fetchUpdateOrder({
+                          instance,
+                          apiRequest,
+                          updateById,
+                          orderFormData,
+                          setError: setOrdersError,
+                          setLoading: setOrderItemsLoading,
+                        })
+                      }
+                    >
+                      <SaveIcon className="h-4 w-4" />
+                      <span className="sr-only">Salvar {ORDER}</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Salvar {ORDER}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      disabled={!order || isDisabled}
+                      onClick={() =>
+                        setDialog({
+                          ...DIALOG_INITIAL_STATE,
+                          show: true,
+                          title: 'Confirmação',
+                          body: `Tem certeza de que deseja excluir?`,
+                          positive: 'Sim',
+                          negative: 'Cancelar',
+                          positiveCallback: () =>
+                            fetchDeleteOrder({
+                              order,
                               instance,
                               apiRequest,
-                              updateById,
                               orderFormData,
+                              deleteById,
                               setError: setOrdersError,
                               setLoading: setOrderItemsLoading,
-                            })
-                          }
-                        >
-                          <SaveIcon className="h-4 w-4" />
-                          <span className="sr-only">Salvar {ORDER}</span>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Salvar {ORDER}</TooltipContent>
-                    </Tooltip>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          disabled={!order || isDisabled}
-                          onClick={() =>
-                            setDialog({
-                              ...DIALOG_INITIAL_STATE,
-                              show: true,
-                              title: 'Confirmação',
-                              body: `Tem certeza de que deseja excluir?`,
-                              positive: 'Sim',
-                              negative: 'Cancelar',
-                              positiveCallback: () =>
-                                fetchDeleteOrder({
-                                  order,
-                                  instance,
-                                  apiRequest,
-                                  orderFormData,
-                                  deleteById,
-                                  setError: setOrdersError,
-                                  setLoading: setOrderItemsLoading,
-                                }),
-                            })
-                          }
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir {ORDER}</span>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Excluir {ORDER}</TooltipContent>
-                    </Tooltip>
-                  </div>
-                </div>
+                            }),
+                        })
+                      }
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sr-only">Excluir {ORDER}</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Excluir {ORDER}</TooltipContent>
+                </Tooltip>
               </div>
 
               <Separator />

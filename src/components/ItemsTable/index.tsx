@@ -29,9 +29,10 @@ import { Separator } from '@/components/ui/separator';
 
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableToolbar } from './data-table-toolbar';
+import { Item } from '../Orders/columns';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+  columns: ColumnDef<Item>[] | ColumnDef<TData, TValue>[] | any;
   data: TData[];
   filter: React.ComponentType<{ table: ITable<TData> }>;
   rowSelection: RowSelectionState | undefined;
@@ -116,9 +117,9 @@ export function ItemsTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}

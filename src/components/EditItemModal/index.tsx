@@ -37,10 +37,10 @@ const EditItemModal: React.FC = () => {
   const [modal, setModal] = useAtom(editItemFormModalState);
   const { show, onSubmit } = modal;
 
-  const { register, handleSubmit, formState, reset, getValues } =
-    useForm<FormData>({
-      resolver: zodResolver(schema),
-    });
+  // const { register, handleSubmit, formState, reset, getValues } =
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
 
   const [formError, setFormError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -65,9 +65,9 @@ const EditItemModal: React.FC = () => {
   const handleFormSubmit = async () => {
     try {
       setIsLoading(true);
-      const data = getValues();
+      const data = form.getValues();
       await onSubmit(data);
-      reset();
+      form.reset();
       setFormError(null);
       setModal((prev) => ({ ...prev, show: false }));
     } catch (error) {
@@ -78,9 +78,8 @@ const EditItemModal: React.FC = () => {
   };
 
   const handleCancel = () => {
-    cancel();
     setModal((prev) => ({ ...prev, show: false }));
-    reset();
+    form.reset();
   };
 
   return (
@@ -96,8 +95,8 @@ const EditItemModal: React.FC = () => {
             Modifique os valores de preço e quantidade e clique em "Salvar".
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <Form>
-          <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleFormSubmit)}>
             <div className="grid grid-cols-2 gap-2 items-center">
               <div className="grid mb-2 gap-2">
                 <Label htmlFor="unitPrice">Preço Unitário</Label>
@@ -105,16 +104,16 @@ const EditItemModal: React.FC = () => {
                   id="unitPrice"
                   type="number"
                   step="0.01"
-                  {...register('unitPrice', {
+                  {...form.register('unitPrice', {
                     setValueAs: (value) =>
                       value === '' ? undefined : parseFloat(value),
                   })}
                   className="input"
-                  aria-invalid={formState.errors.unitPrice ? 'true' : 'false'}
+                  aria-invalid={form.formState.errors.unitPrice ? 'true' : 'false'}
                 />
-                {formState.errors.unitPrice && (
+                {form.formState.errors.unitPrice && (
                   <p className="text-red-500">
-                    {formState.errors.unitPrice.message}
+                    {form.formState.errors.unitPrice.message}
                   </p>
                 )}
               </div>
@@ -123,16 +122,16 @@ const EditItemModal: React.FC = () => {
                 <Input
                   id="quantity"
                   type="number"
-                  {...register('quantity', {
+                  {...form.register('quantity', {
                     setValueAs: (value) =>
                       value === '' ? undefined : parseInt(value, 10),
                   })}
                   className="input"
-                  aria-invalid={formState.errors.quantity ? 'true' : 'false'}
+                  aria-invalid={form.formState.errors.quantity ? 'true' : 'false'}
                 />
-                {formState.errors.quantity && (
+                {form.formState.errors.quantity && (
                   <p className="text-red-500">
-                    {formState.errors.quantity.message}
+                    {form.formState.errors.quantity.message}
                   </p>
                 )}
               </div>

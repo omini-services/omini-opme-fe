@@ -20,7 +20,38 @@ export const orderFetchStatusAtom = atom({
   orders: { loading: false, error: null },
 });
 
-export const orderFormAtom = atom<IOrderItem | {}>({});
+export const ORDER_FORM_INITIAL_STATE = {
+  id: '',
+  number: 0,
+  dueDate: '',
+  createdOn: '',
+  items: [],
+  total: 0,
+  // patient data
+  patientCode: '',
+  patientFirstName: '',
+  patientMiddleName: '',
+  patientLastName: '',
+  // physician data
+  physicianCode: '',
+  physicianFirstName: '',
+  physicianMiddleName: '',
+  physicianLastName: '',
+  // payment data
+  payingSourceCode: '',
+  payingSourceName: '',
+  payingSourceType: '',
+  // hospital data
+  hospitalName: '',
+  hospitalCode: '',
+  // insurance data
+  insuranceCompanyName: '',
+  insuranceCompanyCode: '',
+  // specialist
+  internalSpecialistCode: '',
+};
+
+export const orderFormAtom = atom<IOrderItem | typeof ORDER_FORM_INITIAL_STATE>(ORDER_FORM_INITIAL_STATE);
 
 export type TOrdersTableSelection = {
   [key: number]: boolean;
@@ -30,7 +61,7 @@ export const ordersTableSelection = atom<TOrdersTableSelection>({});
 
 export const ITEM_FORM_INITIAL_STATE = {
   show: false,
-  onSubmit: (data: any) => {},
+  onSubmit: (data: any) => { },
 };
 
 export const editItemFormModalState = atom(ITEM_FORM_INITIAL_STATE);

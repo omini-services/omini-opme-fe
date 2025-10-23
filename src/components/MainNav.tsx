@@ -15,7 +15,7 @@ export const MainNav = ({
 }: React.HTMLAttributes<HTMLElement>) => {
   const navigate = useNavigate();
 
-  const handleOnSelect = (path) => {
+  const handleOnSelect = (path: string) => {
     navigate(path);
   };
 
@@ -31,18 +31,16 @@ export const MainNav = ({
         Home
       </a>
 
-      <Menubar>
+      {/* Example */}
+
+      {/* <Menubar>
         <MenubarMenu>
           <MenubarTrigger className="font-bold">Cadastros</MenubarTrigger>
           <MenubarContent>
-            <MenubarItem onSelect={handleOnSelect}>About Music</MenubarItem>
-            <MenubarItem onSelect={handleOnSelect}>Preferences...</MenubarItem>
-            <MenubarItem onSelect={handleOnSelect}>Hide Music...</MenubarItem>
-            <MenubarItem onSelect={handleOnSelect}>Hide Others...</MenubarItem>
-            <MenubarItem onSelect={handleOnSelect}>Quit Music</MenubarItem>
+            <MenubarItem onSelect={() => handleOnSelect("/about")}>About</MenubarItem>
           </MenubarContent>
         </MenubarMenu>
-      </Menubar>
+      </Menubar> */}
       {/* <a
         href="/dashboard"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
@@ -54,12 +52,6 @@ export const MainNav = ({
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Tasks
-      </a>
-      <a
-        href="/music"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        Music
       </a>
     </nav>
   );

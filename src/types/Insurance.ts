@@ -1,4 +1,5 @@
 export type TInsurance = {
+  id: string | number
   code: string;
   legalName: string;
   tradeName: string;

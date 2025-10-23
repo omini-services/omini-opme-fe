@@ -19,8 +19,8 @@ export const OrderTableItemsSkeleton = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
               <tr>
-                {Array(6)
-                  .fill()
+                {Array()
+                  .fill(6)
                   .map((_, index) => (
                     <th key={index} className="px-4 py-3 bg-gray-100">
                       <div className="h-4 bg-gray-300 rounded"></div>
@@ -29,12 +29,12 @@ export const OrderTableItemsSkeleton = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {Array(10)
-                .fill()
+              {Array()
+                .fill(10)
                 .map((_, rowIndex) => (
                   <tr key={rowIndex}>
-                    {Array(6)
-                      .fill()
+                    {Array()
+                      .fill(6)
                       .map((_, colIndex) => (
                         <td
                           key={colIndex}
@@ -111,8 +111,8 @@ export const OrderSkeleton = (index: any) => {
 export const OrderListSkeleton = () => {
   return (
     <div className="flex-1 p-4 space-y-2">
-      {Array(6)
-        .fill()
+      {Array()
+        .fill(6)
         .map((_, index) => (
           <OrderSkeleton key={index} index={index} />
         ))}
